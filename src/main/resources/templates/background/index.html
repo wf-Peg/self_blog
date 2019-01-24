@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>FF后台管理</title>
+    <meta name="description" content="这是一个 index 页面">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <script src="assets/js/echarts.min.js"></script>
+    <link rel="stylesheet" href="assets/css/amazeui.min.css" />
+    <link rel="stylesheet" href="assets/css/amazeui.datatables.min.css" />
+    <link rel="stylesheet" href="assets/css/app.css">
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="/asserts/js/do.js"></script>
+
+    <!-- time -->
+    <!--<script>-->
+    <!--function show_cur_times(){-->
+    <!--//获取当前日期-->
+    <!--var date_time = new Date();-->
+    <!--//定义星期-->
+    <!--var week;-->
+    <!--//switch判断-->
+    <!--switch (date_time.getDay()){-->
+    <!--case 1: week="星期一"; break;-->
+    <!--case 2: week="星期二"; break;-->
+    <!--case 3: week="星期三"; break;-->
+    <!--case 4: week="星期四"; break;-->
+    <!--case 5: week="星期五"; break;-->
+    <!--case 6: week="星期六"; break;-->
+    <!--default:week="星期天"; break;-->
+    <!--}-->
+
+    <!--//年-->
+    <!--var year = date_time.getFullYear();-->
+    <!--//判断小于10，前面补0-->
+    <!--if(year<10){-->
+    <!--year="0"+year;-->
+    <!--}-->
+
+    <!--//月-->
+    <!--var month = date_time.getMonth()+1;-->
+    <!--//判断小于10，前面补0-->
+    <!--if(month<10){-->
+    <!--month="0"+month;-->
+    <!--}-->
+
+    <!--//日-->
+    <!--var day = date_time.getDate();-->
+    <!--//判断小于10，前面补0-->
+    <!--if(day<10){-->
+    <!--day="0"+day;-->
+    <!--}-->
+
+    <!--//时-->
+    <!--var hours =date_time.getHours();-->
+    <!--//判断小于10，前面补0-->
+    <!--if(hours<10){-->
+    <!--hours="0"+hours;-->
+    <!--}-->
+
+    <!--//分-->
+    <!--var minutes =date_time.getMinutes();-->
+    <!--//判断小于10，前面补0-->
+    <!--if(minutes<10){-->
+    <!--minutes="0"+minutes;-->
+    <!--}-->
+
+<!--//    //秒-->
+<!--//    var seconds=date_time.getSeconds();-->
+<!--//    //判断小于10，前面补0-->
+<!--//    if(seconds<10){-->
+<!--//    seconds="0"+seconds;-->
+<!--//    }-->
+
+    <!--//拼接年月日时分秒-->
+    <!--var date_str = year+"年"+month+"月"+day+"日 "+hours+":"+minutes+" "+week;-->
+
+    <!--//显示在id为showtimes的容器里-->
+    <!--document.getElementById("showtimes").innerHTML= date_str;-->
+    <!--}-->
+    <!--//设置60秒调用一次show_cur_times函数-->
+    <!--setInterval("show_cur_times()",6000);-->
+    <!--</script>-->
+
+</head>
+
+<body data-type="index">
+    <script src="assets/js/theme.js"></script>
+    <div class="am-g tpl-g">
+        <!-- 头部 -->
+        <header>
+            <!-- logo -->
+            <div class="am-fl tpl-header-logo" style="background-color: #313131">
+                <a href="#"><img src="assets/img/logo.png" alt=""></a>
+            </div>
+            <!-- 右侧内容 -->
+            <div class="tpl-header-fluid">
+                <!-- 侧边切换 -->
+                <div class="am-fl tpl-header-switch-button am-icon-list">
+                    <span>
+
+                </span>
+                </div>
+                <!-- 搜索 -->
+                <div class="am-fl tpl-header-search">
+                    <form class="tpl-header-search-form" action="javascript:;">
+                        <button class="tpl-header-search-btn am-icon-search"></button>
+                        <input class="tpl-header-search-box" type="text" placeholder="搜索内容...">
+                    </form>
+                </div>
+                <!-- 其它功能-->
+                <div class="am-fr tpl-header-navbar">
+                    <ul>
+                        <!-- 欢迎语 -->
+                        <li class="am-text-sm tpl-header-navbar-welcome">
+                            <a href="javascript:;">欢迎你, <span sec:authentication="name"></span> </a>
+                        </li>
+
+                        <!-- 新邮件 -->
+                        <li class="am-dropdown tpl-dropdown" data-am-dropdown>
+                            <a href="javascript:;" class="am-dropdown-toggle tpl-dropdown-toggle" data-am-dropdown-toggle>
+                                <i class="am-icon-envelope"></i>
+                                <span class="am-badge am-badge-success am-round item-feed-badge">4</span>
+                            </a>
+                            <!-- 弹出列表 -->
+                            <ul class="am-dropdown-content tpl-dropdown-content">
+                                <li class="tpl-dropdown-menu-messages">
+                                    <a href="javascript:;" class="tpl-dropdown-menu-messages-item am-cf">
+                                        <div class="menu-messages-ico">
+                                            <img src="assets/img/user04.png" alt="">
+                                        </div>
+                                        <div class="menu-messages-time">
+                                            3小时前
+                                        </div>
+                                        <div class="menu-messages-content">
+                                            <div class="menu-messages-content-title">
+                                                <i class="am-icon-circle-o am-text-success"></i>
+                                                <span>PPPWF</span>
+                                            </div>
+                                            <div class="am-text-truncate"> PinPon巷的诞生，依托了 GitHub 及其他技术社区上一些优秀的资源；PPPWF 的成长，则离不开周围的支持与鼓励。 </div>
+                                            <div class="menu-messages-content-time">2018-09-21 下午 16:40</div>
+                                        </div>
+                                    </a>
+                                </li>
+
+                                <li class="tpl-dropdown-menu-messages" >
+                                    <a href="javascript:;" class="tpl-dropdown-menu-messages-item am-cf">
+                                        <div class="menu-messages-ico">
+                                            <img src="assets/img/user02.png" alt="">
+                                        </div>
+                                        <div class="menu-messages-time">
+                                            5天前
+                                        </div>
+                                        <div class="menu-messages-content">
+                                            <div class="menu-messages-content-title">
+                                                <i class="am-icon-circle-o am-text-warning"></i>
+                                                <span>夕风色</span>
+                                            </div>
+                                            <div class="am-text-truncate"> 为了能最准确的传达所描述的问题， 建议你在反馈时附上演示，方便我们理解。 </div>
+                                            <div class="menu-messages-content-time">2018-09-16 上午 09:23</div>
+                                        </div>
+                                    </a>
+                                </li>
+
+                                <li class="tpl-dropdown-menu-messages" >
+                                    <a href="javascript:;" class="tpl-dropdown-menu-messages-item am-cf">
+                                        <div class="menu-messages-ico">
+                                            <img src="assets/img/user02.png" alt="">
+                                        </div>
+                                        <div class="menu-messages-time">
+                                            5天前
+                                        </div>
+                                        <div class="menu-messages-content">
+                                            <div class="menu-messages-content-title">
+                                                <i class="am-icon-circle-o am-text-warning"></i>
+                                                <span>夕风色</span>
+                                            </div>
+                                            <div class="am-text-truncate"> 为了能最准确的传达所描述的问题， 建议你在反馈时附上演示，方便我们理解。 </div>
+                                            <div class="menu-messages-content-time">2018-09-16 上午 09:23</div>
+                                        </div>
+                                    </a>
+                                </li>
+
+                                <li class="tpl-dropdown-menu-messages" >
+                                    <a href="javascript:;" class="tpl-dropdown-menu-messages-item am-cf">
+                                        <div class="menu-messages-ico">
+                                            <img src="assets/img/user02.png" alt="">
+                                        </div>
+                                        <div class="menu-messages-time">
+                                            5天前
+                                        </div>
+                                        <div class="menu-messages-content">
+                                            <div class="menu-messages-content-title">
+                                                <i class="am-icon-circle-o am-text-warning"></i>
+                                                <span>夕风色</span>
+                                            </div>
+                                            <div class="am-text-truncate"> 为了能最准确的传达所描述的问题， 建议你在反馈时附上演示，方便我们理解。 </div>
+                                            <div class="menu-messages-content-time">2018-09-16 上午 09:23</div>
+                                        </div>
+                                    </a>
+                                </li>
+
+                                <li class="tpl-dropdown-menu-messages">
+                                    <a href="javascript:;" class="tpl-dropdown-menu-messages-item am-cf">
+                                        <i class="am-icon-circle-o"></i> 进入列表…
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!-- 新提示 -->
+                        <li class="am-dropdown" data-am-dropdown>
+                            <a href="javascript:;" class="am-dropdown-toggle" data-am-dropdown-toggle>
+                                <i class="am-icon-bell"></i>
+                                <span class="am-badge am-badge-warning am-round item-feed-badge">5</span>
+                            </a>
+
+                            <!-- 弹出列表 -->
+                            <ul class="am-dropdown-content tpl-dropdown-content">
+                                <li class="tpl-dropdown-menu-notifications">
+                                    <a href="javascript:;" class="tpl-dropdown-menu-notifications-item am-cf">
+                                        <div class="tpl-dropdown-menu-notifications-title">
+                                            <i class="am-icon-line-chart"></i>
+                                            <span> 有6笔新的待审核博客</span>
+                                        </div>
+                                        <div class="tpl-dropdown-menu-notifications-time">
+                                            12分钟前
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="tpl-dropdown-menu-notifications">
+                                    <a href="javascript:;" class="tpl-dropdown-menu-notifications-item am-cf">
+                                        <div class="tpl-dropdown-menu-notifications-title">
+                                            <i class="am-icon-star"></i>
+                                            <span> 有3个来博文的评论消息</span>
+                                        </div>
+                                        <div class="tpl-dropdown-menu-notifications-time">
+                                            30分钟前
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="tpl-dropdown-menu-notifications">
+                                    <a href="javascript:;" class="tpl-dropdown-menu-notifications-item am-cf">
+                                        <div class="tpl-dropdown-menu-notifications-title">
+                                            <i class="am-icon-star"></i>
+                                            <span> 有3个来博文的评论消息</span>
+                                        </div>
+                                        <div class="tpl-dropdown-menu-notifications-time">
+                                            30分钟前
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="tpl-dropdown-menu-notifications">
+                                    <a href="javascript:;" class="tpl-dropdown-menu-notifications-item am-cf">
+                                        <div class="tpl-dropdown-menu-notifications-title">
+                                            <i class="am-icon-star"></i>
+                                            <span> 有3个来博文的评论消息</span>
+                                        </div>
+                                        <div class="tpl-dropdown-menu-notifications-time">
+                                            30分钟前
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="tpl-dropdown-menu-notifications">
+                                    <a href="javascript:;" class="tpl-dropdown-menu-notifications-item am-cf">
+                                        <div class="tpl-dropdown-menu-notifications-title">
+                                            <i class="am-icon-star"></i>
+                                            <span> 有3个来博文的评论消息</span>
+                                        </div>
+                                        <div class="tpl-dropdown-menu-notifications-time">
+                                            30分钟前
+                                        </div>
+                                    </a>
+                                </li>
+
+                                <li class="tpl-dropdown-menu-notifications">
+                                    <a href="javascript:;" class="tpl-dropdown-menu-notifications-item am-cf">
+                                        <i class="am-icon-bell"></i> 进入列表…
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!-- 退出 -->
+                        <li class="am-text-sm">
+                            <a href="javascript:;" onclick="logoutBackground()">
+                                <span class="am-icon-sign-out"></span> 退出
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </header>
+
+        <!-- 侧边导航栏 -->
+        <div class="left-sidebar">
+            <!-- 用户信息 -->
+            <div class="tpl-sidebar-user-panel">
+                <div class="tpl-user-panel-slide-toggleable">
+                    <div class="tpl-user-panel-profile-picture">
+                        <img src="assets/img/user04.png" alt="">
+                    </div>
+                    <span class="user-panel-logged-in-text">
+              <i class="am-icon-circle-o am-text-success tpl-user-panel-status-icon"></i>
+              <span sec:authentication="name"></span>
+          </span>
+                    <!--<a href="javascript:;" class="tpl-user-panel-action-link"> <span class="am-icon-pencil"></span> 账号设置</a>-->
+                </div>
+            </div>
+
+            <!-- 菜单 -->
+            <ul class="sidebar-nav">
+                <li class="sidebar-nav-heading">数据管理</li>
+                <li class="sidebar-nav-link">
+                    <a href="#" onclick="loadPage('/background/home.html')">
+                        <i class="am-icon-home sidebar-nav-link-logo"></i> 首页
+                    </a>
+                </li>
+                <li class="sidebar-nav-link">
+                    <a href="#" onclick="loadPage('/background/blog-form.html')">
+                        <i class="am-icon-wpforms sidebar-nav-link-logo"></i> 发表博文
+                    </a>
+                </li>
+                <li class="sidebar-nav-link">
+                    <a href="#" onclick="loadPage('/background/blog-tables.html')">
+                        <i class="am-icon-table sidebar-nav-link-logo"></i> 博文管理
+                    </a>
+                </li>
+                <li class="sidebar-nav-link">
+                    <!--<a href="#" onclick="loadPage('/background/banner-tables.html')">-->
+                    <a href="#" onclick="loadPage('/banner/list')">
+                        <i class="am-icon-table sidebar-nav-link-logo"></i> 墙角管理
+                    </a>
+                </li>
+                <div sec:authorize="hasRole('admin')">
+                <li class="sidebar-nav-link">
+                    <a href="#" onclick="loadPage('/user/users')"><!--/background/user-tables.htm-->
+                        <i class="am-icon-table sidebar-nav-link-logo"></i> 用户管理
+                    </a>
+                </li>
+                </div>
+                <!--<li class="sidebar-nav-link">-->
+                    <!--<a href="#" onclick="loadPage('/background/chart.html')">-->
+                        <!--<i class="am-icon-bar-chart sidebar-nav-link-logo"></i> 网站流量图表-->
+                    <!--</a>-->
+                <!--</li>-->
+
+                <li class="sidebar-nav-heading">常用页面<br>
+                    <a href="https://www.baidu.com" target="_blank">百度</a>&nbsp;&nbsp;
+                    <a href="https://www.google.com" target="_blank">google</a>&nbsp;&nbsp;
+                    <a href="https://sspai.com" target="_blank">少数派</a>&nbsp;&nbsp;
+                    <a href="https://www.zhihu.com" target="_blank">知乎</a>&nbsp;&nbsp;
+                    <a href="https://www.jianshu.com" target="_blank">简书</a>&nbsp;&nbsp;
+                </li>
+                <div sec:authorize="hasRole('admin')">
+                <li class="sidebar-nav-link">
+                    <a href="#" onclick="loadPage('/registerIndex')">
+                        <i class="am-icon-clone sidebar-nav-link-logo"></i> 新增管理员
+                        <!--<span class="am-badge am-badge-secondary sidebar-nav-link-logo-ico am-round am-fr am-margin-right-sm">6</span>-->
+                    </a>
+                </li>
+                </div>
+                <li class="sidebar-nav-link">
+                    <a href="#" onclick="loadPage('/background/404.html')">
+                        <i class="am-icon-tv sidebar-nav-link-logo"></i> 404错误
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+
+
+        <!-- 内容区域 start -->
+        <div class="tpl-content-wrapper">
+            <div class="container-fluid am-cf">
+                <div class="row">
+                    <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
+                        <div class="page-header-heading"><span class="am-icon-home page-header-heading-icon"></span> 后台首页 <small>PinPon巷</small></div>
+                        <p class="page-header-description">碎碎念，树洞，心情，技术，Whatever.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row-content am-cf">
+                <div class="row  am-cf">
+                    <div class="am-u-sm-12 am-u-md-12 am-u-lg-4">
+                        <div class="widget am-cf">
+                            <div class="widget-head am-cf">
+                                <div class="widget-title am-fl">今日访客</div>
+                            </div>
+                            <div class="widget-body am-fr">
+                                <div class="am-fl"><strong>今天是：</strong>
+                                    <div class="widget-fluctuation-period-text" id="showtimes">
+                                        <strong id="date">
+                                            <script language="javascript">/*show_cur_times();*/
+                                            date.innerHTML=new Date().toLocaleString()+' 星期'+'日一二三四五六'.charAt(new Date().getDay());
+                                             </script>
+                                        </strong>
+                                    </div>
+                                </div>
+                                <div class="am-fr am-cf">
+                                    <div class="widget-fluctuation-description-amount text-success" am-cf>
+                                        3名访客
+                                    </div>
+                                    <div class="widget-fluctuation-description-text am-text-right">
+                                        1个留言
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="am-u-sm-12 am-u-md-6 am-u-lg-4">
+                        <div class="widget widget-primary am-cf">
+                            <div class="widget-statistic-header">
+                                本月访客
+                            </div>
+                            <div class="widget-statistic-body">
+                                <div class="widget-statistic-value">
+                                    10名访客
+                                </div>
+                                <div class="widget-statistic-description">
+                                    本上月多 <strong>2</strong> 名访客
+                                </div>
+                                <span class="widget-statistic-icon am-icon-credit-card-alt"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="am-u-sm-12 am-u-md-6 am-u-lg-4">
+                        <div class="widget widget-purple am-cf">
+                            <div class="widget-statistic-header">
+                                本年访客
+                            </div>
+                            <div class="widget-statistic-body">
+                                <div class="widget-statistic-value">
+                                    111名访客
+                                </div>
+                                <div class="widget-statistic-description">
+                                    本年比去年多 <strong>111</strong> 名访客
+                                </div>
+                                <span class="widget-statistic-icon am-icon-support"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row am-cf">
+                    <div class="am-u-sm-12 am-u-md-8">
+                        <div class="widget am-cf">
+                            <div class="widget-head am-cf">
+                                <div class="widget-title am-fl">月度流量比例</div>
+                                <div class="widget-function am-fr">
+                                    <a href="javascript:;" class="am-icon-cog"></a>
+                                </div>
+                            </div>
+                            <div class="widget-body-md widget-body tpl-amendment-echarts am-fr" id="tpl-echarts">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-u-sm-12 am-u-md-4">
+                        <div class="widget am-cf">
+                            <div class="widget-head am-cf">
+                                <div class="widget-title am-fl">服务器负载</div>
+                                <div class="widget-function am-fr">
+                                    <a href="javascript:;" class="am-icon-cog"></a>
+                                </div>
+                            </div>
+                            <div class="widget-body widget-body-md am-fr">
+
+                                <div class="am-progress-title">CPU Load <span class="am-fr am-progress-title-more">28% / 100%</span></div>
+                                <div class="am-progress">
+                                    <div class="am-progress-bar" style="width: 15%"></div>
+                                </div>
+                                <div class="am-progress-title">CPU Load <span class="am-fr am-progress-title-more">74% / 100%</span></div>
+                                <div class="am-progress">
+                                    <div class="am-progress-bar  am-progress-bar-warning" style="width: 75%"></div>
+                                </div>
+                                <div class="am-progress-title">CPU Load <span class="am-fr am-progress-title-more">34% / 100%</span></div>
+                                <div class="am-progress">
+                                    <div class="am-progress-bar am-progress-bar-danger" style="width: 35%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row am-cf">
+                    <div class="am-u-sm-12 am-u-md-12 am-u-lg-4 widget-margin-bottom-lg ">
+                        <div class="tpl-user-card am-text-center widget-body-lg">
+                            <div class="tpl-user-card-title">
+                                彭山夆
+                            </div>
+                            <div class="achievement-subheading">
+                                月度最佳管理员
+                            </div>
+                            <img class="achievement-image" src="assets/img/user04.png" style="height: 100px;width: 100px" alt="">
+                            <div class="achievement-description">
+                                彭山夆
+                                <strong>一个月天内</strong> 发布了
+                                <strong>20多篇高质量</strong>博文。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-u-sm-12 am-u-md-12 am-u-lg-8 widget-margin-bottom-lg">
+
+                        <div class="widget am-cf widget-body-lg">
+
+                            <div class="widget-body  am-fr">
+                                <div class="am-scrollable-horizontal ">
+                                    <table width="100%" class="am-table am-table-compact am-text-nowrap tpl-table-black " id="example-r">
+                                        <thead>
+                                            <tr>
+                                                <th>文章标题</th>
+                                                <th>作者</th>
+                                                <th>时间</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="gradeX">
+                                                <td>新加坡大数据初创公司 Latize 获 150 万美元风险融资</td>
+                                                <td>张鹏飞</td>
+                                                <td>2016-09-26</td>
+                                                <td>
+                                                    <div class="tpl-table-black-operation">
+                                                        <a href="javascript:;">
+                                                            <i class="am-icon-pencil"></i> 编辑
+                                                        </a>
+                                                        <a href="javascript:;" class="tpl-table-black-operation-del">
+                                                            <i class="am-icon-trash"></i> 删除
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="even gradeC">
+                                                <td>自拍的“政治角色”：观众背对希拉里自拍合影表示“支持”</td>
+                                                <td>天纵之人</td>
+                                                <td>2016-09-26</td>
+                                                <td>
+                                                    <div class="tpl-table-black-operation">
+                                                        <a href="javascript:;">
+                                                            <i class="am-icon-pencil"></i> 编辑
+                                                        </a>
+                                                        <a href="javascript:;" class="tpl-table-black-operation-del">
+                                                            <i class="am-icon-trash"></i> 删除
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="gradeX">
+                                                <td>关于创新管理，我想和你当面聊聊。</td>
+                                                <td>王宽师</td>
+                                                <td>2016-09-26</td>
+                                                <td>
+                                                    <div class="tpl-table-black-operation">
+                                                        <a href="javascript:;">
+                                                            <i class="am-icon-pencil"></i> 编辑
+                                                        </a>
+                                                        <a href="javascript:;" class="tpl-table-black-operation-del">
+                                                            <i class="am-icon-trash"></i> 删除
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="even gradeC">
+                                                <td>究竟是趋势带动投资，还是投资引领趋势？</td>
+                                                <td>着迷</td>
+                                                <td>2016-09-26</td>
+                                                <td>
+                                                    <div class="tpl-table-black-operation">
+                                                        <a href="javascript:;">
+                                                            <i class="am-icon-pencil"></i> 编辑
+                                                        </a>
+                                                        <a href="javascript:;" class="tpl-table-black-operation-del">
+                                                            <i class="am-icon-trash"></i> 删除
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="even gradeC">
+                                                <td>Docker领域再添一员，网易云发布“蜂巢”，加入云计算之争</td>
+                                                <td>醉里挑灯看键</td>
+                                                <td>2016-09-26</td>
+                                                <td>
+                                                    <div class="tpl-table-black-operation">
+                                                        <a href="javascript:;">
+                                                            <i class="am-icon-pencil"></i> 编辑
+                                                        </a>
+                                                        <a href="javascript:;" class="tpl-table-black-operation-del">
+                                                            <i class="am-icon-trash"></i> 删除
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+
+                                            <!-- more data -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 内容区域 end -->
+    </div>
+
+    <script src="assets/js/amazeui.min.js"></script>
+    <script src="assets/js/amazeui.datatables.min.js"></script>
+    <script src="assets/js/dataTables.responsive.min.js"></script>
+    <script src="assets/js/app.js"></script>
+
+</body>
+<script>
+    //myJavaScript代码区域
+    function loadPage(tag) {
+        $(".tpl-content-wrapper").load(tag);
+    }
+</script>
+</html>

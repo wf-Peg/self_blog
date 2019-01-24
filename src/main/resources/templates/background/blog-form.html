@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Amaze UI Admin index Examples</title>
+    <meta name="description" content="这是一个 index 页面">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
+    <script src="assets/js/echarts.min.js"></script>
+    <link rel="stylesheet" href="assets/css/amazeui.min.css"/>
+    <link rel="stylesheet" href="assets/css/amazeui.datatables.min.css"/>
+    <link rel="stylesheet" href="assets/css/app.css">
+    <script src="assets/js/jquery.min.js"></script>
+</head>
+
+<body data-type="widgets">
+<script src="assets/js/theme.js"></script>
+<!-- 风格切换 -->
+<div class="tpl-skiner">
+    <div class="tpl-skiner-toggle am-icon-cog">
+    </div>
+    <div class="tpl-skiner-content">
+        <div class="tpl-skiner-content-title">
+            选择主题
+        </div>
+        <div class="tpl-skiner-content-bar">
+            <span class="skiner-color skiner-white" data-color="theme-white"></span>
+            <span class="skiner-color skiner-black" data-color="theme-black"></span>
+        </div>
+    </div>
+</div>
+
+<!-- 内容区域 -->
+<div class="row">
+
+    <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+        <div class="widget am-cf">
+            <div class="widget-head am-cf">
+                <div class="widget-title am-fl">发表博文</div>
+                <div class="widget-function am-fr">
+                    <a href="javascript:;" class="am-icon-cog"></a>
+                </div>
+            </div>
+            <div class="widget-body am-fr">
+
+                <form class="am-form tpl-form-line-form">
+                    <input type="hidden" name="id">
+                    <div class="am-form-group">
+                        <label for="title" class="am-u-sm-3 am-form-label">标题 <span class="tpl-form-line-small-title">Title</span></label>
+                        <div class="am-u-sm-9">
+                            <input type="text" class="tpl-form-input" id="title" name="title" maxlength="50"
+                                   placeholder="请输入标题文字">
+                            <small>请填写标题文字10-20字左右。</small>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="releaseTime" class="am-u-sm-3 am-form-label">发布时间 <span
+                                class="tpl-form-line-small-title">releaseTime</span></label>
+                        <div class="am-u-sm-9">
+                            <input type="text" class="am-form-field tpl-form-no-bg" placeholder="发布时间"
+                                   id="releaseTime" name="releaseTime" data-am-datepicker readonly="" required>
+                            <small>发布时间为必填</small>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="blogCategory" class="am-u-sm-3 am-form-label">分类 <span
+                                class="tpl-form-line-small-title">blogCategory</span></label>
+                        <div class="am-u-sm-9">
+                            <select id="blogCategory" multiple data-am-selected name="blogCategory"
+                                    class="form-control form-control-chosen" data-placeholder="请选择">
+                                <option value="技术">技术</option>
+                                <option value="生活">生活</option>
+                                <option value="随笔">随笔</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="Author" class="am-u-sm-3 am-form-label">作者 <span class="tpl-form-line-small-title">Author</span></label>
+                        <div class="am-u-sm-9">
+                            <select id="Author" name="Author" data-am-selected style="display: none;">
+                                <option value="a">-The.CC</option>
+                                <option value="b">夕风色</option>
+                                <option value="o">Orange</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="summary" class="am-u-sm-3 am-form-label">博客摘要 <span
+                                class="tpl-form-line-small-title">summary</span></label>
+                        <div class="am-u-sm-9">
+                            <textarea id="summary" name="summary" type="text" placeholder="输入摘要信息" maxlength="300"
+                                      rows="4"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="image" class="am-u-sm-3 am-form-label">封面图 <span class="tpl-form-line-small-title">Image</span></label>
+                        <div class="am-u-sm-9">
+                            <div class="am-form-group am-form-file">
+                                <div class="tpl-form-file-img">
+                                    <img id="image" name="image" src="assets/img/blog_default.png" alt="默认图片">
+                                </div>
+                                <button type="button" class="am-btn am-btn-danger am-btn-sm">
+                                    <i class="am-icon-cloud-upload"></i> 添加封面图片
+                                </button>
+                                <input id="doc-form-file" type="file" multiple="">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="keywords" class="am-u-sm-3 am-form-label">关键词 <span
+                                class="tpl-form-line-small-title">Keywords</span></label>
+                        <div class="am-u-sm-9">
+                            <input type="text" id="keywords" name="keywords" placeholder="关键词用逗号隔开" maxlength="30">
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="isVisible" class="am-u-sm-3 am-form-label">隐藏文章</label>
+                        <div class="am-u-sm-9">
+                            <div class="tpl-switch">
+                                <input type="checkbox" id="isVisible" name="isVisible"
+                                       class="ios-switch bigswitch tpl-switch-btn" checked="">
+                                <div class="tpl-switch-btn-view">
+                                    <div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <label for="content" class="am-u-sm-3 am-form-label">文章内容</label>
+                        <div class="am-u-sm-9">
+                            <textarea id="content" name="content" data-provide="markdown" class="" rows="50"
+                                      data-hidden-buttons="cmdImage" placeholder="请输入文章内容"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <div class="am-u-sm-9 am-u-sm-push-3">
+                            <button type="button" class="am-btn am-btn-primary tpl-btn-bg-color-success ">提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="assets/js/amazeui.min.js"></script>
+<script src="assets/js/amazeui.datatables.min.js"></script>
+<script src="assets/js/dataTables.responsive.min.js"></script>
+<script src="assets/js/app.js"></script>
+
+</body>
+<script>
+    //myJavaScript代码区域
+    function loadPage(tag) {
+        $(".tpl-content-wrapper").load(tag);
+    }
+</script>
+</html>

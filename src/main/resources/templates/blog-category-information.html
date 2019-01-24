@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  
+<!-- Mirrored from lmpixels.com/demo/sunshine-demo/sunshine-version-2/sunshine-html-template/blog-post-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 24 Aug 2018 06:14:45 GMT -->
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+    <title>Sunshine - Responsive vCard Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="Sunshine - Responsive vCard Template" />
+    <meta name="keywords" content="vcard, resposnive, retina, resume, jquery, css3, bootstrap, Sunshine, portfolio" />
+    <meta name="author" content="lmtheme" />
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/transition-animations.css">
+    <link rel="stylesheet" href="css/owl.carousel.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/main.css" type="text/css">
+    
+
+    <script src="js/jquery-2.1.3.min.js"></script>
+    <script src="js/modernizr.custom.js"></script>
+  </head>
+
+  <body>
+  	
+	<!-- content -->
+	<div id="content">
+			 
+      			<article class="article">
+                    <!--<h2 class="title"><a href="article?id=${article.id}">${article.title}</a></h2>-->
+                    <!--<h2 class="title"><a href="blog-post-1.html">${article.title}</a></h2>-->
+                    <h2 class="title">
+                    <!--<a href="#" onclick="loadPage('blog-information.html?id=<%=info.getId()%>')"><%=info.getTitle()%></a>-->
+                    <a href="blog-detail.html" target="_blank">测试标题1<%=info.getTitle()%></a>
+								    </h2>
+                    <span><i>标签：${article.keywords}</i></span>
+                    <time style="text-align: center">${article.localTime}</time>
+                    <section class="article-content markdown-body">
+                      <blockquote>
+                        <p>${article.desci}</p>
+                      </blockquote>
+                      ......
+                    </section>
+                    <footer>
+                      <a href="blog-detail.html" target="_blank">阅读全文</a>
+                    </footer>
+                 </article>
+		</div>
+	<!-- /content -->
+	<script>
+        //myJavaScript代码区域
+        function loadPage(tag) {
+            $("#content").load(tag);
+        }
+    </script>
+  	
+  </body>
+
+<!-- Mirrored from lmpixels.com/demo/sunshine-demo/sunshine-version-2/sunshine-html-template/blog-post-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 24 Aug 2018 06:15:06 GMT -->
+</html>

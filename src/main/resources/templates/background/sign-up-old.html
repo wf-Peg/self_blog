@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>用户注册</title>
+    <meta name="description" content="这是一个 index 页面">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <link rel="stylesheet" href="assets/css/amazeui.min.css" />
+    <link rel="stylesheet" href="assets/css/amazeui.datatables.min.css" />
+    <link rel="stylesheet" href="assets/css/app.css">
+    <script src="assets/js/jquery.min.js"></script>
+
+</head>
+
+<body data-type="login">
+    <script src="assets/js/theme.js"></script>
+    <div id="content">
+    <div class="am-g tpl-g">
+        <!-- 风格切换 -->
+        <div class="tpl-skiner">
+            <div class="tpl-skiner-toggle am-icon-cog">
+            </div>
+            <div class="tpl-skiner-content">
+                <div class="tpl-skiner-content-title">
+                    选择主题
+                </div>
+                <div class="tpl-skiner-content-bar">
+                    <span class="skiner-color skiner-white" data-color="theme-white"></span>
+                    <span class="skiner-color skiner-black" data-color="theme-black"></span>
+                </div>
+            </div>
+        </div>
+        <div class="tpl-login">
+            <div class="tpl-login-content">
+                <div class="tpl-login-title">注册用户</div>
+                <span class="tpl-login-content-info">
+                  创建一个新的用户
+              </span>
+
+
+                <form class="am-form tpl-form-line-form" id="registerForm"  th:object="${userModel.user}">
+                    <input type="hidden" name="userId" id="userId" th:value="*{userId}">
+                    <div class="am-form-group">
+                        <input type="text" class="tpl-form-input" name="userName" id="userName" placeholder="用户名" th:value="*{userName}"  onchange="checkAccountIsExist()">
+                        <div class="span-exist-tip" style="display: none;color: red"><span class="label label-sm label-danger">该帐号已经存在，请重新输入!</span></div>
+                    </div>
+
+                    <div class="am-form-group">
+                        <input type="password" class="tpl-form-input" name="passWord" id="passWord" th:value="*{passWord}" placeholder="请输入密码">
+                    </div>
+
+                    <!--<div class="am-form-group">-->
+                        <!--<input type="password" class="tpl-form-input" name="rePassword" id="rePassword" th:value="*{rePassword}" placeholder="再次输入密码">-->
+                    <!--</div>-->
+
+                    <div  style="padding-bottom: 10px">
+                        <select name="userRole" data-am-selected="{searchBox: 1}" style="display: none;">
+                            <option value="user">user</option>
+                            <option value="admin">admin</option>
+                        </select>
+                    </div>
+
+                    <div class="am-form-group">
+                        <!--<input type="submit" class="am-btn am-btn-primary  am-btn-block tpl-btn-bg-color-success  tpl-login-btn" value="提交"></input>-->
+                        <button class="am-btn am-btn-primary  am-btn-block tpl-btn-bg-color-success  tpl-login-btn" type="button"
+                                 onclick="saveUser()">注册
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+     </div>
+    </div>
+    <script src="assets/js/amazeui.min.js"></script>
+    <script src="assets/js/app.js"></script>
+
+</body>
+
+</html>

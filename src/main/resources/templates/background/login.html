@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:tx="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>请登陆</title>
+    <!-- Bootstrap core CSS -->
+    <link href="asserts/css/bootstrap.min.css" th:href="@{asserts/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="asserts/css/signin.css" th:href="@{/asserts/css/signin.css}" rel="stylesheet">
+    <script type="text/javascript" src="asserts/js/jquery-1.7.1.min.js"
+            th:src="@{/asserts/js/jquery-1.7.1.min.js}"></script>
+    <script src="asserts/js/do.js"></script>
+    <script>
+        $(document).ready(function() {
+            //回车提交事件
+            $("body").bind('keydown', function(event) {
+                if(event.keyCode==13){
+//                    alert('回车');
+                    login();
+                }
+            });
+        });
+    </script>
+
+</head>
+
+<body class="text-center">
+<form class="form-signin" th:action="@{/userlogin}" method="post" id="myForm">
+    <img class="mb-4" src="asserts/img/Icon.jpeg" th:src="@{asserts/img/Icon.jpeg}" alt="" width="72" height="72">
+    <h1 class="h3 mb-3 font-weight-normal" th:text="#{login.tip}">Please sign in</h1>
+    <a href="/registerUserIndex" th:text="#{login.register}" style="color:dodgerblue;float: right;">+ 注册</a>
+    <p style="color:red;" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}"></p>
+    <label class="sr-only" th:text="#{login.username}">Username</label>
+    <input type="text" class="form-control" name="username" th:placeholder="#{login.username}" placeholder="Username"
+           required="" autofocus="">
+    <label class="sr-only" th:text="#{login.password}">Password</label>
+    <input type="password" class="form-control" name="password" th:placeholder="#{login.password}"
+           placeholder="Password" required="">
+    <div th:align="left" class="form-inline">
+        <input class="form-control" type="text" th:placeholder="#{login.code}" name="imageCode" style="width: 100px">&nbsp;&nbsp;&nbsp;&nbsp;
+        <img src="/code/image" id="check" onclick="changeImg()">
+    </div>
+    <!--<p style="color:red;" th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}" th:if="${param.error}">-->
+    <!--用户名或密码错误，请重新输入-->
+    <!--</p>-->
+    <div class="checkbox" align="left" style="float:left; margin-top: 8px">
+        <label>
+            <input type="checkbox" name="remember-me">[[#{login.remember}]]
+        </label>
+    </div>
+    <div align="right" style="margin-top: 8px"><a href="/forgotPasswordIndex" th:text="#{login.forget}">忘记密码？</a></div>
+    <p style="color:red;margin-right: 70px" th:if="${param.error}">输入信息有误</p>
+    <!--<p style="color:red;margin-right: 70px" th:text="${erroMsg}" th:if="${loginError}"></p>-->
+    <button class="btn btn-lg btn-primary btn-block" type="button"
+            th:text="#{login.sign}" onclick="login()">Sign in
+    </button>
+    <!--<input class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{login.sign}" onclick="check(this.from)">-->
+    <p class="mt-5 mb-3 text-muted">© 2017-2018</p>
+    <a class="btn btn-sm" th:href="@{/userlogin(l='zh_CN')}">中文</a>
+    <a class="btn btn-sm" th:href="@{/userlogin(l='en_US')}">English</a>
+</form>
+
+</body>
+
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="新增Banner">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
+    <script src="assets/js/echarts.min.js" th:src="@{assets/js/echarts.min.js}"></script>
+    <link rel="stylesheet" href="assets/css/amazeui.min.css" th:src="@{assets/css/amazeui.min.css}"/>
+    <link rel="stylesheet" href="assets/css/amazeui.datatables.min.css"
+          th:src="@{assets/css/amazeui.datatables.min.css}"/>
+    <link rel="stylesheet" href="assets/css/app.css" th:src="@{assets/css/app.css}">
+    <script src="assets/js/jquery.min.js" th:src="@{assets/js/jquery.min.js}"></script>
+    <script src="assets/js/theme.js"></script>
+    <script src="/asserts/js/do.js"></script>
+</head>
+<body>
+<div id="content">
+    <!-- 风格切换 -->
+    <div class="tpl-skiner">
+        <div class="tpl-skiner-toggle am-icon-cog">
+        </div>
+        <div class="tpl-skiner-content">
+            <div class="tpl-skiner-content-title">
+                选择主题
+            </div>
+            <div class="tpl-skiner-content-bar">
+                <span class="skiner-color skiner-white" data-color="theme-white"></span>
+                <span class="skiner-color skiner-black" data-color="theme-black"></span>
+            </div>
+        </div>
+    </div>
+    <!-- 内容区 -->
+    <div class="row">
+
+        <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+            <div class="widget am-cf">
+                <div class="widget-head am-cf">
+                    <div class="widget-title am-fl">修改Banner信息</div>
+                    <div class="widget-function am-fr">
+                        <a href="javascript:;" class="am-icon-cog"></a>
+                    </div>
+                </div>
+                <div class="widget-body am-fr">
+                    <!--<form action="/banner/add" method="post" class="form-horizontal" enctype="multipart/form-data">-->
+                    <form class="am-form tpl-form-line-form"
+                          enctype="multipart/form-data" id="bannerEditForm">
+                        <label class="am-u-sm-3 am-form-label">Banner描述</label>
+                        <div class="am-u-sm-9">
+                            <!--<input type="text" class="tpl-form-input" name="userId" id="userId"-->
+                            <!--th:value="${userModel.user == null? 'null' : userModel.user.userId}"-->
+                            <!--readonly="readonly">-->
+                            <input class="form-control" type="text" name="name" id="name"
+                                   placeholder="图片描述">
+                            <!--<small>帐号唯一id</small>-->
+                        </div>
+
+                        <label for="bannerkey" class="am-u-sm-3 am-form-label">图片关键字</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" class="tpl-form-input" name="bannerkey" id="bannerkey"
+                                   placeholder="图片关键字<wallpaper|gif|illustration|gif|media>">
+                        </div>
+
+                        <label for="img" class="am-u-sm-3 am-form-label">图片地址</label>
+                        <div class="am-u-sm-9">
+                            <div class="am-form-group am-form-file">
+                                <div class="tpl-form-file-img">
+                                    <!--<input type="hidden" name="img" value="">-->
+                                    <img class="img" id="img" name="img" src="assets/img/blog_default.png" alt="默认图片"
+                                         style="width: 50%;height: auto">
+                                </div>
+                                <button type="button" class="am-btn am-btn-danger am-btn-sm">
+                                    <i class="am-icon-cloud-upload"></i> 添加Banner图片
+                                </button>
+                                <input id="uploadFile" type="file" multiple="" name="uploadFile" onchange="reads(this)">
+                            </div>
+                        </div>
+                        <!-- old test -->
+                        <!--<div class="am-u-sm-9">-->
+                        <!--<input type="text" class="tpl-form-input" name="img" id="img"-->
+                        <!--placeholder="添加Banner图片">-->
+                        <!--</div>-->
+                        <!-- old test -->
+
+                        <div class="am-form-group">
+                            <!--<input type="submit" class="am-btn am-btn-primary  am-btn-block tpl-btn-bg-color-success  tpl-login-btn" value="提交"></input>-->
+                            <button class="am-btn am-btn-primary  am-btn-block tpl-btn-bg-color-success  tpl-login-btn"
+                                    type="button"
+                                onclick="saveBanner() ">提交
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="assets/js/amazeui.min.js"></script>
+<script src="assets/js/amazeui.datatables.min.js"></script>
+<script src="assets/js/dataTables.responsive.min.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+//    function getImg() {
+//        var uploadFile=$(this).attr('uploadFile');
+//        $.ajax({
+//            type: "POST",
+//            url: "/banner/getImg",
+//            data: uploadFile,
+//            dataType: "json",
+//            contentType: false,
+//            processData: false,// 注意这里应设为false
+//            success: function (data) {
+//                alert(data.msg);
+//                $('img').html(data.body);
+//            }
+//        });
+//    }
+
+</script>
+</html>
+
+

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:tx="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>注册用户</title>
+    <!-- Bootstrap core CSS -->
+    <link href="asserts/css/bootstrap.min.css" th:href="@{asserts/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="asserts/css/signin.css" th:href="@{asserts/css/signin.css}" rel="stylesheet">
+    <script type="text/javascript" src="asserts/js/jquery-1.7.1.min.js"
+            th:src="@{/asserts/js/jquery-1.7.1.min.js}"></script>
+    <script src="asserts/js/do.js"></script>
+</head>
+
+<body class="text-center">
+<form class="form-signin" th:action="@{/forgotPassword}" method="post" id="registerFormForUser">
+    <h1 class="h3 mb-3 font-weight-normal">注册用户</h1>
+    <input type="hidden" id="userId" name="userId"></input>
+    <label class="sr-only" >用户名</label>
+    <input type="text" class="form-control" name="userName" id="userName" placeholder="用户名"
+           required="" autofocus="" onchange="checkUserNameIsExist()">
+        <div class="span-exist-tip" style="display: none;color: red"><span class="label label-sm label-danger">该帐号已存在，请重新输入!</span></div>
+    <label class="sr-only" >密码</label>
+    <input type="password" class="form-control" name="passWord" id="passWord"
+           placeholder="密码" required="">
+    <label class="sr-only" >邮箱</label>
+    <input type="email" class="form-control" name="email" id="email"
+           placeholder="邮箱" required="">
+    <input type="hidden" id="userRole" name="userRole" value="user"></input>
+    <!--<label class="sr-only" >请重复密码</label>-->
+    <!--<input type="password" class="form-control" name="rePassword" id="rePassword"-->
+           <!--placeholder="请重复密码" required="">-->
+    <!--<p style="color:red;" th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}" th:if="${param.error}">-->
+    <!--用户名或密码错误，请重新输入-->
+    <!--</p>-->
+    <!--<p style="color:red;margin-right: 70px" th:text="${erroMsg}" th:if="${loginError}"></p>-->
+    <button class="btn btn-lg btn-primary btn-block" type="button" onclick="saveUserForUser()">注册</button>
+    <!--<input class="btn btn-lg btn-primary btn-block" type="submit" value="确认修改"></input>-->
+    <!--<input class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{login.sign}" onclick="check(this.from)">-->
+</form>
+
+</body>
+
+</html>

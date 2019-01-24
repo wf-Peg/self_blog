@@ -1,0 +1,56 @@
+spring:
+  servlet:
+     multipart:
+       max-file-size: 10Mb
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/self_blog?characterEncoding=utf8&useSSL=false
+    username: root
+#    password: 123456
+    password: root
+    #最大活跃数
+    maxActive: 20
+    #初始化数量
+    initialSize: 1
+    #最大连接等待超时时间
+    maxWait: 60000
+    #打开PSCache，并且指定每个连接PSCache的大小
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    #通过connectionProperties属性来打开mergeSql功能；慢SQL记录
+    #connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 1 from dual
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+  jpa:
+    show-sql: true
+    database: mysql
+    format_sql: true
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    encoding: utf-8
+    cache: false
+    mode: HTML5
+  resources:
+    static-locations: classpath:/templates/,classpath:/static/
+  messages:
+        basename: i18n.login
+  data:
+      elasticsearch:
+        cluster-nodes: localhost:9300
+        properties:
+          # 内嵌 Elasticsearch 实例。默认存储位置是工作目录的 elastic 目录
+          path:
+            home: target/elastic
+          # 设置连接超时时间
+          transport:
+            tcp:
+             connect_timeout: 120s
+server:
+  port: 8090
