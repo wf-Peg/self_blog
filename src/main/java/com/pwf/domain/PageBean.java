@@ -13,6 +13,7 @@ import javax.validation.constraints.Min;
  */
 @Data
 public class PageBean {
+
     @Min(0)
     private int page = 0;
     @Min(0)

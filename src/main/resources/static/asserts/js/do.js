@@ -77,7 +77,7 @@ function login() {
         url: '/login',
         type: 'POST',
         contentType: false,
-        processData: false,// 注意这里应设为false
+        processData: false,// 注意这里应设为false,防止自动转换数据格式。
         // data: "username=" + username + "&password=" + password + "",
         data: formData,
         success: function (loginResult) {

@@ -16,6 +16,8 @@ import java.io.Serializable;
 @Entity
 @Proxy(lazy = false)
 public class Banner implements Serializable{
+
+    private static final long serialVersionUID = -6858593469611808385L;
     //图片id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
