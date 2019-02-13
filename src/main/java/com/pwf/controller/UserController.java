@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
+@CrossOrigin
 @RestController
 @RequestMapping("/user")
 @Api(tags = "后台用户控制类")

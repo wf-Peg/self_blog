@@ -232,8 +232,9 @@ function updateUser() {
         data: data,
         contentType: false,
         processData: false,// 注意这里应设为false
-        success: function () {
-            console.info("进入更新用户");
+        success: function (result) {
+            // console.info("进入更新用户");
+            alert(result.msg);
             loadPageForRegister('/user/users');
         }
     });

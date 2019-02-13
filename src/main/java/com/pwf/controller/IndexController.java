@@ -1,29 +1,37 @@
 package com.pwf.controller;
 
 import com.pwf.domain.Banner;
+import com.pwf.domain.Blog;
 import com.pwf.service.BannerService;
+import com.pwf.service.BlogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
 @Controller
+@CrossOrigin
 @Api(tags = "页面跳转控制层")
 public class IndexController {
     private final String PREFIX = "background/";
     @Autowired
     private BannerService bannerService;
+    @Autowired
+    private BlogService blogService;
 
     @RequestMapping({"/","index"})
     @ApiOperation(value = "跳转前台首页")
     public String index(Model model) {
-        List<Banner> list = bannerService.findAll();
-        model.addAttribute("bannerList", list);
+        List<Banner> bannerList = bannerService.findAll();
+        Iterable<Blog> blogList=blogService.findAll();
+        model.addAttribute("bannerList", bannerList);
+        model.addAttribute("blogList", blogList);
         return "index";
     }
 
@@ -46,6 +54,12 @@ public class IndexController {
     @ApiOperation(value = "跳转后台首页")
     public String backgroundIndex() {
         return PREFIX + "index";
+    }
+
+    @RequestMapping("/blogDetail")
+    @ApiOperation(value = "跳转博客详情")
+    public String blogIndex() {
+        return  "blog-detail";
     }
 
     @RequestMapping("/forgotPasswordIndex")

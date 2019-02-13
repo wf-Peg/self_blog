@@ -152,7 +152,7 @@
     <!-- Mobile Header -->
     <div class="mobile-header mobile-visible">
         <div class="mobile-logo-container">
-            <div class="mobile-site-title">Alex Smith</div>
+            <div class="mobile-site-title">PPPWF</div>
         </div>
 
         <a class="menu-toggle mobile-visible">
@@ -210,7 +210,7 @@
                         <div class="col-sm-6 col-md-6 subpage-block">
                             <div class="general-info">
                                 <h3>Java工程师</h3>
-                                <p>个人自传本人良好的团队合作精神，能迅速融入新的团队。易和人相处，拥有良好的亲和力。能吃苦耐劳，能在较大的压力下保持良好的工作状态，善于自我调节。具有强烈的责任感，工作踏实。性格开朗乐观，积极上进。非常热爱编程，喜欢钻研新的技术，喜欢接受各种不同的挑战。热爱学习，具有很强的自学能力和良好的学习方法。</p>
+                                <p>个人自传本人良好的团队合作精神，能迅速融入新的团队。易和人相处，拥有良好的亲和力。能吃苦耐劳，能在较大的压力下保持良好的工作状态，善于自我调节。具有强烈的责任感，工作踏实。性格开朗乐观，积极上进。非常热爱编程，喜欢钻研新的技术，喜欢接受各种不同的挑战，具有较好的自学能力和良好的学习方法。</p>
                                 <p>教育背景</p>
                                 <p>毕业院校：厦门理工学院</p>
                                 <p>学历：本科</p>
@@ -732,37 +732,39 @@
                             <!--</div>-->
 
                             <!--<c:forEach items="${articles}" var="article">-->
-                            <article class="article">
+                            <article class="article" th:each="blog : ${blogList}">
                                 <!--<h2 class="title"><a href="article?id=${article.id}">${article.title}</a></h2>-->
-                                <h2 class="title"><a href="blog-category-information.html">${article.title}</a></h2>
-                                <span><i>${article.keywords}</i></span>
-                                <time style="text-align: center">${article.localTime}</time>
+                                <h2 class="title"><a th:href="@{/blog/}+${blog.id}" th:text="${blog.title}" target="_blank">${blog.title}</a></h2>
+                                <span><i th:text="${blog.keywords}">${blog.keywords}</i></span>
+                                <time style="text-align: center" th:text="${blog.updateTime}">${blog.updateTime}</time>
                                 <section class="article-content markdown-body">
                                     <blockquote>
-                                        <p>${article.desci}</p>
+                                        <p th:text="${blog.summary}">${blog.summary}</p>
                                     </blockquote>
                                     ......
                                 </section>
                                 <footer>
-                                    <a href="article?id=${article.id}">阅读全文</a>
+                                    <!--@{/emp/}+${emp.id}-->
+                                    <!--<a href="blog/+"${blog.id}">阅读全文</a>-->
+                                    <a th:href="@{/blog/}+${blog.id}" target="_blank">阅读全文</a>
                                 </footer>
                             </article>
 
-                            <article class="article">
-                                <!--<h2 class="title"><a href="article?id=${article.id}">${article.title}</a></h2>-->
-                                <h2 class="title"><a href="blog-post-1.html">${article.title}</a></h2>
-                                <span><i>${article.keywords}</i></span>
-                                <time style="text-align: center">${article.localTime}</time>
-                                <section class="article-content markdown-body">
-                                    <blockquote>
-                                        <p>${article.desci}</p>
-                                    </blockquote>
-                                    ......
-                                </section>
-                                <footer>
-                                    <a href="article?id=${article.id}">阅读全文</a>
-                                </footer>
-                            </article>
+                            <!--<article class="article">-->
+                                <!--&lt;!&ndash;<h2 class="title"><a href="article?id=${article.id}">${article.title}</a></h2>&ndash;&gt;-->
+                                <!--<h2 class="title"><a href="blog-post-1.html">${article.title}</a></h2>-->
+                                <!--<span><i>${article.keywords}</i></span>-->
+                                <!--<time style="text-align: center">${article.localTime}</time>-->
+                                <!--<section class="article-content markdown-body">-->
+                                    <!--<blockquote>-->
+                                        <!--<p>${article.desci}</p>-->
+                                    <!--</blockquote>-->
+                                    <!--......-->
+                                <!--</section>-->
+                                <!--<footer>-->
+                                    <!--<a href="article?id=${article.id}">阅读全文</a>-->
+                                <!--</footer>-->
+                            <!--</article>-->
                         </div>
                         <!-- content end-->
                         <!-- paging start-->

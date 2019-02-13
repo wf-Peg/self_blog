@@ -24,6 +24,7 @@ import java.util.Map;
  * Created by PWF on 2019/1/17.
  */
 @Controller
+@CrossOrigin
 @RequestMapping("/banner")
 public class BannerController {
     @Autowired
