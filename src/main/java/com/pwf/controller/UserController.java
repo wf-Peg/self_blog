@@ -1,5 +1,6 @@
 package com.pwf.controller;
 
+import com.pwf.domain.Blog;
 import com.pwf.domain.User;
 import com.pwf.service.UserService;
 import com.pwf.util.ConstraintViolationExceptionHandler;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,6 +33,8 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @GetMapping("/me")
     @ApiOperation(value = "查看当前用户基本信息")
@@ -155,14 +159,12 @@ public class UserController {
     @ApiOperation("根据用户id查询并转发到管理员编辑页面")
     @GetMapping("/userDetail")
     public ModelAndView editForm(@RequestParam("userId") Integer userId, Model model) {
-        if (userId != 0) {
-            try {
-                User user = userService.getUserById(userId);
-                model.addAttribute("user", user);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        User user = (User) redisTemplate.opsForValue().get("user_" + userId);
+        if (user == null) {
+            user = userService.getUserById(userId);
+            redisTemplate.opsForValue().set("user_" + userId, user);
         }
+        model.addAttribute("user", user);
         return new ModelAndView("background/user-edit", "userModel", model);
     }
 

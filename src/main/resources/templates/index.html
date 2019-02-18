@@ -37,6 +37,7 @@
     <script src="js/jquery.magnific-popup.min.js"></script>
     <script src="js/jquery.hoverdir.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/bootstrap-datetimepicker.min.js"></script>
 
     <!-- Demo Color changer Script -->
     <script src="preview/lmpixels-demo-panel.js"></script>
@@ -45,6 +46,18 @@
         //myJavaScript代码区域
         function loadPage(tag) {
             $("#content").load(tag);
+        }
+
+        function loadImage(url,callback) {
+            var img=new Image();
+            img.src=url;
+            if (img.complete){
+                callback.call(img);
+                return;
+            }
+            img.onload=function () {
+                callback.call(img);
+            }
         }
     </script>
 
@@ -115,34 +128,35 @@
             <!--</ul>-->
             <!-- /Social buttons -->
         </div>
+
         <!-- keywords start -->
-        <div class="keywords" style="position: relative; left: 60px;top: 20px;">
-            <h3 class="keywords-header"><i class="fa fa-tags" aria-hidden="true"></i> 热门标签</h3>
-            <div class="card-block">
-                <div class="row" style="margin-left: 0px;margin-right: 0px">
-                    <div class="col-lg-9" style="margin-left: 10px">
-                        <a href="/blogs?tag=1"> <span class="badge badge-default">Web Design</span></a>
-                        <a href="/blogs?tag=1"> <span class="badge badge-default">Jersey</span></a>
-                        <a href="/blogs?tag=1"> <span class="badge badge-default">JavaScript</span></a>
-                        <a href="/blogs?tag=1"> <span class="badge badge-default">CSS</span></a>
-                        <a href="/blogs?tag=1"> <span class="badge badge-default">Java</span></a>
-                        <a href="/blogs?tag=1"> <span class="badge badge-default">Freebies</span></a>
-                        <a href="/blogs?tag=1"> <span class="badge badge-default">Web Design</span></a>
-                        <a href="/blogs?tag=1"> <span class="badge badge-default">Jersey</span></a>
-                        <a href="/blogs?tag=1"> <span class="badge badge-default">JavaScript</span></a>
-                        <a href="/blogs?tag=1"> <span class="badge badge-default">CSS</span></a>
-                        <a href="/blogs?tag=1"> <span class="badge badge-default">Java</span></a>
-                        <a href="/blogs?tag=1"> <span class="badge badge-default">Freebies</span></a>
-                        <a href="/blogs?tag=1"> <span class="badge badge-default">Web Design</span></a>
-                        <a href="/blogs?tag=1"> <span class="badge badge-default">Jersey</span></a>
-                        <a href="/blogs?tag=1"> <span class="badge badge-default">JavaScript</span></a>
-                        <a href="/blogs?tag=1"> <span class="badge badge-default">CSS</span></a>
-                        <a href="/blogs?tag=1"> <span class="badge badge-default">Java</span></a>
-                        <a href="/blogs?tag=1"> <span class="badge badge-default">Freebies</span></a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!--<div class="keywords" style="position: relative; left: 60px;top: 20px;">-->
+            <!--<h3 class="keywords-header"><i class="fa fa-tags" aria-hidden="true"></i> 热门标签</h3>-->
+            <!--<div class="card-block">-->
+                <!--<div class="row" style="margin-left: 0px;margin-right: 0px">-->
+                    <!--<div class="col-lg-9" style="margin-left: 10px">-->
+                        <!--<a href="/blogs?tag=1"> <span class="badge badge-default">Web Design</span></a>-->
+                        <!--<a href="/blogs?tag=1"> <span class="badge badge-default">Jersey</span></a>-->
+                        <!--<a href="/blogs?tag=1"> <span class="badge badge-default">JavaScript</span></a>-->
+                        <!--<a href="/blogs?tag=1"> <span class="badge badge-default">CSS</span></a>-->
+                        <!--<a href="/blogs?tag=1"> <span class="badge badge-default">Java</span></a>-->
+                        <!--<a href="/blogs?tag=1"> <span class="badge badge-default">Freebies</span></a>-->
+                        <!--<a href="/blogs?tag=1"> <span class="badge badge-default">Web Design</span></a>-->
+                        <!--<a href="/blogs?tag=1"> <span class="badge badge-default">Jersey</span></a>-->
+                        <!--<a href="/blogs?tag=1"> <span class="badge badge-default">JavaScript</span></a>-->
+                        <!--<a href="/blogs?tag=1"> <span class="badge badge-default">CSS</span></a>-->
+                        <!--<a href="/blogs?tag=1"> <span class="badge badge-default">Java</span></a>-->
+                        <!--<a href="/blogs?tag=1"> <span class="badge badge-default">Freebies</span></a>-->
+                        <!--<a href="/blogs?tag=1"> <span class="badge badge-default">Web Design</span></a>-->
+                        <!--<a href="/blogs?tag=1"> <span class="badge badge-default">Jersey</span></a>-->
+                        <!--<a href="/blogs?tag=1"> <span class="badge badge-default">JavaScript</span></a>-->
+                        <!--<a href="/blogs?tag=1"> <span class="badge badge-default">CSS</span></a>-->
+                        <!--<a href="/blogs?tag=1"> <span class="badge badge-default">Java</span></a>-->
+                        <!--<a href="/blogs?tag=1"> <span class="badge badge-default">Freebies</span></a>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
         <!-- keywords end -->
 
         <!-- Navigation & Social buttons -->
@@ -675,12 +689,29 @@
 
                 <!-- Blog Subpage -->
                 <section class="pt-page pt-page-5" data-id="blog" id="blog" >
+                    <div style="margin-left: 90%;font-size: larger"><a class="btn btn-primary btn-lg" style="border-radius: 6px;" href="/userlogin">发布内容</a></div>
                     <div class="section-title-block">
                         <h2 class="section-title">博客</h2>
                         <h5 class="section-description">碎碎念，树洞，心情，技术，Whatever.</h5>
+                        <div class="form-group" style="width:33%;margin: 0 auto;">
+                            <input style="position:absolute;width: 80%;margin-top: 2px" id="searchText" type="text" name="searchText" class="form-control" placeholder="请输入搜索内容">
+                            <button style="position:relative;float:right;display: inline-block" class="fa fa-search" type="button" onclick="getContentByName()"></button>
+                        </div>
                     </div>
 
-                    <div id="container">
+
+                    <!--<div style="float: right">-->
+                        <!--<div class="am-input-group am-input-group-sm tpl-form-border-form cl-p">-->
+                            <!--<input type="text" id="searchName" class="form-control mr-sm-2 " placeholder="根据名称查询">-->
+                            <!--<span class="am-input-group-btn">-->
+                            <!--<button class="fa fa-search"-->
+                                    <!--type="button" onclick="getBannerByName()">-->
+                            <!--</button>-->
+                          <!--</span>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <div id="container" style="padding-top: 20px">
                         <div id="category"><h2>分类：
                             <!--<a href="#">生活&nbsp;&nbsp;</a>-->
                             <a href="#" onclick="loadPage('blog-category-information.html')">生活&nbsp;&nbsp;</a><!--<%=info.getTitle()%>-->
@@ -734,8 +765,9 @@
                             <!--<c:forEach items="${articles}" var="article">-->
                             <article class="article" th:each="blog : ${blogList}">
                                 <!--<h2 class="title"><a href="article?id=${article.id}">${article.title}</a></h2>-->
-                                <h2 class="title"><a th:href="@{/blog/}+${blog.id}" th:text="${blog.title}" target="_blank">${blog.title}</a></h2>
+                                <h1 class="title" style="padding-top: 15px"><a th:href="@{/blog/}+${blog.id}" th:text="${blog.title}" target="_blank">${blog.title}</a></h1>
                                 <span><i th:text="${blog.keywords}">${blog.keywords}</i></span>
+                                <h4>作者：<b th:text="${blog.author}">author</b>&nbsp;&nbsp;&nbsp;&nbsp;阅读量：<b th:text="${blog.reading}">reading</b></h4>
                                 <time style="text-align: center" th:text="${blog.updateTime}">${blog.updateTime}</time>
                                 <section class="article-content markdown-body">
                                     <blockquote>
@@ -779,9 +811,21 @@
                         <!--</div>-->
                         <!-- paging end-->
                     </div>
+
+                    <ul class="pagination square" style="margin-left: 470px">
+                        <li><a href="#">&laquo;</a></li>
+                        <li class="previous"><a href="#">上一页</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li class="next"><a href="#">下一页</a></li>
+                        <li><a href="#">&raquo;</a></li>
+                    </ul>
                     <!-- container end-->
                     <!--<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>-->
-                    <a href="#blog" target="_self" id="top" style="color: darkseagreen;">Top</a>
+                    <a href="#blog" target="_self" id="top" style="color: darkseagreen;padding-right: 200px">Top</a>
                 </section>
                 <!-- End Blog Subpage -->
 

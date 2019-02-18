@@ -36,6 +36,9 @@ public interface UserService {
     @ApiOperation(value = "根据id获取用户")
     User getUserById(Integer id);
 
+    @ApiOperation(value = "根据用户名获取用户")
+    Optional<User> getUserByUsername(String username);
+
     @ApiOperation(value = "获取用户列表")
     List<User> listUsers();
 

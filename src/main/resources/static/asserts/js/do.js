@@ -365,6 +365,26 @@ $('.del-user').bind('click', function () {
     }
 });
 
+/**
+ * 博文删除
+ */
+$('.del-blog').bind('click', function () {
+    var id = $(this).attr('id');
+    if (window.confirm('(请注意，删除博文后评论将消失)确认删除该博文?')) {
+        $.ajax({
+            url: '/blog/' + id,
+            type: 'DELETE',
+            dataType: 'json',
+            success: function (data) {
+                if (data.success) {
+                    loadPageForRegister('/blog/list');
+                    alert(data.msg);
+                }
+            }
+        })
+    }
+});
+
 
 /*------------------------------------Banner---------------------------------*/
 /**
@@ -450,3 +470,56 @@ function reads(obj) {
         $("#img").attr("src", ev.target.result);
     }
 }
+
+
+/*------------------------------------评论---------------------------------*/
+
+// 根据评论内容查询
+function getCommentByName() {
+    $.ajax({
+        url: "/comments/commentSearch",
+        contentType: 'application/json',
+        data: {
+            // "async":true,
+            // "pageIndex":pageIndex,
+            // "pageSize":pageSize,
+            "searchText": $("#searchName").val()
+        },
+        success: function (data) {
+            // loadPageForRegister('/user/usersSearch');
+            $("#content").html(data);
+        },
+        error: function () {
+            alert("error!");
+            alert($("#searchName").val());
+        }
+    });
+}
+
+/**
+ * 删除评论
+ */
+$('.del-comment').click(function () {
+    var id = $(this).attr('id');
+    var blogId = $('.blogId').attr('id');
+    // alert("id="+id+",blogId="+blogId);
+    if (window.confirm('确认要删除该行评论?')) {
+        $.ajax({
+            url: '/comments/' + id + '?blogId=' + blogId,
+            type: 'DELETE',
+            dataType: "json",
+            success: function (data) {
+                if (data.code == 0) {
+                    alert(data.msg);
+                    loadPageForRegister('/comments/list');
+                } else {
+                    alert(data.code+"错误信息为："+data.msg);
+                }
+            },
+            error: function () {
+                alert(data.code+"错误信息为："+data.msg);
+            }
+        });
+    }
+});
+

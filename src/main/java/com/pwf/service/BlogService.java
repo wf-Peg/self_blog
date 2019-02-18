@@ -1,7 +1,10 @@
 package com.pwf.service;
 
 import com.pwf.dao.BlogRepository;
+import com.pwf.dao.CommentRepository;
 import com.pwf.domain.Blog;
+import com.pwf.domain.Comment;
+import com.pwf.domain.User;
 import com.pwf.util.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.Nullable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +22,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Created by PWF on 2019/2/2.
@@ -27,6 +33,8 @@ import java.util.List;
 public class BlogService {
     @Autowired
     private BlogRepository repository;
+    @Autowired
+    private CommentRepository commentRepository;
     @Autowired
     private IdWorker idWorker;
 
@@ -45,12 +53,25 @@ public class BlogService {
 //        return repository.findByTitleContainingOrSummaryContainingOrContentContaining(title,summary,content,pageable);
 //    }
 
-    public Blog findById(String id){
-        return repository.findById(id).get();
+    public Blog findById(Long id){
+        Optional<Blog> byId = repository.findById(id);
+        return byId.isPresent()?byId.get():null;
     }
+
+    /**
+     * 阅读量递增
+     * @param id
+     */
+    public void readingIncrease(Long id) {
+        Blog blog = repository.getOne(id);
+        blog.setReading(blog.getReading()+1);
+        repository.save(blog);
+    }
+
     public void save(Blog blog){
         //对象中没id就是保存
-        blog.setId(idWorker.nextId()+"");
+        blog.setId(idWorker.nextId());
+//        blog.setId(idWorker.nextId()+"");
         System.out.println(idWorker.nextId());
         repository.save(blog);
     }
@@ -59,7 +80,7 @@ public class BlogService {
 //        repository.saveAndFlush(blog);
         repository.save(blog);
     }
-    public void deleteById(String id){
+    public void deleteById(Long id){
         repository.deleteById(id);
     }
 
@@ -104,7 +125,7 @@ public class BlogService {
         });
     }
 
-    //根据blog名称、关键词进行分页条件查询：
+    //根据blog名称、关键词、分类、摘要进行分页条件查询：
     public Page<Blog> pageSearch(Blog blog, int page, int size) {
         //封装分页对象
         Pageable pageable= PageRequest.of(page-1,size);//框架中第一页是从零开始算的
@@ -140,5 +161,29 @@ public class BlogService {
         }, pageable);
     }
 
+    public Blog createComment(Long blogId, String commentUsername,String commentContent) {
+        Blog originalBlog = repository.findById(blogId).get();
+        Comment comment = new Comment(commentUsername, commentContent,blogId);
+//        commentRepository.save(comment);
+        originalBlog.addComment(comment);
+        return repository.save(originalBlog);
+    }
 
+    public void removeComment(Long blogId, Long commentId) {
+        Blog originalBlog = repository.findById(blogId).get();
+        originalBlog.removeComment(commentId);
+        repository.save(originalBlog);
+    }
+
+    public void examine(Long id,Boolean isVisible) {
+        repository.updateBlogState(id,isVisible);
+    }
+
+    public Page<Blog> findBlogsByIsVisibleIsFalse(Pageable pageable){
+        return repository.findBlogsByIsVisibleIsFalse(pageable);
+    }
+
+    public void updateLikes(Long id) {
+        repository.upateLikes(id);
+    }
 }

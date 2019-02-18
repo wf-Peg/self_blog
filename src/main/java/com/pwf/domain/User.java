@@ -1,6 +1,7 @@
 package com.pwf.domain;
 
 import lombok.Data;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -8,6 +9,7 @@ import java.io.Serializable;
 
 @Entity
 @Data
+@Proxy(lazy = false)
 public class User implements Serializable {
     private static final long serialVersionUID = -5889846202649492920L;
     @Id

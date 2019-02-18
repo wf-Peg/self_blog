@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
@@ -43,6 +43,9 @@
         <div class="widget am-cf">
             <div class="widget-head am-cf">
                 <div class="widget-title am-fl">发表博文</div>
+                <div class="widget-function am-fr">
+                    <a href="javascript:;" class="am-icon-cog"></a>
+                </div>
             </div>
             <div class="widget-body am-fr">
 
@@ -52,7 +55,7 @@
                         <label for="title" class="am-u-sm-3 am-form-label">标题 <span class="tpl-form-line-small-title">Title</span></label>
                         <div class="am-u-sm-9">
                             <input type="text" class="tpl-form-input" id="title" name="title" maxlength="50"
-                                   placeholder="请输入标题文字">
+                                   placeholder="请输入标题文字" th:value="${blogModel.blog.title}">
                             <small>请填写标题文字10-20字左右。</small>
                         </div>
                     </div>
@@ -83,7 +86,7 @@
                     <div class="am-form-group">
                         <label for="Author" class="am-u-sm-3 am-form-label">作者 <span class="tpl-form-line-small-title">Author</span></label>
                         <div class="am-u-sm-9">
-                            <select id="Author" name="Author" data-am-selected style="display: none;">
+                            <select id="Author" th:name="${blogModel.blog.author}" data-am-selected style="display: none;">
                                 <option value="a">-The.CC</option>
                                 <option value="b">夕风色</option>
                                 <option value="o">Orange</option>
@@ -119,32 +122,35 @@
                         <label for="keywords" class="am-u-sm-3 am-form-label">关键词 <span
                                 class="tpl-form-line-small-title">Keywords</span></label>
                         <div class="am-u-sm-9">
-                            <input type="text" id="keywords" name="keywords" placeholder="关键词用逗号隔开" maxlength="30">
+                            <input type="text" id="keywords" name="keywords"  placeholder="关键词用逗号隔开" maxlength="30">
                         </div>
                     </div>
 
-                    <!--<div class="am-form-group">-->
-                        <!--<label for="isVisible" class="am-u-sm-3 am-form-label">隐藏文章</label>-->
-                        <!--<div class="am-u-sm-9">-->
-                            <!--<div class="tpl-switch">-->
-                                <!--<input type="checkbox" id="isVisible" name="isVisible"-->
-                                       <!--class="ios-switch bigswitch tpl-switch-btn" checked="">-->
-                                <!--<div class="tpl-switch-btn-view"></div>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
+                    <div class="am-form-group">
+                        <label for="isVisible" class="am-u-sm-3 am-form-label">隐藏文章</label>
+                        <div class="am-u-sm-9">
+                            <div class="tpl-switch">
+                                <input type="checkbox" id="isVisible" name="isVisible" value="true"
+                                       class="ios-switch bigswitch tpl-switch-btn" checked="">
+                                <div class="tpl-switch-btn-view">
+                                    <div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="am-form-group">
                         <label for="content" class="am-u-sm-3 am-form-label">文章内容</label>
                         <div class="am-u-sm-9">
                             <textarea id="content" name="content" data-provide="markdown" class="" rows="50"
-                                      data-hidden-buttons="cmdImage" placeholder="请输入文章内容"></textarea>
+                                       data-hidden-buttons="cmdImage" placeholder="请输入文章内容"></textarea>
                         </div>
                     </div>
 
                     <div class="am-form-group">
                         <div class="am-u-sm-9 am-u-sm-push-3">
-                            <button type="button" class="am-btn am-btn-primary tpl-btn-bg-color-success ">提交</button>
+                            <button type="button" class="am-btn am-btn-danger" onclick="setVisible()">审核通过</button>
+                            <button type="button" class="am-btn am-btn-primary tpl-btn-bg-color-success">提交</button>
                         </div>
                     </div>
                 </form>
@@ -157,12 +163,26 @@
 <script src="assets/js/amazeui.datatables.min.js"></script>
 <script src="assets/js/dataTables.responsive.min.js"></script>
 <script src="assets/js/app.js"></script>
-
+<script src="/asserts/js/do.js"></script>
 </body>
 <script>
-    //myJavaScript代码区域
-    function loadPage(tag) {
-        $(".tpl-content-wrapper").load(tag);
+    var blogId = [[${blogModel.blog.id}]];
+    function setVisible() {
+//        alert(blogId);
+        $.ajax({
+            url: '/blog/examine/'+blogId,
+            type: 'PUT',
+            success: function(data){
+                alert(data.msg);
+            },
+            error : function() {
+                alert("error!");
+            }
+        });
     }
+//    $(document).ready(function () {
+//        var attr = $("input[type='checkbox']").attr('value');
+//        console.log(attr);
+//    });
 </script>
 </html>

@@ -41,6 +41,8 @@ spring:
     static-locations: classpath:/templates/,classpath:/static/
   messages:
         basename: i18n.login
+  redis:
+    host: localhost
 #  data:
 #      elasticsearch:
 #        cluster-nodes: localhost:9300

@@ -97,8 +97,9 @@
         <!-- 头部 -->
         <header>
             <!-- logo -->
-            <div class="am-fl tpl-header-logo" style="background-color: #313131">
-                <a href="#"><img src="assets/img/logo.png" alt=""></a>
+            <!--style="background-color: #313131"-->
+            <div class="am-fl tpl-header-logo" >
+                <img src="assets/img/logo.png" style="margin-top: 15px;">
             </div>
             <!-- 右侧内容 -->
             <div class="tpl-header-fluid">
@@ -300,6 +301,7 @@
 
         </header>
 
+
         <!-- 侧边导航栏 -->
         <div class="left-sidebar">
             <!-- 用户信息 -->
@@ -330,8 +332,21 @@
                     </a>
                 </li>
                 <li class="sidebar-nav-link">
-                    <a href="#" onclick="loadPage('/background/blog-tables.html')">
+                    <!--<a href="#" onclick="loadPage('/background/blog-tables.html')">-->
+                    <a href="#" onclick="loadPage('/blog/examine?page=0&size=10')">
+                        <i class="am-icon-table sidebar-nav-link-logo"></i> 博文审核
+                    </a>
+                </li>
+                <li class="sidebar-nav-link">
+                    <!--<a href="#" onclick="loadPage('/background/blog-tables.html')">-->
+                    <a href="#" onclick="loadPage('/blog/list')">
                         <i class="am-icon-table sidebar-nav-link-logo"></i> 博文管理
+                    </a>
+                </li>
+                <li class="sidebar-nav-link">
+                    <!--<a href="#" onclick="loadPage('/background/blog-tables.html')">-->
+                    <a href="#" onclick="loadPage('/comments/list')">
+                        <i class="am-icon-table sidebar-nav-link-logo"></i> 评论管理
                     </a>
                 </li>
                 <li class="sidebar-nav-link">

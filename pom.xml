@@ -148,6 +148,15 @@
 			<version>2.8.3</version>
 		</dependency>
 
+		<!-- markdown -->
+		<!-- https://mvnrepository.com/artifact/es.nitaur.markdown/txtmark -->
+		<dependency>
+			<groupId>es.nitaur.markdown</groupId>
+			<artifactId>txtmark</artifactId>
+			<version>0.16</version>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>
