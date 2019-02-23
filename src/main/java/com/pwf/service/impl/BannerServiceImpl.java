@@ -20,6 +20,11 @@ public class BannerServiceImpl implements BannerService {
     private BannerRepository repository;
 
     @Override
+    public Page<Banner> findAll(Pageable pageable) {
+        return repository.findAll(pageable);
+    }
+
+    @Override
     public List<Banner> findAll() {
         return repository.findAll();
     }
@@ -53,6 +58,11 @@ public class BannerServiceImpl implements BannerService {
         searchText = "%" + searchText + "%";
         Page<Banner> banners = repository.findByNameLike(searchText, pageable);
         return banners;
+    }
+
+    @Override
+    public Integer findAllCount() {
+        return repository.findAll().size();
     }
 
 }

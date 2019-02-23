@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 /**
@@ -23,8 +24,12 @@ public class Banner implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     //图片名字:title名（项目名）、
+
+    @NotEmpty(message = "图片名称不能为空")
     private String name;
     //图片链接:img文件地址、
+
+//    @NotEmpty(message = "图片不能为空")
     private String img;
     //图片key：data-groups、标签名、i 图标class的值
     private String bannerkey;

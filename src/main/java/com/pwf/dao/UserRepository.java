@@ -2,10 +2,13 @@ package com.pwf.dao;
 
 import com.pwf.domain.Banner;
 import com.pwf.domain.User;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -59,5 +62,18 @@ public interface UserRepository extends JpaRepository<User, Integer>,JpaSpecific
      */
     List<User> findByUserIdIsIn(Integer... ids);
 
+    @ApiOperation(value = "根据用户名查询并添加博客数量")
+    @Modifying
+    @Query(value = "update USER set blog_count = blog_count+1 where user_name = ?1 ",nativeQuery = true)
+    void addBlogCount(String username);
+
+    @ApiOperation(value = "根据用户名查询并删除博客数量")
+    @Modifying
+    @Query(value = "update USER set blog_count = blog_count-1 where user_name = ?1 ",nativeQuery = true)
+    void decreaseBlogCount(String username);
+
+    @ApiOperation(value = "查询并博客数量最多的用户")
+    @Query(value = "SELECT * FROM USER WHERE blog_count=(SELECT MAX(blog_count) FROM USER)",nativeQuery = true)
+    User findMostBlogsUser();
 
 }

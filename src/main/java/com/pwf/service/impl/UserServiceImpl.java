@@ -140,6 +140,21 @@ public class UserServiceImpl implements UserService {
         return uesrOptional;
     }
 
+    @Override
+    public void addBlogCount(String username) {
+        repository.addBlogCount(username);
+    }
+
+    @Override
+    public User findMostBlogsUser() {
+        return repository.findMostBlogsUser();
+    }
+
+    @Override
+    public void decreaseUserBlogCount(String author) {
+        repository.decreaseBlogCount(author);
+    }
+
 //    @Override
 //    public Page<User> findByLastLoginDate() {
 //        return null;

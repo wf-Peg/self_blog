@@ -1,16 +1,18 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <!-- Mirrored from lmpixels.com/demo/sunshine-demo/sunshine-version-2/sunshine-html-template/blog-post-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 24 Aug 2018 06:14:45 GMT -->
 <head>
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Sunshine - Responsive vCard Template</title>
+    <title th:text="${blogDetail.title}">FFShine</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <meta name="description" content="Sunshine - Responsive vCard Template"/>
     <meta name="keywords" content="vcard, resposnive, retina, resume, jquery, css3, bootstrap, Sunshine, portfolio"/>
     <meta name="author" content="lmtheme"/>
-    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="shortcut icon" href="favicon.ico" thhre>
+
 
     <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" href="/css/normalize.css">
@@ -72,17 +74,16 @@
             <!--<a class="blog-back-button" href="#" onclick="loadPage('blog-category-information.html')"><i class="fa fa-angle-left"></i></a>-->
 
             <div class="blog-post-main-image">
-                <img class="post-image img-responsive" src="/images/blog/blog_post_2_full.jpg" alt="blog-post-1"/>
+                <img class="post-image img-responsive" th:src="${blogDetail.image}"
+                     src="/images/blog/blog_post_2_full.jpg"/>
             </div>
 
             <div class="blog-post-content">
                 <h1 th:text="${blogDetail.title}"></h1>
                 <ul class="tags">
-                    <li><a th:text="${blogDetail.category}">HTML5</a></li>
-                    <li><a>CSS3</a></li>
-                    <li><a>jQuery</a></li>
-                    <li><a>Ajax</a></li>
-                    <li><a>PHP5</a></li>
+                    <!--<li>分类:<a th:text="${blogDetail.category}">HTML5</a></li>-->
+                    <li th:each="keyword : ${#strings.arraySplit(blogDetail.keywords, ',')}"><a th:text="${keyword}">CSS3</a>
+                    </li>
                 </ul>
                 <blockquote>
                     <p style="font-weight: bolder;font-size: large" th:text="${blogDetail.summary}">Lorem ipsum
@@ -92,7 +93,7 @@
                         suscipit tristique. Nulla sollicitudin pretium massa sit amet tristique.</p>
                 </blockquote>
 
-                <p th:text="${blogDetail.content}">Aenean porta quam quis tempus posuere. Integer tempor, elit in
+                <p th:utext="${blogDetail.htmlContent}">Aenean porta quam quis tempus posuere. Integer tempor, elit in
                     auctor scelerisque, arcu augue rhoncus
                     mauris, et hendrerit sem tellus vitae eros. Nulla feugiat ultrices posuere. Nullam aliquet dolor
                     orci. Curabitur tincidunt sem et libero dignissim, sed molestie felis ultricies. Phasellus malesuada
@@ -101,6 +102,22 @@
                     eget eleifend mauris. Fusce sagittis ipsum nec est finibus, vitae congue nunc elementum. Morbi
                     imperdiet nisl sem, at commodo leo posuere a. Maecenas eu laoreet lorem. Aenean fringilla cursus
                     augue, sed mollis dui.</p>
+                <!--<h4 name="userId" id="userId"-->
+                <!--th:value="${userModel.user == null? 'null' : userModel.user.userId}"-->
+                <!--readonly="readonly">-->
+
+                <footer th:if="${blogDetail.keylink}!=null">
+                    <hr>
+                    <h3 th:if="${blogDetail.keylink}!=null" align="center" style="color: red;">
+                        万恶的会员机制（以下内容为VIP专享）
+                    </h3>
+                    <div th:if="${blogDetail.keylink}!=null" align="center" sec:authorize="hasRole('user')">
+                        <h4>以下内容为VIP专享</h4>
+                    </div>
+                    <div align="center" th:if="${blogDetail.keylink}!=null" sec:authorize="hasRole('VIP1')">
+                       <a th:text="链接地址" th:href="${blogDetail.keylink}"></a>
+                    </div>
+                </footer>
 
                 <!--<blockquote>-->
                 <!--<p>Vivamus volutpat auctor metus, venenatis ornare mi dictum sit amet. Aliquam erat volutpat.</p>-->
@@ -114,14 +131,14 @@
                 <!--faucibus eget, sagittis sed enim. Nunc nec dapibus odio.</p>-->
 
                 <div class="post-info">
-                    <span class="autor"><i class="fa fa-fw fa-user"></i> John Doe</span>
+                    <span class="autor" th:text="${blogDetail.author}"><i class="fa fa-fw fa-user"></i> John Doe</span>
                     <span class="divider">|</span>
-                    <span class="date" th:text="${blogDetail.updateTime}"><i class="fa fa-fw fa-clock-o"></i> 12 December, 2016</span>
+                    <time class="date" th:text="${#dates.format(blogDetail.updateTime, 'yyyy-MM-dd HH:mm')}"><i class="fa fa-fw fa-clock-o"></i> 12 December, 2016</time>
                     <!-- Share Buttons -->
                     <div class="btn-group share-buttons pull-right hidden-xs">
                         <i class="fa fa-eye" aria-hidden="true"><b th:text="${blogDetail.reading}">1</b></i>
                         <i class="fa fa-heart-o" aria-hidden="true"><b th:text="${blogDetail.likes}">1</b></i>
-                        <!--<i class="fa fa-comment-o" aria-hidden="true"><b th:text="${blogDetail.comments}">1</b></i>-->
+                        <i class="fa fa-comment-o" aria-hidden="true"><b th:text="${blogDetail.comments}">1</b></i>
                         <!--<a href="#" target="_blank" class="btn"><i class="fa fa-facebook"></i> </a>-->
                         <!--<a href="#" target="_blank" class="btn"><i class="fa fa-twitter"></i> </a>-->
                         <!--<a href="#" target="_blank" class="btn"><i class="fa fa-dribbble"></i> </a>-->
@@ -129,12 +146,16 @@
                     <!-- /Share Buttons -->
                 </div>
 
-                <button class="btn btn-danger btn-likes" style="float: right;margin-top: 20px" id="submitVote"><i class="fa fa-heart-o" aria-hidden="true"></i>喜欢</button>
+                <button class="btn btn-danger btn-likes" style="float: right;margin-top: 20px" id="submitVote"><i
+                        class="fa fa-heart-o" aria-hidden="true"></i>喜欢
+                </button>
                 <div class="post-comments" style="margin-top: 50px">
                     <!-- 上下篇 start -->
                     <div style="position: relative;left: 0%">
-                        <div><a th:href="@{/blog/}+${blogDetail.id-1}"><h4 class="label label-primary">上一篇:啦啦啦</h4></a></div>
-                        <div><a th:href="@{/blog/}+${blogDetail.id+1}"><h4 class="label label-success">下一篇:哈哈哈</h4></a></div>
+                        <div><a th:href="@{/blog/}+${blogDetail.id-1}"><h4 class="label label-primary">上一篇:啦啦啦</h4></a>
+                        </div>
+                        <div><a th:href="@{/blog/}+${blogDetail.id+1}"><h4 class="label label-success">下一篇:哈哈哈</h4></a>
+                        </div>
                     </div>
                     <!-- 上下篇 end -->
 
@@ -145,40 +166,42 @@
                 </div>
 
                 <div class="card-block" id="mainContainer">
-                <div class="media" id="commentContainer" th:each="comment,commentStat : ${comments}"
-                     th:object="${comment}">
-                    <div class="media-body" id="mainContainerRepleace" style="margin-top: 20px">
-                        <a class="pull-left" style="padding-right: 0px">
-                            <img th:if="${commentStat.index % 2 == 1}" class="media-object"
-                                 style="width:auto;height: auto;max-width: 55%;max-height: 55%;"
-                                 src="/images/blog/comments/comment_photo_1.png" alt="">
-                            <img th:if="${commentStat.index % 2 == 0}" class="media-object"
-                                 style="width:auto;height: auto;max-width: 55%;max-height: 55%"
-                                 src="/images/blog/comments/comment_photo_2.png" alt="">
-                        </a>
-                        <div class="media-heading" style="margin-top: 15px;">
-                            <!--<a href="#" >John Doe</a> <span class="divider">|</span> <span class="light-gray">1 hour ago</span>-->
-                            <b style="font-size: large" th:text="${comment.commentUsername}">John Doe</b> <span
-                                class="divider">|</span>
-                            <span class="light-gray">[[${commentStat.index} + 1]]楼  [[${#dates.format(comment.createTime, 'yyyy-MM-dd HH:mm')}]] </span>
+                    <div class="media" id="commentContainer" th:each="comment,commentStat : ${comments}"
+                         th:object="${comment}">
+                        <div class="media-body" id="mainContainerRepleace" style="margin-top: 20px">
+                            <a class="pull-left" style="padding-right: 0px">
+                                <img th:if="${commentStat.index % 2 == 1}" class="media-object"
+                                     style="width:auto;height: auto;max-width: 55%;max-height: 55%;"
+                                     src="/images/blog/comments/comment_photo_1.png" alt="">
+                                <img th:if="${commentStat.index % 2 == 0}" class="media-object"
+                                     style="width:auto;height: auto;max-width: 55%;max-height: 55%"
+                                     src="/images/blog/comments/comment_photo_2.png" alt="">
+                            </a>
+                            <div class="media-heading" style="margin-top: 15px;">
+                                <!--<a href="#" >John Doe</a> <span class="divider">|</span> <span class="light-gray">1 hour ago</span>-->
+                                <b style="font-size: large" th:text="${comment.commentUsername}">John Doe</b> <span
+                                    class="divider">|</span>
+                                <span class="light-gray">[[${commentStat.index} + 1]]楼  [[${#dates.format(comment.createTime, 'yyyy-MM-dd HH:mm')}]] </span>
+                            </div>
+                            <!--<p>Nam pellentesque laoreet augue sed facilisis. Suspendisse nec sollicitudin mauris.-->
+                            <h3 th:text="*{content}">Nam pellentesque laoreet augue sed facilisis. Suspendisse nec
+                                sollicitudin mauris.
+                                Integer fringilla a odio sit amet fermentum. Nunc nibh mauris, pretium eu risus et,
+                                finibus facilisis lorem.</h3>
+                            <hr/>
+
+
+                            <!--<div class="media-footer">-->
+                            <!--&lt;!&ndash;<a href="#"><i class="fa fa-reply"></i> Reply</a>&ndash;&gt;-->
+                            <!--<span class="divider"></span>-->
+                            <!--<i class="fa fa-thumbs-up"></i>-->
+                            <!--<span>0</span>-->
+                            <!--<i class="fa fa-thumbs-down"></i>-->
+                            <!--<span>0</span>-->
+                            <!--</div>-->
                         </div>
-                        <!--<p>Nam pellentesque laoreet augue sed facilisis. Suspendisse nec sollicitudin mauris.-->
-                        <h3 th:text="*{content}">Nam pellentesque laoreet augue sed facilisis. Suspendisse nec
-                            sollicitudin mauris.
-                            Integer fringilla a odio sit amet fermentum. Nunc nibh mauris, pretium eu risus et,
-                            finibus facilisis lorem.</h3>
-                        <hr/>
-                        <!--<div class="media-footer">-->
-                        <!--&lt;!&ndash;<a href="#"><i class="fa fa-reply"></i> Reply</a>&ndash;&gt;-->
-                        <!--<span class="divider"></span>-->
-                        <!--<i class="fa fa-thumbs-up"></i>-->
-                        <!--<span>0</span>-->
-                        <!--<i class="fa fa-thumbs-down"></i>-->
-                        <!--<span>0</span>-->
-                        <!--</div>-->
                     </div>
                 </div>
-            </div>
 
             </div>
 
@@ -188,7 +211,8 @@
                 </div>
                 <form class="form-add-comment" style="width: 100%">
                     <div class="form-group">
-                        <input class="form-control" placeholder="Your name" required="required" name="commentUsername" id="commentUsername">
+                        <input class="form-control" placeholder="Your name" required="required" name="commentUsername"
+                               id="commentUsername">
                         <div class="form-control-border"></div>
                         <i class="form-control-icon fa fa-user"></i>
                     </div>
@@ -212,24 +236,80 @@
 </div>
 <!-- content end-->
 <script type="text/javascript">
-var blogId = [[${blogDetail.id}]];
+    var blogId = [[${blogDetail.id}]];
     // 提交评论
     $('.add-comment').bind('click', function () {
         var commentUsername = document.getElementById("commentUsername").value;
         var content = document.getElementById("commentContent").value;
 //        alert(blogId+";"+commentUsername+";"+content);
-        $.ajax({
-            url: '/comments',
-            type: 'POST',
+        if ("" == commentUsername || "" == content) {
+            alert("评论人和评论名不能为空，且至少两个字符");
+        } else {
+            $.ajax({
+                url: '/comments',
+                type: 'POST',
 //            contentType: 'application/json',
-            data: {"blogId": blogId, "commentUsername": commentUsername, "content": content},
-            success: function (data) {
-                if (data.success) {
-                    // 刷新获取评论列表
+                data: {"blogId": blogId, "commentUsername": commentUsername, "content": content},
+                success: function (data) {
+                    if (data.success) {
+                        // 刷新获取评论列表
 //                    history.go(0);
 //                    window.location.reload();
 //                    getComment(blogId);
+                        alert(data.msg);
+                    } else {
+                        alert(data.msg);
+                    }
+                },
+                error: function () {
+                    alert("error!");
+                }
+            });
+        }
+    });
+
+
+    //DOM加载完加载评论
+    $(document).ready(function () {
+//    alert(blogId);
+        $.ajax({
+            url: '/comments',
+            type: 'GET',
+            data: {"blogId": blogId},
+            success: function (data) {
+                $("#mainContainer").html(data);
+            },
+            error: function () {
+                alert("error!");
+            }
+        });
+    });
+
+    function getComment(blogId) {
+        $.ajax({
+            url: '/comments',
+            type: 'GET',
+            data: {"blogId": blogId},
+            success: function (data) {
+                $("#content").html(data);
+            },
+            error: function () {
+                alert("error!");
+            }
+        });
+    }
+
+
+    // 提交点赞
+    $('.btn-likes').click(function () {
+        $.ajax({
+            url: '/blog/likes/' + blogId,
+            type: 'PUT',
+            success: function (data) {
+                if (data.success) {
                     alert(data.msg);
+                    // 成功后，重定向
+                    window.location.reload();
                 } else {
                     alert(data.msg);
                 }
@@ -239,58 +319,6 @@ var blogId = [[${blogDetail.id}]];
             }
         });
     });
-
-
-//DOM加载完加载评论
-$(document).ready(function (){
-//    alert(blogId);
-        $.ajax({
-            url: '/comments',
-            type: 'GET',
-            data:{"blogId":blogId},
-            success: function(data){
-                $("#mainContainer").html(data);
-            },
-            error : function() {
-                alert("error!");
-            }
-        });
-});
-
-function getComment(blogId) {
-    $.ajax({
-        url: '/comments',
-        type: 'GET',
-        data: {"blogId": blogId},
-        success: function (data) {
-            $("#content").html(data);
-        },
-        error: function () {
-            alert("error!");
-        }
-    });
-}
-
-
-// 提交点赞
-$('.btn-likes').click(function () {
-    $.ajax({
-        url: '/blog/likes/'+blogId,
-        type: 'PUT',
-        success: function(data){
-            if (data.success) {
-                alert(data.msg);
-                // 成功后，重定向
-                window.location.reload();
-            } else {
-                alert(data.msg);
-            }
-        },
-        error : function() {
-            alert("error!");
-        }
-    });
-});
 
 </script>
 <script src="/js/bootstrap.min.js"></script>

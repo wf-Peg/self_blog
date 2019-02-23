@@ -80,6 +80,7 @@ public class CommentController {
 	public ResponseEntity<ResultVO> createComment(Long blogId, String commentUsername,String content) {
 		try {
 			blogService.createComment(blogId,commentUsername, content);
+
 		} catch (ConstraintViolationException e)  {
 			return ResponseEntity.ok().body(new ResultVO(false, ConstraintViolationExceptionHandler.getMessage(e)));
 		} catch (Exception e) {

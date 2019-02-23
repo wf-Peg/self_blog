@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Amaze UI Admin index Examples</title>
-    <meta name="description" content="这是一个 用户管理 页面">
+    <title>用户管理</title>
+    <meta name="description" content="这是一个用户管理页面">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
@@ -43,8 +42,6 @@
             <div class="widget am-cf">
                 <div class="widget-head am-cf">
                     <div class="widget-title  am-cf">用户管理</div>
-
-
                 </div>
                 <div class="widget-body  am-fr">
 
@@ -93,6 +90,7 @@
                                 <th style="align:center;text-align: center">用户id</th>
                                 <th style="align:center;text-align: center">用户昵称</th>
                                 <th style="align:center;text-align: center">用户邮箱</th>
+                                <th style="align:center;text-align: center">用户发布博客数量</th>
                                 <th style="align:center;text-align: center">用户权限</th>
                                 <th style="align:center;text-align: center">操作</th>
                             </tr>
@@ -107,9 +105,8 @@
                             <tr class="even gradeC" th:each="user : ${userModel.userList}" style="align:center;text-align: center">
                                 <td th:text="${user.userId}">1</td>
                                 <td><a th:onclick="'loadPageForRegister(\'/user/userDetail?userId='+${user.userId}+'\')'" th:text="${user.userName}">pwf</a></td>
-                                <!--<td><a onclick="loadPageForRegister('/background/user-edit.html')" th:text="${user.userName}">pwf</a></td>-->
-                                <!--<td th:text="${user.passWord}">pwf</td>-->
                                 <td th:text="${user.email}">long@gmail.com</td>
+                                <td th:text="${user.blogCount}">3</td>
                                 <td th:text="${user.userRole}">admin</td>
                                 <td>
                                     <div class="tpl-table-black-operation" style="align:center;text-align: center">

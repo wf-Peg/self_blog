@@ -60,5 +60,14 @@ public interface UserService {
     @ApiOperation(value = "效验用户名和密码")
     Optional<User> login(String userName, String passWord);
 
+    @ApiOperation(value = "根据用户名查询并添加博客数量")
+    void addBlogCount(String username);
+
+    @ApiOperation(value = "查询博客数量最多的用户")
+    User findMostBlogsUser();
+
+    void decreaseUserBlogCount(String author);
+
+
 //    Page<User> findByLastLoginDate();
 }

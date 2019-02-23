@@ -50,6 +50,43 @@ function getBannerByName() {
     });
 }
 
+// 根据blog名称、关键词、分类、摘要进行查询
+function getBlogByAttr() {
+    // var _pageSize; // 存储用于搜索
+    $.ajax({
+        url: "/blog/search",
+        contentType: 'application/json',
+        data: {
+            // "async":true,
+            // "pageIndex":pageIndex,
+            // "pageSize":pageSize,
+            "searchText": $("#searchName").val()
+        },
+        success: function (data) {
+            $("#content").html(data);
+        },
+        error: function () {
+            alert("error!");
+            alert($("#searchName").val());
+        }
+    });
+}
+
+// function getBannerIndex() {
+//     $.ajax({
+//         url: "/bannerIndex",
+//         type: 'GET',
+//         success: function (data) {
+//             // window.location.href="#portfolio";
+//             // $("#portfolioPage").load(#portfolio);
+//             $("#portfolio-content").html(data);
+//         },
+//         error: function () {
+//             alert("error!");
+//         }
+//     });
+// }
+
 
 // // 分页
 // $.tbpage("#mainContainer", function (pageIndex, pageSize) {
@@ -101,11 +138,10 @@ function login() {
 /**
  * 若果存在该名字的用户则查询出id并修改
  */
-window.id;
 function forgotPassword() {
     if (checkUserNameAndEmailExist()) {
         // var data = $('#forgotForm').serializeObject();
-        var username=$('#userName').val();
+        var username = $('#userName').val();
         // var email= $('#email').val();
         var pwd1 = $('#passWord').val();
         var pwd2 = $('#rePassword').val();
@@ -117,7 +153,7 @@ function forgotPassword() {
             $.ajax({
                 url: '/user/update',
                 type: 'POST',
-                data: "userId="+window.id+"&passWord=" + pwd1,
+                data: "userId=" + window.id + "&passWord=" + pwd1,
                 dataType: 'json',
                 // data: data,
                 success: function (Result) {
@@ -211,9 +247,14 @@ function saveUser() {
             data: data,
             contentType: false,
             processData: false,// 注意这里应设为false
-            success: function () {
-                console.info("进入注册用户");
-                loadPageForRegister('/user/users');
+            success: function (Result) {
+                if (Result.success === true) {
+                    alert(Result.msg);
+                    loadPageForRegister('/user/users');
+                } else {
+                    alert(Result.msg);
+                }
+
             }
         });
     }
@@ -254,8 +295,9 @@ function loadPageForRegister(tag) {
  */
 function checkAccountIsExist() {
     var username = $("#userName").val();
-    var id = $("#userId").val();
-    var url = "/user/exist?userName=" + username + "&userId=" + id;
+    // var id = $("#userId").val();
+    var url = "/user/existByUsername?userName=" + username;
+    // var url = "/user/existByUsername?userName=" + username + "&userId=" + id;
     var isExist = false;
     $.ajax({
         url: url,
@@ -318,7 +360,7 @@ function checkUserNameIsNotExist() {
 function checkUserNameAndEmailExist() {
     var username = $("#userName").val();
     var email = $("#email").val();
-    var url = "/user/existByUsernameAndEmail?userName=" + username+"&email="+email;
+    var url = "/user/existByUsernameAndEmail?userName=" + username + "&email=" + email;
     var isExist = false;
     $.ajax({
         url: url,
@@ -328,13 +370,12 @@ function checkUserNameAndEmailExist() {
             var display = Result.success ? "none" : "inline";
             $(".span-exist-tip").css("display", display);
             isExist = Result.success;
-            window.id=Result.msg;
+            window.id = Result.msg;
             // alert(window.id);
         }
     });
     return isExist;
 }
-
 
 
 /**
@@ -366,7 +407,7 @@ $('.del-user').bind('click', function () {
 });
 
 /**
- * 博文删除
+ * 正常博文删除
  */
 $('.del-blog').bind('click', function () {
     var id = $(this).attr('id');
@@ -385,6 +426,88 @@ $('.del-blog').bind('click', function () {
     }
 });
 
+/**
+ * 审核博文删除
+ */
+$('.del-blog-check').bind('click', function () {
+    var id = $(this).attr('id');
+    if (window.confirm('(请注意，删除博文后评论将消失)确认删除该博文?')) {
+        $.ajax({
+            url: '/blog/' + id,
+            type: 'DELETE',
+            dataType: 'json',
+            success: function (data) {
+                if (data.success) {
+                    alert(data.msg);
+                    loadPageForRegister('/blog/examine');
+                }
+            }
+        })
+    }
+});
+
+
+/**
+ * 保存博文
+ */
+function saveBlog() {
+    var form = document.getElementById("blogForm");
+    var data = new FormData(form);
+    var releaseTime = $("#releaseTime").val();
+    var img = document.getElementsByClassName("img")[0].src;
+    if (releaseTime == '' || releaseTime == undefined || releaseTime == null) {
+        alert("发布时间必填");
+    }  if ("http://localhost:8090/background/assets/img/blog_default.png" == img) {
+        alert('图片不能为空');
+    }  else{
+        $.ajax({
+            type: "POST",
+            url: "/blog",
+            data: data,
+            contentType: false,
+            processData: false,// 注意这里应设为false
+            success: function (Result) {
+                if (Result.success === true) {
+                    if (Result.msg=="提交更新成功"){
+                    loadPageForRegister('/blog/list');
+                    alert(Result.msg);
+                    }else {
+                        alert(Result.msg);
+                        window.location.reload();
+                    }
+                } else {
+                    alert(Result.msg);
+                }
+
+            }
+        });
+    }
+}
+
+/**
+ * 根据博文名称、关键词、分类、摘要、作者进行查询
+ */
+function getContentBySearchText() {
+    var val = $("#searchText").val();
+    $.ajax({
+        url: "/blog/esSearch",
+        contentType: 'application/json',
+        data: {
+            // "async":true,
+            // "pageIndex":pageIndex,
+            // "pageSize":pageSize,
+            "searchText": val
+        },
+        success: function (data) {
+            // loadPageForRegister('/user/usersSearch');
+            $("#content").html(data);
+        },
+        error: function () {
+            alert("error!");
+            alert($("#searchText").val());
+        }
+    });
+}
 
 /*------------------------------------Banner---------------------------------*/
 /**
@@ -394,20 +517,16 @@ $('.del-banner').click(function () {
     if (window.confirm('确认要删除该行数据?')) {
         $.ajax({
             url: "/banner/delete?id=" + $(this).attr('id'),
-            type: "GET",
+            type: "DELETE",
             dataType: "json",
             success: function (data) {
                 alert(data.msg);
                 loadPageForRegister('/banner/list');
-//                    if (data.code == 0) {
-//                        setTimeout(function () {
-//                            window.location.href = "/banner/list";
-//                        }, 2000);
-//                    }
             }
         });
     }
 });
+
 /**
  * 提交Banner
  */
@@ -416,23 +535,33 @@ function saveBanner() {
     var data = new FormData(form);
     // var img = data.get("img");
     var img = document.getElementsByClassName("img")[0].src;
-    console.log(img);
+    var name =$("#name").val();
+    // alert(name);
+    // console.log(img);
     // http://localhost:8090/background/assets/img/blog_default.png
     // alert(img);
-    if ("http://localhost:8090/background/assets/img/blog_default.png"==img) {
-        alert('图片不能为空');
-    }else {
-    $.ajax({
-        type: "POST",
-        url: "/banner/add",
-        data: data,
-        contentType: false,
-        processData: false,// 注意这里应设为false
-        success: function () {
-            alert('上传成功')
-            loadPageForRegister('/banner/list');
-        }
-    });
+    if ("http://localhost:8090/background/assets/img/blog_default.png" == img||""==name) {
+        alert('图片/图片名称不能为空');
+    } else {
+        $.ajax({
+            type: "POST",
+            url: "/banner/add",
+            data: data,
+            dataType: "json",
+            contentType: false,
+            processData: false,// 注意这里应设为false
+            success: function (Result) {
+                if (Result.success === true){
+                    alert(Result.msg);
+                    loadPageForRegister('/banner/list');
+                }else {
+                    alert(Result.msg);
+                }
+            },
+            error: function () {
+                alert("erro");
+            }
+        });
     }
 
 }
@@ -464,16 +593,17 @@ function updateBanner() {
  */
 function reads(obj) {
     var file = obj.files[0];
-    var reader = new  FileReader();
+    var reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = function (ev) {
         $("#img").attr("src", ev.target.result);
+        $("#img").css({"width":"60%" ,"height":"auto"});
+        // style="width: 50%;height: auto"
     }
 }
 
 
 /*------------------------------------评论---------------------------------*/
-
 // 根据评论内容查询
 function getCommentByName() {
     $.ajax({
@@ -513,11 +643,58 @@ $('.del-comment').click(function () {
                     alert(data.msg);
                     loadPageForRegister('/comments/list');
                 } else {
-                    alert(data.code+"错误信息为："+data.msg);
+                    alert(data.code + "错误信息为：" + data.msg);
                 }
             },
             error: function () {
-                alert(data.code+"错误信息为："+data.msg);
+                alert(data.code + "错误信息为：" + data.msg);
+            }
+        });
+    }
+});
+
+/* -------- 提交message --------*/
+function sendMessage() {
+    // var contactUsername = $("#form_name").val();
+    // var email = $("#form_email").val();
+    // var message = $("#form_message").val();
+    // alert(contactUsername+"e"+ email+"m"+ message);
+
+    var form = document.getElementById("contact-form");
+    var data = new FormData(form);
+        $.ajax({
+            url: 'message/sendMessage',
+            type: 'POST',
+            dataType: "json",
+            contentType: false,
+            processData: false,// 注意这里应设为false
+            data: data,
+            // data: {"contactUsername": contactUsername, "email": email,"message": message},
+            success: function (data) {
+                if (data.success) {
+                    alert(data.msg);
+                } else {
+                    alert(data.msg);
+                }
+            },
+            error: function () {
+                alert("error!");
+            }
+        });
+}
+
+/**
+ * 删除message
+ */
+$('.del-message').click(function () {
+    if (window.confirm('确认要删除该行数据?')) {
+        $.ajax({
+            url: "/message/delete?id=" + $(this).attr('id'),
+            type: "DELETE",
+            dataType: "json",
+            success: function (data) {
+                alert(data.msg);
+                loadPageForRegister('/message/list');
             }
         });
     }
