@@ -64,16 +64,17 @@ public interface UserRepository extends JpaRepository<User, Integer>,JpaSpecific
 
     @ApiOperation(value = "根据用户名查询并添加博客数量")
     @Modifying
-    @Query(value = "update USER set blog_count = blog_count+1 where user_name = ?1 ",nativeQuery = true)
+    @Query(value = "update t_user set blog_count = blog_count+1 where user_name = ?1 ",nativeQuery = true)
     void addBlogCount(String username);
 
     @ApiOperation(value = "根据用户名查询并删除博客数量")
     @Modifying
-    @Query(value = "update USER set blog_count = blog_count-1 where user_name = ?1 ",nativeQuery = true)
+    @Query(value = "update t_user set blog_count = blog_count-1 where user_name = ?1 ",nativeQuery = true)
     void decreaseBlogCount(String username);
 
-    @ApiOperation(value = "查询并博客数量最多的用户")
-    @Query(value = "SELECT * FROM USER WHERE blog_count=(SELECT MAX(blog_count) FROM USER)",nativeQuery = true)
+    @ApiOperation(value = "查询博客数量最多的用户")
+    @Query(value = "SELECT * FROM t_user ORDER BY blog_count DESC LIMIT 1",nativeQuery = true)
+//    @Query(value = "SELECT * FROM t_user WHERE blog_count=(SELECT MAX(blog_count) FROM t_user)",nativeQuery = true)
     User findMostBlogsUser();
 
 }

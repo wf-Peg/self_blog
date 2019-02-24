@@ -23,6 +23,9 @@
     <!-- input -->
     <script src="/js/jquery.tagsinput.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/jquery.tagsinput.css"/>
+    <!-- 弹窗美化 -->
+    <link rel="stylesheet" type="text/css" href="/sweetalert/sweetalert.css">
+    <script type="text/javascript" src="/sweetalert/sweetalert-dev.js"></script>
 </head>
 
 <body data-type="widgets">
@@ -282,11 +285,14 @@
             url: '/blog/examine/' + blogId,
             type: 'PUT',
             success: function (data) {
-                alert(data.msg);
-                loadPageForRegister('/blog/examine');
+                setTimeout(function(){swal("提示",data.msg,"success"); },100);
+                //2秒后刷新页面，足够显示swal()的信息
+                setTimeout(function(){ loadPageForRegister('/blog/examine'); },2000);
+//                alert(data.msg);
+//                loadPageForRegister('/blog/examine');
             },
             error: function () {
-                alert("error!");
+                swal("error!");
             }
         });
     }

@@ -12,17 +12,17 @@ import java.io.Serializable;
 @Entity
 @Data
 @Proxy(lazy = false)
+@Table(name = "t_user")
 public class User implements Serializable {
     private static final long serialVersionUID = -5889846202649492920L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
 
-    @Size(min=2, max=20,message = "用户名要求2-20个字符")
+//    @Size(min=2, max=20,message = "用户名要求2-20个字符")
     @NotEmpty(message = "用户名不能为空")
     private String userName;
 
-    @Column(length = 20)
     @NotEmpty(message = "密码不能为空")
     @Size(min=3, max=20,message = "密码要求3-20个字符")
     private String passWord;

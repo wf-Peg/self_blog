@@ -77,17 +77,17 @@ public class CommentController {
 	 * @return
 	 */
 	@PostMapping
-	public ResponseEntity<ResultVO> createComment(Long blogId, String commentUsername,String content) {
+	@ResponseBody
+	public ResultVO createComment(String blogId, String commentUsername,String content) {
 		try {
-			blogService.createComment(blogId,commentUsername, content);
-
+			blogService.createComment(Long.valueOf(blogId),commentUsername, content);
 		} catch (ConstraintViolationException e)  {
-			return ResponseEntity.ok().body(new ResultVO(false, ConstraintViolationExceptionHandler.getMessage(e)));
+			return  new ResultVO(false, ConstraintViolationExceptionHandler.getMessage(e));
 		} catch (Exception e) {
-			return ResponseEntity.ok().body(new ResultVO(false, e.getMessage()));
+			return new ResultVO(false, e.getMessage());
 		}
 //		return ResponseEntity.ok().body(new ResultVO(true, "发表评论成功!",commentService.getCommentById(blogId)));
-		return ResponseEntity.ok().body(new ResultVO(true, "发表评论成功!"));
+		return new ResultVO(true, "发表评论成功!");
 	}
 
 

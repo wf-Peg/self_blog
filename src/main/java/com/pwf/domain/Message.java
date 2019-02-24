@@ -3,10 +3,7 @@ package com.pwf.domain;
 import lombok.Data;
 import org.hibernate.annotations.Proxy;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
@@ -18,6 +15,7 @@ import java.util.Date;
 @Data
 @Entity
 @Proxy(lazy = false)
+@Table(name = "message")
 public class Message implements Serializable {
 
     private static final long serialVersionUID = 4671083981028788168L;

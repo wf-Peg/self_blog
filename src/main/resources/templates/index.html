@@ -41,6 +41,9 @@
 
     <!-- 引入 ECharts 文件 -->
     <script src="/js/echarts.min.js"></script>
+    <!-- 弹窗美化 -->
+    <link rel="stylesheet" type="text/css" href="/sweetalert/sweetalert.css">
+    <script type="text/javascript" src="/sweetalert/sweetalert-dev.js"></script>
 
     <!-- Demo Color changer Script -->
     <script src="preview/lmpixels-demo-panel.js"></script>
@@ -133,8 +136,8 @@
             <!--<li><a class="tip social-button" href="#" title="last.fm"><i class="fa fa-lastfm"></i></a></li>-->
             <!--<li><a class="tip social-button" href="#" title="Dribbble"><i class="fa fa-dribbble"></i></a></li>-->
             <div class="social-links" style="margin-top: 60px;margin-left: 40px">
-                <h3 class="keywords-header"><i class="fa fa-tags" aria-hidden="true"></i>标签</h3>
-                <div class="card-block" style="margin-top: 20px;margin-left: 20px" >
+                <h3 class="keywords-header"><i class="fa fa-tags" aria-hidden="true"></i>热门标签</h3>
+                <div class="card-block" style="margin-top: 20px;margin-left: 20px;margin-right: 50px" >
                 <a th:onclick="loadPageForBlogContent2('/blog/keySearch?keyword='+[[${keyword}]])" th:each="keyword : ${#strings.arraySplit(keywordList , ',')}">
                 <!--<a th:href="'/blog/search?keyword='+${keyword}" th:each="keyword : ${#strings.arraySplit(keywordList, ',')}">-->
                     <span class="badge badge-default" th:text="${keyword}">Web Design</span>

@@ -11,7 +11,7 @@
     <meta name="description" content="Sunshine - Responsive vCard Template"/>
     <meta name="keywords" content="vcard, resposnive, retina, resume, jquery, css3, bootstrap, Sunshine, portfolio"/>
     <meta name="author" content="lmtheme"/>
-    <link rel="shortcut icon" href="favicon.ico" thhre>
+    <link rel="shortcut icon" href="favicon.ico" th:href="@{/favicon.ico}">
 
 
     <link rel="stylesheet" href="/css/bootstrap.css">
@@ -21,6 +21,10 @@
     <link rel="stylesheet" href="/css/magnific-popup.css">
     <link rel="stylesheet" href="/css/animate.css">
     <link rel="stylesheet" href="/css/main.css" type="text/css">
+
+    <!-- 弹窗美化 -->
+    <link rel="stylesheet" type="text/css" href="/sweetalert/sweetalert.css">
+    <script type="text/javascript" src="/sweetalert/sweetalert-dev.js"></script>
 
     <!--<script>-->
     <!--(function (i, s, o, g, r, a, m) {-->
@@ -222,7 +226,7 @@
                         <div class="form-control-border"></div>
                         <i class="form-control-icon fa fa-comment"></i>
                     </div>
-                    <button class="button add-comment" type="submit">提交</button>
+                    <button class="button add-comment" onclick="sendComment()" type="submit">提交</button>
                 </form>
             </div>
 
@@ -238,87 +242,106 @@
 <script type="text/javascript">
     var blogId = [[${blogDetail.id}]];
     // 提交评论
-    $('.add-comment').bind('click', function () {
+    function sendComment() {
         var commentUsername = document.getElementById("commentUsername").value;
         var content = document.getElementById("commentContent").value;
 //        alert(blogId+";"+commentUsername+";"+content);
         if ("" == commentUsername || "" == content) {
-            alert("评论人和评论名不能为空，且至少两个字符");
+            swal("评论人和评论名不能为空，且至少两个字符");
         } else {
             $.ajax({
                 url: '/comments',
                 type: 'POST',
-//            contentType: 'application/json',
+//                dataType: "json",
                 data: {"blogId": blogId, "commentUsername": commentUsername, "content": content},
                 success: function (data) {
-                    if (data.success) {
-                        // 刷新获取评论列表
+                    // 刷新获取评论列表
 //                    history.go(0);
 //                    window.location.reload();
 //                    getComment(blogId);
-                        alert(data.msg);
-                    } else {
-                        alert(data.msg);
-                    }
+                    swal(data.msg);
+                    history.go(0);
                 },
                 error: function () {
-                    alert("error!");
+                    swal("error!");
                 }
             });
         }
-    });
-
-
-    //DOM加载完加载评论
-    $(document).ready(function () {
-//    alert(blogId);
-        $.ajax({
-            url: '/comments',
-            type: 'GET',
-            data: {"blogId": blogId},
-            success: function (data) {
-                $("#mainContainer").html(data);
-            },
-            error: function () {
-                alert("error!");
-            }
-        });
-    });
-
-    function getComment(blogId) {
-        $.ajax({
-            url: '/comments',
-            type: 'GET',
-            data: {"blogId": blogId},
-            success: function (data) {
-                $("#content").html(data);
-            },
-            error: function () {
-                alert("error!");
-            }
-        });
     }
 
 
-    // 提交点赞
-    $('.btn-likes').click(function () {
-        $.ajax({
-            url: '/blog/likes/' + blogId,
-            type: 'PUT',
-            success: function (data) {
-                if (data.success) {
-                    alert(data.msg);
-                    // 成功后，重定向
-                    window.location.reload();
-                } else {
-                    alert(data.msg);
+        //DOM加载完加载评论
+//    $(document).ready(function () {
+////    alert(blogId);
+//        $.ajax({
+//            url: '/comments',
+//            type: 'GET',
+//            data: {"blogId": blogId},
+//            success: function (data) {
+//                $("#mainContainer").html(data);
+//            },
+//            error: function () {
+//                swal("error!");
+//            }
+//        });
+//    });
+
+//    function getComment(blogId) {
+//        $.ajax({
+//            url: '/comments',
+//            type: 'GET',
+//            data: {"blogId": blogId},
+//            success: function (data) {
+//                $("#content").html(data);
+//            },
+//            error: function () {
+//                alert("error!");
+//            }
+//        });
+//    }
+
+
+        // 提交点赞
+        $('.btn-likes').click(function () {
+            $.ajax({
+                url: '/blog/likes/' + blogId,
+                type: 'PUT',
+                success: function (data) {
+                    if (data.success) {
+                        setTimeout(function () {
+                            swal("提示", data.msg, "success");
+                        }, 100);
+                        //2秒后刷新页面，足够显示swal()的信息
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 2000);
+
+//                    swal({
+//                        title: data.msg,
+//                        text: "2秒后自动关闭。",
+//                        timer: 2000,
+//                        showConfirmButton: false
+//                    });
+////                    swal(data.msg);
+//                    // 成功后，重定向
+//                    window.location.reload();
+                    } else {
+                        setTimeout(function () {
+                            swal("提示", data.msg, "fail");
+                        }, 100);
+                        //2秒后刷新页面，足够显示swal()的信息
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 2000);
+                    }
+                },
+                error: function () {
+                    swal("error!");
                 }
-            },
-            error: function () {
-                alert("error!");
-            }
+            });
+
         });
-    });
+
 
 </script>
 <script src="/js/bootstrap.min.js"></script>

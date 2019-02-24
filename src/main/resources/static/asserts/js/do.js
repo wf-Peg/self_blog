@@ -21,8 +21,8 @@ function getUersByName() {
             $("#content").html(data);
         },
         error: function () {
-            alert("error!");
-            alert($("#searchName").val());
+            swal("error!");
+            // alert($("#searchName").val());
         }
     });
 }
@@ -44,8 +44,8 @@ function getBannerByName() {
             $("#content").html(data);
         },
         error: function () {
-            alert("error!");
-            alert($("#searchName").val());
+            swal("error!");
+            // alert($("#searchName").val());
         }
     });
 }
@@ -66,7 +66,7 @@ function getBlogByAttr() {
             $("#content").html(data);
         },
         error: function () {
-            alert("error!");
+            swal("error!");
             alert($("#searchName").val());
         }
     });
@@ -123,12 +123,13 @@ function login() {
             console.info(loginResult);
             var msg = loginResult.msg;
             if (loginResult.success === true) {
-                // alert(msg);
                 window.location.href = '/background/index';
             }
             if (loginResult.success === false) {
-                alert(msg);
-                window.location.href = '/userlogin';
+                setTimeout(function(){swal("提示",msg,"warning"); },100);
+                //2秒后刷新页面，足够显示swal()的信息
+                setTimeout(function(){window.location.href = '/userlogin'; },2000);
+                // window.location.href = '/userlogin';
             }
         }
 
@@ -157,8 +158,11 @@ function forgotPassword() {
                 dataType: 'json',
                 // data: data,
                 success: function (Result) {
-                    alert(Result.msg);
-                    window.location.href = 'background/login.html';
+                    // alert(Result.msg);
+                    // window.location.href = 'background/login.html';
+                    setTimeout(function(){swal("提示",Result.msg,"success"); },100);
+                    //2秒后刷新页面，足够显示swal()的信息
+                    setTimeout(function(){window.location.href = 'background/login.html'; },2000);
                 }
             });
         }
@@ -194,7 +198,7 @@ function logoutBackground() {
         if (msg === "true") {
             window.location.href = "/userlogin";
         } else {
-            alert("退出异常!");
+            swal("退出异常!");
         }
     });
 
@@ -221,12 +225,18 @@ function saveUserForUser() {
                 // console.info(Result.msg);
                 // console.info(Result);
                 if (Result.success === true) {
-                    alert(Result.msg);
-                    window.location.href = '/userlogin';
+                    // swal(Result.msg);
+                    setTimeout(function(){swal("提示",Result.msg,"success"); },100);
+                    //2秒后刷新页面，足够显示swal()的信息
+                    setTimeout(function(){ window.location.href = '/userlogin'; },2000);
+                    // window.location.href = '/userlogin';
                 }
                 if (Result.success === false) {
-                    alert(Result.msg);
-                    window.location.href = '/registerUserIndex';
+                    setTimeout(function(){swal("提示",Result.msg,"warning"); },100);
+                    //2秒后刷新页面，足够显示swal()的信息
+                    setTimeout(function(){ window.location.href = '/registerUserIndex'; },2000);
+                    // alert(Result.msg);
+                    // window.location.href = '/registerUserIndex';
                 }
                 // loadPageForRegister('/user/users');
             }
@@ -249,10 +259,13 @@ function saveUser() {
             processData: false,// 注意这里应设为false
             success: function (Result) {
                 if (Result.success === true) {
-                    alert(Result.msg);
-                    loadPageForRegister('/user/users');
+                    // alert(Result.msg);
+                    // loadPageForRegister('/user/users');
+                    setTimeout(function(){swal("提示",Result.msg,"success"); },100);
+                    //2秒后刷新页面，足够显示swal()的信息
+                    setTimeout(function(){ loadPageForRegister('/user/users');},2000);
                 } else {
-                    alert(Result.msg);
+                    swal(Result.msg);
                 }
 
             }
@@ -275,8 +288,11 @@ function updateUser() {
         processData: false,// 注意这里应设为false
         success: function (result) {
             // console.info("进入更新用户");
-            alert(result.msg);
-            loadPageForRegister('/user/users');
+            setTimeout(function(){swal("提示",result.msg,"success"); },100);
+            //2秒后刷新页面，足够显示swal()的信息
+            setTimeout(function(){ loadPageForRegister('/user/users'); },2000);
+            // alert(result.msg);
+            // loadPageForRegister('/user/users');
         }
     });
     // }
@@ -383,27 +399,40 @@ function checkUserNameAndEmailExist() {
  */
 $('.del-user').bind('click', function () {
     var id = $(this).attr('id');
-    if (window.confirm('确认删除该行数据?')) {
-        //alert('删除')
-        $.ajax({
-            url: '/user/userDelete?userId=' + id,
-            type: 'GET',
-            dataType: 'json',
-            success: function (data) {
-                if (data.code == 0) {
-//                        setTimeout(function () {
-//                            //2s后执行如下代码
-                    loadPageForRegister('/user/users');
-//                        $('#info').html(data.msg);
-                    alert(data.msg);
-//                            window.location.href = '/user/usersSearch'
-//                        }, 2000)
-                }
-
-                <!--th:onclick="'loadPageForRegister(\'/user/userDelete?userId='+${user.userId}+'\')'">-->
+    swal({
+            title: "确认删除该行数据？",
+            text: "你将无法恢复该数据！",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "确定删除！",
+            cancelButtonText: "取消删除！",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                $.ajax({
+                    url: '/user/userDelete?userId=' + id,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.code == 0) {
+                            setTimeout(function () {
+                                swal("提示", data.msg, "success");
+                            }, 100);
+                            //2秒后刷新页面，足够显示swal()的信息
+                            setTimeout(function () {
+                                loadPageForRegister('/user/users');
+                            }, 2000);
+                        }
+                    }
+                })
+            } else {
+                swal("取消！", "你的虚拟数据是安全的:)",
+                    "error");
             }
         })
-    }
 });
 
 /**
@@ -411,19 +440,53 @@ $('.del-user').bind('click', function () {
  */
 $('.del-blog').bind('click', function () {
     var id = $(this).attr('id');
-    if (window.confirm('(请注意，删除博文后评论将消失)确认删除该博文?')) {
-        $.ajax({
-            url: '/blog/' + id,
-            type: 'DELETE',
-            dataType: 'json',
-            success: function (data) {
-                if (data.success) {
-                    loadPageForRegister('/blog/list');
-                    alert(data.msg);
-                }
+    // if (window.confirm('(请注意，删除博文后评论将消失)确认删除该博文?')) {
+    //     $.ajax({
+    //         url: '/blog/' + id,
+    //         type: 'DELETE',
+    //         dataType: 'json',
+    //         success: function (data) {
+    //             if (data.success) {
+    //                 setTimeout(function(){swal("提示",data.msg,"success"); },100);
+    //                 //2秒后刷新页面，足够显示swal()的信息
+    //                 setTimeout(function(){ loadPageForRegister('/blog/list'); },2000);
+    //
+    //                 // loadPageForRegister('/blog/list');
+    //                 // alert(data.msg);
+    //             }
+    //         }
+    //     })
+    //
+    swal({
+            title: "确认删除该博文数据？",
+            text: "请注意，你将无法恢复该数据，删除博文后评论也将消失！",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "确定删除！",
+            cancelButtonText: "取消删除！",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                $.ajax({
+                    url: '/blog/' + id,
+                    type: 'DELETE',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.success) {
+                            setTimeout(function(){swal("提示",data.msg,"success"); },100);
+                            //2秒后刷新页面，足够显示swal()的信息
+                            setTimeout(function(){ loadPageForRegister('/blog/list'); },2000);
+                        }
+                    }
+                })
+            } else {
+                swal("取消！", "你的虚拟数据是安全的:)",
+                    "error");
             }
         })
-    }
 });
 
 /**
@@ -431,19 +494,36 @@ $('.del-blog').bind('click', function () {
  */
 $('.del-blog-check').bind('click', function () {
     var id = $(this).attr('id');
-    if (window.confirm('(请注意，删除博文后评论将消失)确认删除该博文?')) {
-        $.ajax({
-            url: '/blog/' + id,
-            type: 'DELETE',
-            dataType: 'json',
-            success: function (data) {
-                if (data.success) {
-                    alert(data.msg);
-                    loadPageForRegister('/blog/examine');
-                }
+    swal({
+            title: "确认删除该博文数据？",
+            text: "请注意，你将无法恢复该数据，删除博文后评论也将消失！",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "确定删除！",
+            cancelButtonText: "取消删除！",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                $.ajax({
+                    url: '/blog/' + id,
+                    type: 'DELETE',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.success) {
+                            setTimeout(function(){swal("提示",data.msg,"success"); },100);
+                            //2秒后刷新页面，足够显示swal()的信息
+                            setTimeout(function(){ loadPageForRegister('/blog/examine'); },2000);
+                        }
+                    }
+                })
+            } else {
+                swal("取消！", "你的虚拟数据是安全的:)",
+                    "error");
             }
         })
-    }
 });
 
 
@@ -456,9 +536,9 @@ function saveBlog() {
     var releaseTime = $("#releaseTime").val();
     var img = document.getElementsByClassName("img")[0].src;
     if (releaseTime == '' || releaseTime == undefined || releaseTime == null) {
-        alert("发布时间必填");
+        swal("发布时间必填");
     }  if ("http://localhost:8090/background/assets/img/blog_default.png" == img) {
-        alert('图片不能为空');
+        swal('图片不能为空');
     }  else{
         $.ajax({
             type: "POST",
@@ -469,14 +549,20 @@ function saveBlog() {
             success: function (Result) {
                 if (Result.success === true) {
                     if (Result.msg=="提交更新成功"){
-                    loadPageForRegister('/blog/list');
-                    alert(Result.msg);
+                        setTimeout(function(){swal("提示",Result.msg,"success"); },100);
+                        //2秒后刷新页面，足够显示swal()的信息
+                        setTimeout(function(){  loadPageForRegister('/blog/list');},2000);
+                    // loadPageForRegister('/blog/list');
+                    // alert(Result.msg);
                     }else {
-                        alert(Result.msg);
-                        window.location.reload();
+                        setTimeout(function(){swal("提示",Result.msg,"warning"); },100);
+                        //2秒后刷新页面，足够显示swal()的信息
+                        // setTimeout(function(){ window.location.reload();},2000);
+                        // alert(Result.msg);
+                        // window.location.reload();
                     }
                 } else {
-                    alert(Result.msg);
+                    swal(Result.msg);
                 }
 
             }
@@ -503,8 +589,8 @@ function getContentBySearchText() {
             $("#content").html(data);
         },
         error: function () {
-            alert("error!");
-            alert($("#searchText").val());
+            swal("error!");
+            // alert($("#searchText").val());
         }
     });
 }
@@ -520,8 +606,11 @@ $('.del-banner').click(function () {
             type: "DELETE",
             dataType: "json",
             success: function (data) {
-                alert(data.msg);
-                loadPageForRegister('/banner/list');
+                setTimeout(function(){swal("提示",data.msg,"warning"); },100);
+                //2秒后刷新页面，足够显示swal()的信息
+                setTimeout(function(){ loadPageForRegister('/banner/list'); },2000);
+                // alert(data.msg);
+                // loadPageForRegister('/banner/list');
             }
         });
     }
@@ -541,7 +630,7 @@ function saveBanner() {
     // http://localhost:8090/background/assets/img/blog_default.png
     // alert(img);
     if ("http://localhost:8090/background/assets/img/blog_default.png" == img||""==name) {
-        alert('图片/图片名称不能为空');
+        swal('图片/图片名称不能为空');
     } else {
         $.ajax({
             type: "POST",
@@ -552,14 +641,17 @@ function saveBanner() {
             processData: false,// 注意这里应设为false
             success: function (Result) {
                 if (Result.success === true){
-                    alert(Result.msg);
-                    loadPageForRegister('/banner/list');
+                    setTimeout(function(){swal("提示",Result.msg,"success"); },100);
+                    //2秒后刷新页面，足够显示swal()的信息
+                    setTimeout(function(){ loadPageForRegister('/banner/list'); },2000);
+                    // alert(Result.msg);
+                    // loadPageForRegister('/banner/list');
                 }else {
-                    alert(Result.msg);
+                    swal(Result.msg);
                 }
             },
             error: function () {
-                alert("erro");
+                swal("erro");
             }
         });
     }
@@ -580,9 +672,12 @@ function updateBanner() {
         contentType: false,
         processData: false,// 注意这里应设为false
         success: function (data) {
-            alert(data.msg);
-            console.info("进入更新Banner");
-            loadPageForRegister('/banner/list');
+            setTimeout(function(){swal("提示",data.msg,"success"); },100);
+            //2秒后刷新页面，足够显示swal()的信息
+            setTimeout(function(){ loadPageForRegister('/banner/list'); },2000);
+            // alert(data.msg);
+            // console.info("进入更新Banner");
+            // loadPageForRegister('/banner/list');
         }
     });
     // }
@@ -620,8 +715,8 @@ function getCommentByName() {
             $("#content").html(data);
         },
         error: function () {
-            alert("error!");
-            alert($("#searchName").val());
+            swal("error!");
+            // alert($("#searchName").val());
         }
     });
 }
@@ -633,25 +728,71 @@ $('.del-comment').click(function () {
     var id = $(this).attr('id');
     var blogId = $('.blogId').attr('id');
     // alert("id="+id+",blogId="+blogId);
-    if (window.confirm('确认要删除该行评论?')) {
-        $.ajax({
-            url: '/comments/' + id + '?blogId=' + blogId,
-            type: 'DELETE',
-            dataType: "json",
-            success: function (data) {
-                if (data.code == 0) {
-                    alert(data.msg);
-                    loadPageForRegister('/comments/list');
-                } else {
-                    alert(data.code + "错误信息为：" + data.msg);
-                }
-            },
-            error: function () {
-                alert(data.code + "错误信息为：" + data.msg);
+    swal({
+            title: "确认要删除该行评论？",
+            text: "你将无法恢复该评论！",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "确定删除！",
+            cancelButtonText: "取消删除！",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                $.ajax({
+                    url: '/comments/' + id + '?blogId=' + blogId,
+                    type: 'DELETE',
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.code == 0) {
+                            setTimeout(function () {
+                                swal("提示", data.msg, "success");
+                            }, 100);
+                            //2秒后刷新页面，足够显示swal()的信息
+                            setTimeout(function () {
+                                loadPageForRegister('/comments/list');
+                            }, 2000);
+                            // alert(data.msg);
+                            // loadPageForRegister('/comments/list');
+                        } else {
+                            swal("错误信息为：" + data.msg);
+                        }
+                    },
+                    error: function () {
+                        swal(data.code + "错误信息为：" + data.msg);
+                    }
+                });
+            } else {
+                swal("取消！", "你的虚拟文件是安全的:)",
+                    "error");
             }
         });
-    }
 });
+
+//     if (window.confirm('确认要删除该行评论?')) {
+//         $.ajax({
+//             url: '/comments/' + id + '?blogId=' + blogId,
+//             type: 'DELETE',
+//             dataType: "json",
+//             success: function (data) {
+//                 if (data.code == 0) {
+//                     setTimeout(function(){swal("提示",data.msg,"success"); },100);
+//                     //2秒后刷新页面，足够显示swal()的信息
+//                     setTimeout(function(){loadPageForRegister('/comments/list');},2000);
+//                     // alert(data.msg);
+//                     // loadPageForRegister('/comments/list');
+//                 } else {
+//                     swal(data.code + "错误信息为：" + data.msg);
+//                 }
+//             },
+//             error: function () {
+//                 swal(data.code + "错误信息为：" + data.msg);
+//             }
+//         });
+//     }
+// });
 
 /* -------- 提交message --------*/
 function sendMessage() {
@@ -672,13 +813,14 @@ function sendMessage() {
             // data: {"contactUsername": contactUsername, "email": email,"message": message},
             success: function (data) {
                 if (data.success) {
-                    alert(data.msg);
+                    setTimeout(function(){swal("提示",data.msg,"success"); },100);
+                    //2秒后刷新页面，足够显示swal()的信息
                 } else {
-                    alert(data.msg);
+                    swal(data.msg);
                 }
             },
             error: function () {
-                alert("error!");
+                swal("error!");
             }
         });
 }
@@ -693,8 +835,10 @@ $('.del-message').click(function () {
             type: "DELETE",
             dataType: "json",
             success: function (data) {
-                alert(data.msg);
-                loadPageForRegister('/message/list');
+                // swal(data.msg);
+                setTimeout(function(){swal("提示",data.msg,"success"); },100);
+                setTimeout(function(){ loadPageForRegister('/message/list');},2000);
+                // loadPageForRegister('/message/list');
             }
         });
     }

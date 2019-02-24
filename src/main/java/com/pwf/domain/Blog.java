@@ -18,6 +18,7 @@ import java.util.List;
 @Data
 @Entity
 @Proxy(lazy = false)
+@Table(name = "blog")
 //@Document(indexName = "blog", type = "blog")//标识为文档
 //@Document(indexName = "blog", type = "blog", shards = 1, replicas = 0, refreshInterval = "-1")
 //@XmlRootElement // MediaType 转为 XML
@@ -110,10 +111,14 @@ public class Blog implements Serializable {
         this.htmlContent = Processor.process(content);
     }
 
-//    public void setCommentList(List<Comment> commentList) {
-//        this.commentList = commentList;
-//        this.comments=commentList.size();
-//    }
+    public List<Comment> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<Comment> commentList) {
+        this.commentList = commentList;
+        this.comments=commentList.size();
+    }
 
     /**
      * 添加评论
@@ -121,15 +126,17 @@ public class Blog implements Serializable {
      */
     public void addComment(Comment comment) {
         this.commentList.add(comment);
-//        this.comments = this.commentList.size();
+        this.comments = this.commentList.size();
     }
+
     /**
      * 删除评论
      * @param commentId
      */
     public void removeComment(Long commentId) {
+//        Integer id=commentId.intValue();
         for (int index=0; index < this.commentList.size(); index ++ ) {
-            if (commentList.get(index).getId() == commentId) {
+            if (commentList.get(index).getId() .equals(commentId) ) {
                 this.commentList.remove(index);
                 break;
             }

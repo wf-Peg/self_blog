@@ -157,7 +157,7 @@ public class BlogService {
         Comment comment = new Comment(commentUsername, commentContent,blogId);
 //        commentRepository.save(comment);
         originalBlog.addComment(comment);
-        originalBlog.setComments(originalBlog.getComments()+1);
+//        originalBlog.setComments(originalBlog.getComments()+1);
 //        repository.addCommentCount(blogId);
         return repository.save(originalBlog);
     }

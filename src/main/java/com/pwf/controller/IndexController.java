@@ -18,8 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.awt.print.Pageable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @CrossOrigin
@@ -43,6 +42,8 @@ public class IndexController {
         Page<Banner> bannerList = bannerService.findAll(PageRequest.of(0,30));
 //        List<Banner> bannerList = bannerService.findAll();
         Iterable<Blog> blogList=blogService.findBlogsByIsVisibleIsTrue(PageRequest.of(0,10));
+
+        //取出前三十篇热门的文章的所有标签
         StringBuilder sb = new StringBuilder();
         for (Blog blog:blogService.getTop30Keywords()){
             String keywords = blog.getKeywords();
@@ -51,11 +52,24 @@ public class IndexController {
                 sb.append(keyword+",");
             }
         }
+        System.out.println(sb);
+
+        //准备将所有标签去重,步骤：根据逗号转化为数组，准备第二个StringBuilder存储去重数据，最后使用LinkedHashSet去重并删除首个逗号
+        String[]  arr = sb.toString().split(",");
+        Set<String> set = new LinkedHashSet<>(Arrays.asList(arr));
+        StringBuilder sb2 = new StringBuilder();
+        for (String string : set) {
+            sb2.append(",").append(string);
+        }
+        sb2.deleteCharAt(0);
+        System.out.println(sb2);
+
+
 
         model.addAttribute("bannerList", bannerList.getContent());
 //        model.addAttribute("bannerList", bannerList);
         model.addAttribute("blogList", blogList);
-        model.addAttribute("keywordList", sb);
+        model.addAttribute("keywordList", sb2);
         return "index";
     }
 
