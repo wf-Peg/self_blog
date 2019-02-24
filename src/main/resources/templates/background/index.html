@@ -266,7 +266,7 @@
             <div sec:authorize="hasRole('admin')">
                 <li class="sidebar-nav-link">
                     <!--<a href="#" onclick="loadPage('/background/blog-tables.html')">-->
-                    <a href="#" onclick="loadPage('/blog/list')">
+                        <a href="#" onclick="loadPage('/blog/list?page=0&size=10')">
                         <i class="am-icon-table sidebar-nav-link-logo"></i> 博文管理
                     </a>
                 </li>
@@ -275,7 +275,7 @@
             <div sec:authorize="hasRole('admin')">
                 <li class="sidebar-nav-link">
                     <!--<a href="#" onclick="loadPage('/background/blog-tables.html')">-->
-                    <a href="#" onclick="loadPage('/comments/list')">
+                    <a href="#" onclick="loadPage('/comments/list?page=0&size=10')">
                         <i class="am-icon-table sidebar-nav-link-logo"></i> 评论管理
                     </a>
                 </li>
@@ -293,7 +293,7 @@
             <div sec:authorize="hasRole('admin')">
                 <li class="sidebar-nav-link">
                     <!--<a href="#" onclick="loadPage('/background/banner-tables.html')">-->
-                    <a href="#" onclick="loadPage('/banner/list')">
+                    <a href="#" onclick="loadPage('/banner/list?page=0&size=10')">
                         <i class="am-icon-table sidebar-nav-link-logo"></i> 墙角管理
                     </a>
                 </li>
@@ -301,7 +301,7 @@
 
             <div sec:authorize="hasRole('admin')">
                 <li class="sidebar-nav-link">
-                    <a href="#" onclick="loadPage('/message/list')"><!--/background/user-tables.htm-->
+                    <a href="#" onclick="loadPage('/message/list?page=0&size=10')"><!--/background/user-tables.htm-->
                         <i class="am-icon-table sidebar-nav-link-logo"></i> 留言管理
                     </a>
                 </li>
@@ -309,7 +309,7 @@
 
             <div sec:authorize="hasRole('admin')">
                 <li class="sidebar-nav-link">
-                    <a href="#" onclick="loadPage('/user/users')"><!--/background/user-tables.htm-->
+                    <a href="#" onclick="loadPage('/user/users?page=0&size=10')"><!--/background/user-tables.htm-->
                         <i class="am-icon-table sidebar-nav-link-logo"></i> 用户管理
                     </a>
                 </li>

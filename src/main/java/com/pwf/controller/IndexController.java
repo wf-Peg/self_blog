@@ -36,23 +36,30 @@ public class IndexController {
     @Autowired
     private CommentService commentService;
 
+
     @RequestMapping({"/","index"})
     @ApiOperation(value = "跳转前台首页")
     public String index(Model model) {
         Page<Banner> bannerList = bannerService.findAll(PageRequest.of(0,30));
 //        List<Banner> bannerList = bannerService.findAll();
-        Iterable<Blog> blogList=blogService.findBlogsByIsVisibleIsTrue(PageRequest.of(0,10));
+        Page<Blog> blogList=blogService.findBlogsByIsVisibleIsTrue(PageRequest.of(0,10));
 
         //取出前三十篇热门的文章的所有标签
-        StringBuilder sb = new StringBuilder();
-        for (Blog blog:blogService.getTop30Keywords()){
-            String keywords = blog.getKeywords();
-            String[] strs = keywords.split(",");
-            for (String keyword:strs) {
-                sb.append(keyword+",");
+        StringBuilder sb = null;
+        try {
+            sb = new StringBuilder();
+            for (Blog blog:blogService.getTop30Keywords()){
+                String keywords = blog.getKeywords();
+                String[] strs = keywords.split(",");
+                for (String keyword:strs) {
+                    sb.append(keyword+",");
+                }
             }
+            System.out.println(sb);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("关键词为空导致空指针");
         }
-        System.out.println(sb);
 
         //准备将所有标签去重,步骤：根据逗号转化为数组，准备第二个StringBuilder存储去重数据，最后使用LinkedHashSet去重并删除首个逗号
         String[]  arr = sb.toString().split(",");
@@ -65,10 +72,12 @@ public class IndexController {
         System.out.println(sb2);
 
 
+        model.addAttribute("totalPage", blogList.getTotalPages());
+        model.addAttribute("currentPage", 1);
 
         model.addAttribute("bannerList", bannerList.getContent());
 //        model.addAttribute("bannerList", bannerList);
-        model.addAttribute("blogList", blogList);
+        model.addAttribute("blogList", blogList.getContent());
         model.addAttribute("keywordList", sb2);
         return "index";
     }

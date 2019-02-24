@@ -55,40 +55,46 @@ public class BlogController {
 
     @ApiOperation("查询所有博文")
     @RequestMapping("/list")
-    private String findAll(Model model) {
-        Page<Blog> all = service.pageFindAll(1, 10);
+    private String findAll(PageBean pageBean, Model model) {
+        Page<Blog> all = service.pageFindAll(pageBean);
         model.addAttribute("blogList", all.getContent());
+        model.addAttribute("totalPage", all.getTotalPages());
+        model.addAttribute("currentPage", pageBean.getPage());
         return "/background/blog-tables";
     }
 
     @ApiOperation("根据分类查询所有博文")
     @RequestMapping("/orderList")
-    private String orderList(Model model,
-                             @RequestParam(value = "category", required = false,defaultValue = "") String category
-//                             @PathVariable("page") int page,
-//                             @PathVariable("size") int size
-    ) {
+    private String orderList(Model model, PageBean pageBean,
+                             @RequestParam(value = "category", required = false, defaultValue = "") String category) {
         if (category.equals("生活") || category.equals("技术") || category.equals("游戏")) {
-            Page<Blog> blogList = service.findByCategory(PageRequest.of(0, 10), category);
-            model.addAttribute("blogList", blogList.getContent());
+            Page<Blog> blogs = service.findByCategory(pageBean, category);
+            model.addAttribute("blogList", blogs.getContent());
+            model.addAttribute("totalPage", blogs.getTotalPages());
+            model.addAttribute("currentPage", pageBean.getPage());
             return "index :: #content";
-        } if (category.equals("最热")) {
+        }
+        if (category.equals("最热")) {
+            Page<Blog> blogs = service.hotlist(pageBean);
+            model.addAttribute("blogList", blogs.getContent());
+            model.addAttribute("totalPage", blogs.getTotalPages());
+            model.addAttribute("currentPage", pageBean.getPage());
+            return "index :: #content";
+        }
+        if (category.equals("最新")) {
 //            Pageable pageable = PageRequest.of(0, 10, sort);
-            Page<Blog> blogs = service.hotlist(1, 10);
+            Page<Blog> blogs = service.newlist(pageBean);
 //            PageResult<Blog> pageResult = new PageResult<>(blogs.getTotalElements(),blogs.getContent());
             model.addAttribute("blogList", blogs.getContent());
-            System.out.println("link");
-            return "index :: #content";
-        } if (category.equals("最新")) {
-//            Pageable pageable = PageRequest.of(0, 10, sort);
-            Page<Blog> blogs = service.newlist(1, 10);
-//            PageResult<Blog> pageResult = new PageResult<>(blogs.getTotalElements(),blogs.getContent());
-            model.addAttribute("blogList", blogs.getContent());
+            model.addAttribute("totalPage", blogs.getTotalPages());
+            model.addAttribute("currentPage", pageBean.getPage());
             return "index :: #content";
         }
 
-        Page<Blog> all = service.pageFindAll(1, 10);
+        Page<Blog> all = service.pageFindAll(pageBean);
         model.addAttribute("blogList", all.getContent());
+//        model.addAttribute("totalPage", all.getTotalPages());
+//        model.addAttribute("currentPage", pageBean.getPage());
         return "index :: #content";
     }
 
@@ -116,6 +122,7 @@ public class BlogController {
 //        String strReleaseTime = blog.getReleaseTime().toString().substring(0,10);
 //        blog.setReleaseTime(sdf.parse(strReleaseTime));
 //        System.out.println(strReleaseTime);
+        //todo redis
         model.addAttribute("blog", blog);
         return new ModelAndView("background/blog-edit", "blogModel", model);
     }
@@ -136,7 +143,7 @@ public class BlogController {
                 releaseTime = sdf.parse(strDate);//字符串转成date对象类型
                 //普通更新用户的业务,把blogVo的值拷贝到blog上
                 BeanUtils.copyProperties(blogVo, blog);
-                if ("".equals(blogVo.getKeylink())){
+                if ("".equals(blogVo.getKeylink())) {
                     blog.setKeylink(null);
                 }
                 //上传博客图片
@@ -149,7 +156,7 @@ public class BlogController {
                 //根据当前用户名，为该用户添加博文数量
                 userService.addBlogCount(principal.getUsername());
                 return new ResultVO(true, "发布成功,请耐心等待管理员的审核！");
-            }  catch (ConstraintViolationException e) {
+            } catch (ConstraintViolationException e) {
                 return new ResultVO(false, ConstraintViolationExceptionHandler.getMessage(e));
             } catch (Exception e) {
                 return new ResultVO(false, e.getMessage());
@@ -162,13 +169,13 @@ public class BlogController {
                     filePath = fileUploadService.upload(uploadFile);
                     blog.setImage(filePath);
                 }
-                if ("".equals(blogVo.getKeylink())){
+                if ("".equals(blogVo.getKeylink())) {
                     blog.setKeylink(null);
                 }
                 blog.setReleaseTime(releaseTime);
                 blog.setUpdateTime(new Date());
                 service.update(blog);
-            }catch (ConstraintViolationException e) {
+            } catch (ConstraintViolationException e) {
                 return new ResultVO(false, ConstraintViolationExceptionHandler.getMessage(e));
             } catch (Exception e) {
                 return new ResultVO(false, e.getMessage());
@@ -206,45 +213,58 @@ public class BlogController {
 ////        return new ResultVO(true, "search成功", list);
 //    }
 
-    @ApiOperation("根据blog标题进行查询")
+    @ApiOperation("后台根据blog标题进行查询")
     @GetMapping("/search")
-    public String findSearch(@RequestParam(value = "searchText", required = false, defaultValue = "") String searchText, Model model) {
-        Page<Blog> list = service.findSearch(searchText, 1, 10);
-        model.addAttribute("blogList", list.getContent());
+    public String findSearch(@RequestParam(value = "searchText", required = false, defaultValue = "") String searchText,
+                             PageBean pageBean,Model model) {
+//        List<Blog> list = service.findSearch(searchText);
+//        model.addAttribute("blogList", list);
+//        model.addAttribute("totalPage", list.getTotalPages());
+//        model.addAttribute("currentPage", pageBean.getPage());
+        List<Blog> list = service.findByTitleContainingOrSummaryContainingOrContentContaining(searchText, pageBean);
+        model.addAttribute("blogList", list);
+        model.addAttribute("totalPage", 1);
+        model.addAttribute("currentPage", pageBean.getPage());
         return "background/blog-tables";
     }
 
     @ApiOperation("根据blog关键词进行查询")
     @GetMapping("/keySearch")
-    public String keySearch(@RequestParam(value = "keyword", required = true) String keyword, Model model) {
-        Page<Blog> list = service.findSearch(keyword, 1, 10);
+    public String keySearch(@RequestParam(value = "keyword", required = true) String keyword, Model model, PageBean pageBean) {
+        Page<Blog> list = service.findSearch(keyword, pageBean);
         model.addAttribute("blogList", list.getContent());
+        model.addAttribute("totalPage", list.getTotalPages());
+        model.addAttribute("currentPage", pageBean.getPage());
         return "index :: #content";
     }
 
-    @ApiOperation("根据blog名称、关键词、分类、摘要、作者进行查询")
+    @ApiOperation("前台根据blog名称、关键词、分类、摘要、作者进行查询")
     @GetMapping("/esSearch")
-    public String esSearch(@RequestParam(value = "searchText", required = false, defaultValue = "") String searchText, Model model) {
-        List<Blog> list = service.findByTitleContainingOrSummaryContainingOrContentContaining(searchText,0,20);
+    public String esSearch(@RequestParam(value = "searchText", required = false, defaultValue = "") String searchText,
+                           PageBean pageBean, Model model) {
+        List<Blog> list = service.findByTitleContainingOrSummaryContainingOrContentContaining(searchText, pageBean);
         model.addAttribute("blogList", list);
+        model.addAttribute("totalPage", 1);
+        model.addAttribute("currentPage", pageBean.getPage());
         return "index :: #content";
     }
 
-    @ApiOperation("根据blog名称、关键词、分类、摘要进行分页条件查询")
-    @RequestMapping("/search/{page}/{size}")
-    public ResultVO pageSearch(@RequestBody Blog blog, @PathVariable int page, @PathVariable int size) {
-        Page<Blog> pageData = service.pageSearch(blog, page, size);
-        return new ResultVO(true, "分页search成功", new PageResult<Blog>(pageData.
-                getTotalElements(), pageData.getContent()));
-    }
+//    @ApiOperation("根据blog名称、关键词、分类、摘要进行分页条件查询")
+//    @RequestMapping("/search/{page}/{size}")
+//    public ResultVO pageSearch(@RequestBody Blog blog, @PathVariable int page, @PathVariable int size) {
+//        Page<Blog> pageData = service.pageSearch(blog, page, size);
+//        return new ResultVO(true, "分页search成功", new PageResult<Blog>(pageData.
+//                getTotalElements(), pageData.getContent()));
+//    }
 
     @ApiOperation("查询需要审核的文章")
     @RequestMapping(value = "/examine")
     public String allExamine(PageBean pageBean, Model model) {
-//        service.examine(id,true);
         Pageable pageable = PageRequest.of(pageBean.getPage(), pageBean.getSize());
         Page<Blog> blogs = service.findBlogsByIsVisibleIsFalse(pageable);
         model.addAttribute("blogList", blogs.getContent());
+        model.addAttribute("totalPage", blogs.getTotalPages());
+        model.addAttribute("currentPage", pageBean.getPage());
         return "background/blog-tables-examine";
     }
 
@@ -263,26 +283,5 @@ public class BlogController {
         service.updateLikes(id);
         return new ResultVO(true, "点赞成功");
     }
-
-//    @GetMapping("/esSearch")
-//    @ApiOperation(value = "根据title和content进行全文搜索")
-//    public List<Blog> findBlogs(@RequestParam("title") String title,
-//                                @RequestParam("summary") String summary,
-//                                @RequestParam("content") String content,
-//                                @RequestParam(value = "pageIndex",defaultValue = "0") int pageIndex,
-//                                @RequestParam(value = "pageSize",defaultValue = "15") int pageSize
-//                                ){
-//        Pageable pageable= PageRequest.of(pageIndex,pageSize);
-//        Page<Blog> page = service.findByTitleContainingOrSummaryContainingOrContentContaining(title,summary, content, pageable);
-//        return page.getContent();
-//    }
-
-//    @GetMapping
-//    @RequestMapping("/list")
-//    public String listBlogs(@RequestParam(value="order",required=false,defaultValue="new") String order,
-//                            @RequestParam(value="keywords",required=false) String keywords) {
-//        System.out.print("order:" +order + ";keywords:" +keywords );
-//        return "redirect:/index?order="+order+"&keywords="+keywords;
-//    }
 
 }

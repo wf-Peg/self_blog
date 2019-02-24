@@ -50,10 +50,10 @@ function getBannerByName() {
     });
 }
 
-// 根据blog名称、关键词、分类、摘要进行查询
 function getBlogByAttr() {
     // var _pageSize; // 存储用于搜索
     $.ajax({
+        // url: "/blog/search?page=0&size=10",
         url: "/blog/search",
         contentType: 'application/json',
         data: {
@@ -576,7 +576,7 @@ function saveBlog() {
 function getContentBySearchText() {
     var val = $("#searchText").val();
     $.ajax({
-        url: "/blog/esSearch",
+        url: "/blog/esSearch?page=0&size=10",
         contentType: 'application/json',
         data: {
             // "async":true,

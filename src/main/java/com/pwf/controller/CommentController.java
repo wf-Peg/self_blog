@@ -9,6 +9,7 @@ import javax.validation.ConstraintViolationException;
 
 import com.pwf.domain.Blog;
 import com.pwf.domain.Comment;
+import com.pwf.domain.PageBean;
 import com.pwf.domain.User;
 import com.pwf.service.BlogService;
 import com.pwf.service.CommentService;
@@ -64,8 +65,11 @@ public class CommentController {
 	 * @return
 	 */
 	@GetMapping("/list")
-	public String listComments(Model model) {
-		model.addAttribute("comments", commentService.findAll());
+	public String listComments(Model model, PageBean pageBean) {
+		Page<Comment> all = commentService.findAll(pageBean);
+		model.addAttribute("comments", all.getContent());
+		model.addAttribute("totalPage", all.getTotalPages());
+		model.addAttribute("currentPage", pageBean.getPage());
 		return "background/comments-tables";
 	}
 

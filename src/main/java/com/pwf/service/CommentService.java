@@ -5,8 +5,10 @@ import javax.transaction.Transactional;
 import com.pwf.dao.CommentRepository;
 import com.pwf.domain.Blog;
 import com.pwf.domain.Comment;
+import com.pwf.domain.PageBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +29,8 @@ public class CommentService {
 		commentRepository.deleteById(id);
 	}
 
-	public List<Comment> findAll() {
-		return commentRepository.findAll();
+	public Page<Comment> findAll(PageBean pageBean) {
+		return commentRepository.findAll(PageRequest.of(pageBean.getPage(),pageBean.getSize()));
 	}
 
 	public Comment getCommentById(Long id) {

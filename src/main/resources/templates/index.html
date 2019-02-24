@@ -138,7 +138,7 @@
             <div class="social-links" style="margin-top: 60px;margin-left: 40px">
                 <h3 class="keywords-header"><i class="fa fa-tags" aria-hidden="true"></i>热门标签</h3>
                 <div class="card-block" style="margin-top: 20px;margin-left: 20px;margin-right: 50px" >
-                <a th:onclick="loadPageForBlogContent2('/blog/keySearch?keyword='+[[${keyword}]])" th:each="keyword : ${#strings.arraySplit(keywordList , ',')}">
+                <a th:onclick="loadPageForBlogContent2('/blog/keySearch?page=0&size=10&keyword='+[[${keyword}]])" th:each="keyword : ${#strings.arraySplit(keywordList , ',')}">
                 <!--<a th:href="'/blog/search?keyword='+${keyword}" th:each="keyword : ${#strings.arraySplit(keywordList, ',')}">-->
                     <span class="badge badge-default" th:text="${keyword}">Web Design</span>
                     <!--<span class="badge badge-default" th:onclick="'loadPageForBlogContent2(\'/blog/search?keyword=\''+${keyword}+'\')'" th:text="${keyword}">Web Design</span>-->
@@ -552,12 +552,12 @@
 
                     <div id="container" style="padding-top: 20px">
                         <div id="category"><h2>分类：
-                            <a href="#" onclick="loadPageForBlogContent('blog/orderList')">全部&nbsp;&nbsp;</a>
-                            <a href="#" onclick="loadPageForBlogContent('blog/orderList?category=生活')">生活&nbsp;&nbsp;</a>
-                            <a href="#" onclick="loadPageForBlogContent('blog/orderList?category=技术')">技术&nbsp;&nbsp;</a>
-                            <a href="#" onclick="loadPageForBlogContent('blog/orderList?category=游戏')">游戏&nbsp;&nbsp;</a>
-                            <a href="#" onclick="loadPageForBlogContent('blog/orderList?category=最新')">最新&nbsp;&nbsp;</a>
-                            <a href="#" onclick="loadPageForBlogContent('blog/orderList?category=最热')">最热&nbsp;&nbsp;</a>
+                            <a href="#" onclick="loadPageForBlogContent('blog/orderList?page=0&size=10')">全部&nbsp;&nbsp;</a>
+                            <a href="#" onclick="loadPageForBlogContent('blog/orderList?category=生活?')">生活&nbsp;&nbsp;</a>
+                            <a href="#" onclick="loadPageForBlogContent('blog/orderList?category=技术?')">技术&nbsp;&nbsp;</a>
+                            <a href="#" onclick="loadPageForBlogContent('blog/orderList?category=游戏?')">游戏&nbsp;&nbsp;</a>
+                            <a href="#" onclick="loadPageForBlogContent('blog/orderList?category=最新?')">最新&nbsp;&nbsp;</a>
+                            <a href="#" onclick="loadPageForBlogContent('blog/orderList?category=最热?')">最热&nbsp;&nbsp;</a>
                         </h2>
                         </div>
 
@@ -610,17 +610,39 @@
                         <!-- paging end-->
                     </div>
 
-                    <ul class="pagination square" style="margin-left: 470px">
-                        <li><a href="#">&laquo;</a></li>
-                        <li class="previous"><a href="#">上一页</a></li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                        <li class="next"><a href="#">下一页</a></li>
-                        <li><a href="#">&raquo;</a></li>
-                    </ul>
+                    <!-- 分页 -->
+                    <div class="am-cf">
+                        <div class="am-fr">
+                            <ul class="pagination square" style="margin-left: 470px">
+                                <li><a th:onclick="'loadPage(\'/blog/examine?page=0\')'">«</a></li>
+                                <li th:each="i : ${#numbers.sequence(1,totalPage,1)}"
+                                    th:id="'page'+${i}">
+                                    <a th:text="${i}"
+                                       th:onclick="'loadPage(\'/blog/examine?page='+${i-1}+'\')'">1</a>
+                                </li>
+                                <li>
+                                    <a th:onclick="'loadPage(\'/blog/examine?page='+${totalPage-1}+'\')'">»</a>
+                                </li>
+                            </ul>
+                            <script th:inline="javascript" type="text/javascript">
+                                var id = [[${currentPage+1}]];
+                                $("#page" + id).attr("class", "am-active");
+                            </script>
+                        </div>
+                    </div>
+                    <!-- /分页 -->
+
+                    <!--<ul class="pagination square" style="margin-left: 470px">-->
+                        <!--<li><a href="#">&laquo;</a></li>-->
+                        <!--<li class="previous"><a href="#">上一页</a></li>-->
+                        <!--<li><a href="#">1</a></li>-->
+                        <!--<li><a href="#">2</a></li>-->
+                        <!--<li><a href="#">3</a></li>-->
+                        <!--<li><a href="#">4</a></li>-->
+                        <!--<li><a href="#">5</a></li>-->
+                        <!--<li class="next"><a href="#">下一页</a></li>-->
+                        <!--<li><a href="#">&raquo;</a></li>-->
+                    <!--</ul>-->
                     <!-- container end-->
                     <!--<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>-->
                     <a href="#blog" target="_self" id="top" style="color: darkseagreen;padding-right: 200px">Top</a>

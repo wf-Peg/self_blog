@@ -1,6 +1,7 @@
 package com.pwf.dao;
 
 import com.pwf.domain.Blog;
+import com.pwf.domain.PageBean;
 import io.swagger.annotations.ApiOperation;
 import org.hibernate.validator.constraints.EAN;
 import org.springframework.data.domain.Page;
