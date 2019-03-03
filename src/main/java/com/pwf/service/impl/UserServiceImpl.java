@@ -8,7 +8,6 @@ import com.pwf.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -61,6 +60,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(Integer id) {
         return repository.getOne(id);
+    }
+
+    @Override
+    public Optional<User> getUserByUsername(String username) {
+        Optional<User> byUserName = repository.findByUserName(username);
+        return byUserName.isPresent()?byUserName:null;
     }
 
     @Override
@@ -133,6 +138,21 @@ public class UserServiceImpl implements UserService {
             repository.save(user);
         });
         return uesrOptional;
+    }
+
+    @Override
+    public void addBlogCount(String username) {
+        repository.addBlogCount(username);
+    }
+
+    @Override
+    public User findMostBlogsUser() {
+        return repository.findMostBlogsUser();
+    }
+
+    @Override
+    public void decreaseUserBlogCount(String author) {
+        repository.decreaseBlogCount(author);
     }
 
 //    @Override

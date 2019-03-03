@@ -14,6 +14,9 @@
     <link rel="stylesheet" href="assets/css/amazeui.datatables.min.css" />
     <link rel="stylesheet" href="assets/css/app.css">
     <script src="assets/js/jquery.min.js"></script>
+    <!-- 弹窗美化 -->
+    <link rel="stylesheet" type="text/css" href="/sweetalert/sweetalert.css">
+    <script type="text/javascript" src="/sweetalert/sweetalert-dev.js"></script>
 
 </head>
 
@@ -42,9 +45,8 @@
                   创建一个新的管理员
               </span>
 
-
                 <form class="am-form tpl-form-line-form" id="registerFormForAdmin">
-                    <input type="hidden" name="userId" id="userId">
+                    <!--<input type="hidden" name="userId" id="userId">-->
                     <!--<div class="am-form-group">-->
                         <!--<input type="text" class="tpl-form-input" name="avatar" id="avatar"  placeholder="选择您的头像">-->
                     <!--</div>-->
@@ -66,9 +68,9 @@
                         <input type="password" class="tpl-form-input" name="passWord" id="passWord"  placeholder="请输入密码">
                     </div>
 
-                    <!--<div class="am-form-group">-->
-                        <!--<input type="email" class="tpl-form-input" name="email" id="email"  placeholder="邮箱地址">-->
-                    <!--</div>-->
+                    <div class="am-form-group">
+                        <input type="email" class="tpl-form-input" name="email" id="email"  placeholder="邮箱地址">
+                    </div>
 
                     <!--<div class="am-form-group">-->
                         <!--<input type="password" class="tpl-form-input" name="rePassword" id="rePassword" th:value="*{rePassword}" placeholder="再次输入密码">-->

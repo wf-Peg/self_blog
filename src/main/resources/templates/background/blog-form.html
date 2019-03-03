@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Amaze UI Admin index Examples</title>
-    <meta name="description" content="这是一个 index 页面">
+    <title>发布博客</title>
+    <meta name="description" content="这是一个博客发布页">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
@@ -17,155 +17,256 @@
     <link rel="stylesheet" href="assets/css/amazeui.datatables.min.css"/>
     <link rel="stylesheet" href="assets/css/app.css">
     <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/theme.js"></script>
+    <script src="/asserts/js/do.js"></script>
+    <script src="/js/jquery.tagsinput.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/jquery.tagsinput.css" />
+
+    <!-- 弹窗美化 -->
+    <link rel="stylesheet" type="text/css" href="/sweetalert/sweetalert.css">
+    <script type="text/javascript" src="/sweetalert/sweetalert-dev.js"></script>
 </head>
 
 <body data-type="widgets">
-<script src="assets/js/theme.js"></script>
-<!-- 风格切换 -->
-<div class="tpl-skiner">
-    <div class="tpl-skiner-toggle am-icon-cog">
-    </div>
-    <div class="tpl-skiner-content">
-        <div class="tpl-skiner-content-title">
-            选择主题
-        </div>
-        <div class="tpl-skiner-content-bar">
-            <span class="skiner-color skiner-white" data-color="theme-white"></span>
-            <span class="skiner-color skiner-black" data-color="theme-black"></span>
-        </div>
-    </div>
-</div>
 
-<!-- 内容区域 -->
-<div class="row">
-
-    <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
-        <div class="widget am-cf">
-            <div class="widget-head am-cf">
-                <div class="widget-title am-fl">发表博文</div>
-                <div class="widget-function am-fr">
-                    <a href="javascript:;" class="am-icon-cog"></a>
-                </div>
+<div id="content">
+    <!-- 风格切换 -->
+    <div class="tpl-skiner">
+        <div class="tpl-skiner-toggle am-icon-cog">
+        </div>
+        <div class="tpl-skiner-content">
+            <div class="tpl-skiner-content-title">
+                选择主题
             </div>
-            <div class="widget-body am-fr">
+            <div class="tpl-skiner-content-bar">
+                <span class="skiner-color skiner-white" data-color="theme-white"></span>
+                <span class="skiner-color skiner-black" data-color="theme-black"></span>
+            </div>
+        </div>
+    </div>
 
-                <form class="am-form tpl-form-line-form">
-                    <input type="hidden" name="id">
-                    <div class="am-form-group">
-                        <label for="title" class="am-u-sm-3 am-form-label">标题 <span class="tpl-form-line-small-title">Title</span></label>
-                        <div class="am-u-sm-9">
-                            <input type="text" class="tpl-form-input" id="title" name="title" maxlength="50"
-                                   placeholder="请输入标题文字">
-                            <small>请填写标题文字10-20字左右。</small>
-                        </div>
+    <!-- 内容区域 -->
+    <div class="row-content am-cf">
+        <div class="row">
+
+            <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                <div class="widget am-cf">
+                    <div class="widget-head am-cf">
+                        <div class="widget-title am-fl">发表博文</div>
                     </div>
+                    <div class="widget-body am-fr">
 
-                    <div class="am-form-group">
-                        <label for="releaseTime" class="am-u-sm-3 am-form-label">发布时间 <span
-                                class="tpl-form-line-small-title">releaseTime</span></label>
-                        <div class="am-u-sm-9">
-                            <input type="text" class="am-form-field tpl-form-no-bg" placeholder="发布时间"
-                                   id="releaseTime" name="releaseTime" data-am-datepicker readonly="" required>
-                            <small>发布时间为必填</small>
-                        </div>
-                    </div>
+                        <form class="am-form tpl-form-line-form" id="blogForm">
+                            <input type="hidden" name="id">
+                            <div class="am-form-group">
+                                <label for="title" class="am-u-sm-3 am-form-label">标题 <span
+                                        class="tpl-form-line-small-title">title</span></label>
+                                <div class="am-u-sm-9">
+                                    <input type="text" class="tpl-form-input" id="title" name="title" maxlength="30"
+                                           autofocus="" placeholder="请输入标题文字">
+                                    <small>必填,请填写标题文字10-20字左右</small>
+                                </div>
+                            </div>
 
-                    <div class="am-form-group">
-                        <label for="blogCategory" class="am-u-sm-3 am-form-label">分类 <span
-                                class="tpl-form-line-small-title">blogCategory</span></label>
-                        <div class="am-u-sm-9">
-                            <select id="blogCategory" multiple data-am-selected name="blogCategory"
-                                    class="form-control form-control-chosen" data-placeholder="请选择">
-                                <option value="技术">技术</option>
-                                <option value="生活">生活</option>
-                                <option value="随笔">随笔</option>
-                            </select>
-                        </div>
-                    </div>
+                            <div class="am-form-group">
+                                <label for="keylink" class="am-u-sm-3 am-form-label">VIP内容 <span
+                                        class="tpl-form-line-small-title">keylink</span></label>
+                                <div class="am-u-sm-9">
+                                    <input type="text" class="tpl-form-input" id="keylink" name="keylink" maxlength="500"
+                                            placeholder="请输入隐藏内容">
+                                    <small>是否需要VIP权限才可查看的内容,无请留空</small>
+                                </div>
+                            </div>
 
-                    <div class="am-form-group">
-                        <label for="Author" class="am-u-sm-3 am-form-label">作者 <span class="tpl-form-line-small-title">Author</span></label>
-                        <div class="am-u-sm-9">
-                            <select id="Author" name="Author" data-am-selected style="display: none;">
-                                <option value="a">-The.CC</option>
-                                <option value="b">夕风色</option>
-                                <option value="o">Orange</option>
-                            </select>
-                        </div>
-                    </div>
+                            <div class="am-form-group">
+                                <label for="releaseTime" class="am-u-sm-3 am-form-label">发布时间 <span
+                                        class="tpl-form-line-small-title">releaseTime</span></label>
+                                <div class="am-u-sm-9">
+                                    <input type="text" class="am-form-field tpl-form-no-bg" placeholder="发布时间"
+                                           id="releaseTime" name="releaseTime"
+                                           data-am-datepicker="{format: 'yyyy-mm-dd'}"
+                                           readonly="" required>
+                                    <small>发布时间为必填</small>
+                                </div>
+                            </div>
 
-                    <div class="am-form-group">
-                        <label for="summary" class="am-u-sm-3 am-form-label">博客摘要 <span
-                                class="tpl-form-line-small-title">summary</span></label>
-                        <div class="am-u-sm-9">
+                            <div class="am-form-group">
+                                <label for="category" class="am-u-sm-3 am-form-label">分类 <span
+                                        class="tpl-form-line-small-title">blogCategory</span></label>
+                                <div class="am-u-sm-9">
+                                    <!-- multiple多选 -->
+                                    <!--<select id="category" multiple data-am-selected name="category"-->
+                                    <select id="category" data-am-selected name="category"
+                                            class="form-control form-control-chosen" data-placeholder="请选择">
+                                        <option value="生活">生活</option>
+                                        <option value="技术">技术</option>
+                                        <option value="游戏">游戏</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!--<input type="hidden" value="" sec:authentication="name">-->
+                            <div class="am-form-group">
+                                <label for="author" class="am-u-sm-3 am-form-label">作者 <span
+                                        class="tpl-form-line-small-title">author</span></label>
+                                <div class="am-u-sm-9">
+                                    <input type="text" class="tpl-form-input" id="author" name="author"
+                                           th:value="${username}" readonly>
+                                    <small>作者信息为当前用户</small>
+                                </div>
+                            </div>
+
+                            <!--<div class="am-form-group">-->
+                            <!--<label for="Author" class="am-u-sm-3 am-form-label">作者 <span class="tpl-form-line-small-title">Author</span></label>-->
+                            <!--<div class="am-u-sm-9">-->
+                            <!--<select id="Author" name="Author" data-am-selected style="display: none;">-->
+                            <!--<option value="a">-The.CC</option>-->
+                            <!--<option value="b">夕风色</option>-->
+                            <!--<option value="o">Orange</option>-->
+                            <!--</select>-->
+                            <!--</div>-->
+                            <!--</div>-->
+
+                            <div class="am-form-group">
+                                <label for="summary" class="am-u-sm-3 am-form-label">博客摘要 <span
+                                        class="tpl-form-line-small-title">summary</span></label>
+                                <div class="am-u-sm-9">
                             <textarea id="summary" name="summary" type="text" placeholder="输入摘要信息" maxlength="300"
                                       rows="4"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="am-form-group">
-                        <label for="image" class="am-u-sm-3 am-form-label">封面图 <span class="tpl-form-line-small-title">Image</span></label>
-                        <div class="am-u-sm-9">
-                            <div class="am-form-group am-form-file">
-                                <div class="tpl-form-file-img">
-                                    <img id="image" name="image" src="assets/img/blog_default.png" alt="默认图片">
+                                    <small>必填,摘要最多为300个字符</small>
                                 </div>
-                                <button type="button" class="am-btn am-btn-danger am-btn-sm">
-                                    <i class="am-icon-cloud-upload"></i> 添加封面图片
-                                </button>
-                                <input id="doc-form-file" type="file" multiple="">
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="am-form-group">
-                        <label for="keywords" class="am-u-sm-3 am-form-label">关键词 <span
-                                class="tpl-form-line-small-title">Keywords</span></label>
-                        <div class="am-u-sm-9">
-                            <input type="text" id="keywords" name="keywords" placeholder="关键词用逗号隔开" maxlength="30">
-                        </div>
-                    </div>
-
-                    <div class="am-form-group">
-                        <label for="isVisible" class="am-u-sm-3 am-form-label">隐藏文章</label>
-                        <div class="am-u-sm-9">
-                            <div class="tpl-switch">
-                                <input type="checkbox" id="isVisible" name="isVisible"
-                                       class="ios-switch bigswitch tpl-switch-btn" checked="">
-                                <div class="tpl-switch-btn-view">
-                                    <div>
+                            <label for="img" class="am-u-sm-3 am-form-label">封面图 <span
+                                    class="tpl-form-line-small-title">image</span></label>
+                            <div class="am-u-sm-9">
+                                <div class="am-form-group am-form-file">
+                                    <div class="tpl-form-file-img">
+                                        <!--<input type="hidden" name="img" value="">-->
+                                        <img class="img" id="img" name="image" src="assets/img/blog_default.png"
+                                             alt="默认图片"
+                                        >
                                     </div>
+                                    <button type="button" class="am-btn am-btn-danger am-btn-sm">
+                                        <i class="am-icon-cloud-upload"></i> 添加封面图片
+                                    </button>
+                                    <input id="uploadFile" type="file" multiple="" name="uploadFile"
+                                           onchange="reads(this)">
+                                    <small>必填,为了前台显示效果,图片比例最好为2:1,请自行切图,比例不符合将无法通过审核!</small>
                                 </div>
                             </div>
 
-                        </div>
-                    </div>
 
-                    <div class="am-form-group">
-                        <label for="content" class="am-u-sm-3 am-form-label">文章内容</label>
-                        <div class="am-u-sm-9">
-                            <textarea id="content" name="content" data-provide="markdown" class="" rows="50"
-                                      data-hidden-buttons="cmdImage" placeholder="请输入文章内容"></textarea>
-                        </div>
-                    </div>
+                            <div class="am-form-group">
+                                <label for="keywords" class="am-u-sm-3 am-form-label">关键词 <span
+                                        class="tpl-form-line-small-title">keywords</span></label>
+                                <div class="am-u-sm-9">
+                                    <input type="text" id="keywords" name="keywords" placeholder="请输入关键词">
+                                    <!--<input type="text" id="keywords" name="keywords" placeholder="关键词用逗号隔开"-->
+                                           <!--maxlength="30">-->
+                                    <script>
+                                        $('#keywords').tagsInput({
+                                            'defaultText':'输入标签',
+                                            'width':'100%',
+                                            'height':'auto'
+                                        });
+                                    </script>
+                                    <small>关键词用回车隔开,最多不超过30个字符</small>
+                                </div>
+                            </div>
 
-                    <div class="am-form-group">
-                        <div class="am-u-sm-9 am-u-sm-push-3">
-                            <button type="button" class="am-btn am-btn-primary tpl-btn-bg-color-success ">提交</button>
-                        </div>
+                            <div class="am-form-group">
+                                <label for="content" class="am-u-sm-3 am-form-label">文章内容 <span
+                                        class="tpl-form-line-small-title">markdown格式</span></label>
+                                <div class="am-u-sm-9">
+                                    <textarea placeholder="请输入文章内容,补充:居中可以用标签<center>内容</center>来表示,更多标签请参考markdown语法,且兼容h5标签,编辑器缺失的标签请忽略预览" rows="50" style="background-color: inherit"
+                                              name="content" data-provide="markdown" data-iconlibrary="fa"
+                                              id="editor"></textarea>
+                                    <small>必填,文章内容请进行良好排版,点击预览查看显示效果,排版过乱将无法通过审核!</small>
+                                </div>
+                            </div>
+
+                            <div class="am-form-group">
+                                <div class="am-u-sm-9 am-u-sm-push-3">
+                                    <button type="button" class="am-btn am-btn-primary tpl-btn-bg-color-success"
+                                            onclick="saveBlog()">提交发布
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+
+</body>
 <script src="assets/js/amazeui.min.js"></script>
 <script src="assets/js/amazeui.datatables.min.js"></script>
 <script src="assets/js/dataTables.responsive.min.js"></script>
 <script src="assets/js/app.js"></script>
 
-</body>
+
+<!-- markdown -->
+<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/css/bootstrap-markdown.min.css">
+<!-- 该文件控制图标显示 -->
+<link rel="stylesheet" type="text/css" href="/font-awesome/css/font-awesome.min.css">
+
+<!-- 该jquery文件必须在bootstrap.min.js之前引入 -->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/markdown.js"></script>
+<script src="/js/to-markdown.js"></script>
+<script src="/js/bootstrap-markdown.js"></script>
+<script src="/js/bootstrap-markdown.fr.js"></script>
+
+<script type="text/javascript">
+    //显示中文提示
+    (function ($) {
+        $.fn.markdown.messages.zh = {
+            'Bold': "粗体",
+            'Italic': "斜体",
+            'Heading': "标题",
+            'URL/Link': "链接",
+            'Image': "图片",
+            'List': "列表",
+            'Unordered List': "无序列表",
+            'Ordered List': "有序列表",
+            'Code': "代码",
+            'Quote': "引用",
+            'Preview': "预览",
+            'strong text': "粗体",
+            'emphasized text': "强调",
+            'heading text': "标题",
+            'enter link description here': "输入链接说明",
+            'Insert Hyperlink': "URL地址",
+            'enter image description here': "输入图片说明",
+            'Insert Image Hyperlink': "图片URL地址",
+            'enter image title here': "在这里输入图片标题",
+            'list text here': "这里是列表文本",
+            'code text here': "这里输入代码",
+            'quote here': "这里输入引用文本"
+        };
+    }(jQuery));
+    //初始化编辑器
+    $("#editor").markdown({
+//        autofocus: true,
+        language: 'zh'
+    })
+</script>
+<!-- markdown end -->
+
+<style>
+    small {
+        color: #b43c38;
+    }
+    input{
+        border:1px solid #CCC;
+    }
+</style>
 <script>
     //myJavaScript代码区域
     function loadPage(tag) {

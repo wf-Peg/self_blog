@@ -15,6 +15,9 @@
     <link rel="stylesheet" href="assets/css/amazeui.datatables.min.css"/>
     <link rel="stylesheet" href="assets/css/app.css">
     <script src="assets/js/jquery.min.js"></script>
+    <!-- 弹窗美化 -->
+    <link rel="stylesheet" type="text/css" href="/sweetalert/sweetalert.css">
+    <script type="text/javascript" src="/sweetalert/sweetalert-dev.js"></script>
 
 </head>
 
@@ -51,14 +54,16 @@
 
                     <form class="am-form tpl-form-line-form" id="userEditForm">
                         <div class="am-form-group">
-                            <label class="am-u-sm-3 am-form-label">用户ID</label>
+                            <label for="userId" class="am-u-sm-3 am-form-label">用户ID</label>
                             <div class="am-u-sm-9">
                                 <input type="text" class="tpl-form-input" name="userId" id="userId"
                                        th:value="${userModel.user == null? 'null' : userModel.user.userId}"
                                        readonly="readonly">
                                 <!--<small>帐号唯一id</small>-->
                             </div>
+                        </div>
 
+                        <div class="am-form-group">
                             <label for="userName" class="am-u-sm-3 am-form-label">用户名
                                 <!--<span class="tpl-form-line-small-title">Username</span>--></label>
                             <div class="am-u-sm-9">
@@ -67,15 +72,17 @@
                                        th:value="${userModel.user == null? 'userName' : userModel.user.userName}"
                                        readonly>
                             </div>
+                        </div>
 
+                        <div class="am-form-group">
                             <label for="email" class="am-u-sm-3 am-form-label">用户邮箱</label>
                             <div class="am-u-sm-9">
                                 <input type="text" class="tpl-form-input" name="email" id="email"
                                        placeholder="请输入您的邮箱"
                                        th:value="${userModel.user == null? 'null@null' : userModel.user.email}">
                             </div>
-
                         </div>
+
 
                         <div class="am-form-group">
                             <label for="passWord" class="am-u-sm-3 am-form-label">密码</label>
@@ -90,17 +97,32 @@
                         <div class="am-form-group">
                             <label for="userRole" class="am-u-sm-3 am-form-label">角色权限</label>
                             <div class="am-u-sm-9">
-                                <select data-am-selected="{searchBox: 1}" name="userRole" id="userRole">
-                                    <!--<option th:each="role :${roleList}"-->
-                                    <option th:selected="${userModel.user.userRole=='user'?true:false}"
-                                            value="user">user
-                                    </option>
-                                    <!--<option value="user">user</option>-->
-                                    <option th:selected="${userModel.user.userRole == 'admin'?true:false}"
-                                            value="admin">admin
-                                    </option>
-                                </select>
+                                <input type="userRole" class="am-form-field tpl-form-no-bg" id="userRole"
+                                       name="userRole" required="required" placeholder="请输入密码"
+                                       th:value="${userModel.user == null? 'null' : userModel.user.userRole}">
+                                <!--<select data-am-selected="{searchBox: 1}" multiple="multiple" name="userRole" id="userRole">-->
+                                <!--<option th:each="role : ${#strings.arraySplit(userModel.user.userRole, ',')}"-->
+                                <!--th:value="${role}">-->
+                                <!--</option>-->
+                                <!--<option  th:selected="${role=='user'?true:false}"-->
+                                <!--value="user">user-->
+                                <!--</option>-->
+                                <!--&lt;!&ndash;<option value="user">user</option>&ndash;&gt;-->
+                                <!--<option th:selected="${role == 'admin'?true:false}"-->
+                                <!--value="admin">admin-->
+                                <!--</option>-->
+                                <!--<option th:selected="${role == 'VIP1'?true:false}"-->
+                                <!--value="VIP1">VIP1-->
+                                <!--</option>-->
+                                <!--</select>-->
                             </div>
+                        </div>
+
+                        <label for="blogCount" class="am-u-sm-3 am-form-label">用户发布博客数</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" class="tpl-form-input" name="blogCount" id="blogCount"
+                                   th:value="${userModel.user == null? 'null' : userModel.user.blogCount}"
+                                   readonly="readonly">
                         </div>
 
                         <div class="am-form-group">
@@ -116,10 +138,10 @@
     </div>
 </div>
 </body>
-    <script src="assets/js/amazeui.min.js"></script>
-    <script src="assets/js/amazeui.datatables.min.js"></script>
-    <script src="assets/js/dataTables.responsive.min.js"></script>
-    <script src="assets/js/app.js"></script>
+<script src="assets/js/amazeui.min.js"></script>
+<script src="assets/js/amazeui.datatables.min.js"></script>
+<script src="assets/js/dataTables.responsive.min.js"></script>
+<script src="assets/js/app.js"></script>
 
 <script>
     //myJavaScript代码区域

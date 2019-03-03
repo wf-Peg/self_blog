@@ -1,208 +1,360 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
 <!-- Mirrored from lmpixels.com/demo/sunshine-demo/sunshine-version-2/sunshine-html-template/blog-post-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 24 Aug 2018 06:14:45 GMT -->
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
-    <title>Sunshine - Responsive vCard Template</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="Sunshine - Responsive vCard Template" />
-    <meta name="keywords" content="vcard, resposnive, retina, resume, jquery, css3, bootstrap, Sunshine, portfolio" />
-    <meta name="author" content="lmtheme" />
-    <link rel="shortcut icon" href="favicon.ico">
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title th:text="${blogDetail.title}">FFShine</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <meta name="description" content="Sunshine - Responsive vCard Template"/>
+    <meta name="keywords" content="vcard, resposnive, retina, resume, jquery, css3, bootstrap, Sunshine, portfolio"/>
+    <meta name="author" content="lmtheme"/>
+    <link rel="shortcut icon" href="favicon.ico" th:href="@{/favicon.ico}">
 
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/transition-animations.css">
-    <link rel="stylesheet" href="css/owl.carousel.css">
-    <link rel="stylesheet" href="css/magnific-popup.css">
-    <link rel="stylesheet" href="css/animate.css">
-    <link rel="stylesheet" href="css/main.css" type="text/css">
-    
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','../../../../../www.google-analytics.com/analytics.js','ga');
 
-      ga('create', 'UA-92992662-1', 'auto');
-      ga('send', 'pageview');
-    
-    </script>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/transition-animations.css">
+    <link rel="stylesheet" href="/css/owl.carousel.css">
+    <link rel="stylesheet" href="/css/magnific-popup.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="/css/main.css" type="text/css">
 
-    <script src="js/jquery-2.1.3.min.js"></script>
-    <script src="js/modernizr.custom.js"></script>
+    <!-- 弹窗美化 -->
+    <link rel="stylesheet" type="text/css" href="/sweetalert/sweetalert.css">
+    <script type="text/javascript" src="/sweetalert/sweetalert-dev.js"></script>
+
+    <!--<script>-->
+    <!--(function (i, s, o, g, r, a, m) {-->
+    <!--i['GoogleAnalyticsObject'] = r;-->
+    <!--i[r] = i[r] || function () {-->
+    <!--(i[r].q = i[r].q || []).push(arguments)-->
+    <!--}, i[r].l = 1 * new Date();-->
+    <!--a = s.createElement(o),-->
+    <!--m = s.getElementsByTagName(o)[0];-->
+    <!--a.async = 1;-->
+    <!--a.src = g;-->
+    <!--m.parentNode.insertBefore(a, m)-->
+    <!--})(window, document, 'script', '../../../../../www.google-analytics.com/analytics.js', 'ga');-->
+
+    <!--ga('create', 'UA-92992662-1', 'auto');-->
+    <!--ga('send', 'pageview');-->
+
+    <!--</script>-->
+
+    <script src="/js/jquery-2.1.3.min.js" th:src="@{/js/jquery-2.1.3.min.js}"></script>
+    <script src="/js/modernizr.custom.js" th:src="@{/js/modernizr.custom.js}"></script>
     <!-- snow start-->
-    <script src="js/sakura.js"></script>
-    <link type="text/css" rel="stylesheet" media="screen" href="css/sakura.css" />
+    <script src="/js/sakura.js" th:src="@{/js/sakura.js}"></script>
+    <link type="text/css" rel="stylesheet" media="screen" href="/css/sakura.css"/>
     <script>
         // domReady
-        $(function() {
+        $(function () {
             $('body').sakura();
         });
         // windowLoad
-        $(window).load(function() {
+        $(window).load(function () {
             $('body').sakura();
         });
     </script>
     <!-- snow end-->
-  </head>
-
-  <body>
-    <!-- Loading animation -->
-    <div class="preloader">
-      <div class="preloader-animation">
+</head>
+<body>
+<!-- Loading animation -->
+<div class="preloader">
+    <div class="preloader-animation">
         <div class="dot1"></div>
         <div class="dot2"></div>
-      </div>
     </div>
-    <!-- /Loading animation -->
-    <!-- content start -->
-		<div id="content">
-      <div id="main" class="blog-detail-main">
+</div>
+<!-- /Loading animation -->
+<!-- content start -->
+<!--<div id="content" th:each="blog : ${blogDetail.blogDetail}">-->
+<div id="content">
+    <div id="main" class="blog-detail-main">
         <div class="page-wrapper">
-          <!--<a class="blog-back-button" href="#" onclick="loadPage('blog-category-information.html')"><i class="fa fa-angle-left"></i></a>-->
+            <!--<a class="blog-back-button" href="#" onclick="loadPage('blog-category-information.html')"><i class="fa fa-angle-left"></i></a>-->
 
-          <div class="blog-post-main-image">
-            <img class="post-image img-responsive" src="images/blog/blog_post_2_full.jpg" alt="blog-post-1" />
-          </div>
-
-          <div class="blog-post-content">
-            <h1>Bootstrap is the Most Popular HTML, CSS, and JS Framework</h1>
-            <ul class="tags">
-                <li><a>HTML5</a></li>
-                <li><a>CSS3</a></li>
-                <li><a>jQuery</a></li>
-                <li><a>Ajax</a></li>
-                <li><a>PHP5</a></li>
-            </ul>
-            <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a fringilla elit, eu mattis arcu. Curabitur augue augue, scelerisque sit amet varius eget, tristique at nisl. In euismod suscipit tristique. Nulla sollicitudin pretium massa sit amet tristique.</p>
-
-            <p>Aenean porta quam quis tempus posuere. Integer tempor, elit in auctor scelerisque, arcu augue rhoncus mauris, et hendrerit sem tellus vitae eros. Nulla feugiat ultrices posuere. Nullam aliquet dolor orci. Curabitur tincidunt sem et libero dignissim, sed molestie felis ultricies. Phasellus malesuada tellus vitae eros bibendum, nec ultricies massa sollicitudin. Etiam justo neque, faucibus quis urna interdum, interdum rutrum massa. Mauris et velit ac dolor luctus fringilla. Integer in mattis dui, eget eleifend mauris. Fusce sagittis ipsum nec est finibus, vitae congue nunc elementum. Morbi imperdiet nisl sem, at commodo leo posuere a. Maecenas eu laoreet lorem. Aenean fringilla cursus augue, sed mollis dui.</p>
-
-            <blockquote>
-                <p>Vivamus volutpat auctor metus, venenatis ornare mi dictum sit amet. Aliquam erat volutpat.</p>
-                <footer>Someone famous in <cite title="Source Title">Source Title</cite></footer>
-            </blockquote>
-
-            <p>Praesent ac quam sed magna gravida interdum. Vivamus sed nunc lobortis, tempor ante ut, gravida nibh. Praesent sed euismod odio. Maecenas dui dui, euismod quis lobortis quis, dignissim ut eros. Curabitur cursus lacinia sollicitudin. Aenean vitae erat imperdiet, egestas nisi non, placerat sapien. In nec commodo justo. Nunc posuere lacinia neque eu malesuada. Sed lacus lacus, tincidunt id faucibus eget, sagittis sed enim. Nunc nec dapibus odio.</p>
-
-            <div class="post-info">
-              <span class="autor"><i class="fa fa-fw fa-user"></i> John Doe</span>
-              <span class="divider">|</span>
-              <span class="date"><i class="fa fa-fw fa-clock-o"></i> 12 December, 2016</span>
-              <!-- Share Buttons -->
-              <div class="btn-group share-buttons pull-right hidden-xs">
-                <a href="#" target="_blank" class="btn"><i class="fa fa-facebook"></i> </a>
-                <a href="#" target="_blank" class="btn"><i class="fa fa-twitter"></i> </a>
-                <a href="#" target="_blank" class="btn"><i class="fa fa-dribbble"></i> </a>
-              </div>
-              <!-- /Share Buttons -->
+            <div class="blog-post-main-image">
+                <img class="post-image img-responsive" th:src="${blogDetail.image}"
+                     src="/images/blog/blog_post_2_full.jpg"/>
             </div>
 
-            <div class="post-comments">
-              <div class="block-title">
-                <h3>Comments (3)</h3>
-              </div>
+            <div class="blog-post-content">
+                <h1 th:text="${blogDetail.title}"></h1>
+                <ul class="tags">
+                    <!--<li>分类:<a th:text="${blogDetail.category}">HTML5</a></li>-->
+                    <li th:each="keyword : ${#strings.arraySplit(blogDetail.keywords, ',')}"><a th:text="${keyword}">CSS3</a>
+                    </li>
+                </ul>
+                <blockquote>
+                    <p style="font-weight: bolder;font-size: large" th:text="${blogDetail.summary}">Lorem ipsum
+                        dolor sit amet, consectetur adipiscing elit. Etiam a fringilla elit, eu
+                        mattis arcu. Curabitur augue augue, scelerisque sit amet varius eget, tristique at nisl. In
+                        euismod
+                        suscipit tristique. Nulla sollicitudin pretium massa sit amet tristique.</p>
+                </blockquote>
 
-              <div class="media">
-                  <a class="pull-left" href="#">
-                      <img class="media-object" src="images/blog/comments/comment_photo_1.png" alt="">
-                  </a>
-                  <div class="media-body">
-                      <div class="media-heading">
-                          <a href="#">John Doe</a> <span class="divider">|</span> <span class="light-gray">1 hour ago</span>
-                      </div>
-                      <p>Nam pellentesque laoreet augue sed facilisis. Suspendisse nec sollicitudin mauris. Integer fringilla a odio sit amet fermentum. Nunc nibh mauris, pretium eu risus et, finibus facilisis lorem.</p>
-                      <div class="media-footer">
-                          <a href="#"><i class="fa fa-reply"></i> Reply</a>
-                          <span class="divider"></span>
-                          <i class="fa fa-thumbs-up"></i>
-                          <span>0</span>
-                          <i class="fa fa-thumbs-down"></i>
-                      </div>
+                <p th:utext="${blogDetail.htmlContent}">Aenean porta quam quis tempus posuere. Integer tempor, elit in
+                    auctor scelerisque, arcu augue rhoncus
+                    mauris, et hendrerit sem tellus vitae eros. Nulla feugiat ultrices posuere. Nullam aliquet dolor
+                    orci. Curabitur tincidunt sem et libero dignissim, sed molestie felis ultricies. Phasellus malesuada
+                    tellus vitae eros bibendum, nec ultricies massa sollicitudin. Etiam justo neque, faucibus quis urna
+                    interdum, interdum rutrum massa. Mauris et velit ac dolor luctus fringilla. Integer in mattis dui,
+                    eget eleifend mauris. Fusce sagittis ipsum nec est finibus, vitae congue nunc elementum. Morbi
+                    imperdiet nisl sem, at commodo leo posuere a. Maecenas eu laoreet lorem. Aenean fringilla cursus
+                    augue, sed mollis dui.</p>
+                <!--<h4 name="userId" id="userId"-->
+                <!--th:value="${userModel.user == null? 'null' : userModel.user.userId}"-->
+                <!--readonly="readonly">-->
 
-                      <div class="media">
-                          <a class="pull-left" href="#">
-                              <img class="media-object" src="images/blog/comments/comment_photo_2.png" alt="">
-                          </a>
-                          <div class="media-body">
-                              <div class="media-heading">
-                                  <a href="#">Bryan Morris</a> <span class="divider">|</span> <span class="light-gray">5 hours ago</span>
-                              </div>
-                              <p>Donec fermentum elementum massa nec imperdiet. Quisque iaculis accumsan elit eget porttitor.</p>
-                              <div class="media-footer">
-                                  <a href="#"><i class="fa fa-reply"></i> Reply</a>
-                                  <span class="divider"></span>
-                                  <i class="fa fa-thumbs-up"></i>
-                                  <span>0</span>
-                                  <i class="fa fa-thumbs-down"></i>
-                              </div>
-                          </div>
-                      </div>
+                <footer th:if="${blogDetail.keylink}!=null">
+                    <hr>
+                    <h3 th:if="${blogDetail.keylink}!=null" align="center" style="color: red;">
+                        万恶的会员机制（以下内容为VIP专享）
+                    </h3>
+                    <div th:if="${blogDetail.keylink}!=null" align="center" sec:authorize="hasRole('user')">
+                        <h4>以下内容为VIP专享</h4>
+                    </div>
+                    <div align="center" th:if="${blogDetail.keylink}!=null" sec:authorize="hasRole('VIP1')">
+                       <a th:text="链接地址" th:href="${blogDetail.keylink}"></a>
+                    </div>
+                </footer>
 
-                      <div class="media">
-                          <a class="pull-left" href="#">
-                              <img class="media-object" src="images/blog/comments/comment_photo_1.png" alt="">
-                          </a>
-                          <div class="media-body">
-                              <div class="media-heading">
-                                  <a href="#">John Doe</a> <span class="divider">|</span> <span class="light-gray">12 hours ago</span>
-                              </div>
-                              <p>Nulla tincidunt augue lacinia purus scelerisque fringilla. Donec venenatis volutpat lacus, ac efficitur ligula imperdiet id. Nunc gravida ullamcorper metus, ut gravida velit condimentum vel.</p>
-                              <div class="media-footer">
-                                  <a href="#"><i class="fa fa-reply"></i> Reply</a>
-                                  <span class="divider"></span>
-                                  <i class="fa fa-thumbs-up"></i>
-                                  <span>0</span>
-                                  <i class="fa fa-thumbs-down"></i>
-                              </div>
-                          </div>
-                      </div>
-                      
-                  </div>
-              </div>
+                <!--<blockquote>-->
+                <!--<p>Vivamus volutpat auctor metus, venenatis ornare mi dictum sit amet. Aliquam erat volutpat.</p>-->
+                <!--<footer>Someone famous in <cite title="Source Title">Source Title</cite></footer>-->
+                <!--</blockquote>-->
+
+                <!--<p>Praesent ac quam sed magna gravida interdum. Vivamus sed nunc lobortis, tempor ante ut, gravida nibh.-->
+                <!--Praesent sed euismod odio. Maecenas dui dui, euismod quis lobortis quis, dignissim ut eros.-->
+                <!--Curabitur cursus lacinia sollicitudin. Aenean vitae erat imperdiet, egestas nisi non, placerat-->
+                <!--sapien. In nec commodo justo. Nunc posuere lacinia neque eu malesuada. Sed lacus lacus, tincidunt id-->
+                <!--faucibus eget, sagittis sed enim. Nunc nec dapibus odio.</p>-->
+
+                <div class="post-info">
+                    <span class="autor" th:text="${blogDetail.author}"><i class="fa fa-fw fa-user"></i> John Doe</span>
+                    <span class="divider">|</span>
+                    <time class="date" th:text="${#dates.format(blogDetail.updateTime, 'yyyy-MM-dd HH:mm')}"><i class="fa fa-fw fa-clock-o"></i> 12 December, 2016</time>
+                    <!-- Share Buttons -->
+                    <div class="btn-group share-buttons pull-right hidden-xs">
+                        <i class="fa fa-eye" aria-hidden="true"><b th:text="${blogDetail.reading}">1</b></i>
+                        <i class="fa fa-heart-o" aria-hidden="true"><b th:text="${blogDetail.likes}">1</b></i>
+                        <i class="fa fa-comment-o" aria-hidden="true"><b th:text="${blogDetail.comments}">1</b></i>
+                        <!--<a href="#" target="_blank" class="btn"><i class="fa fa-facebook"></i> </a>-->
+                        <!--<a href="#" target="_blank" class="btn"><i class="fa fa-twitter"></i> </a>-->
+                        <!--<a href="#" target="_blank" class="btn"><i class="fa fa-dribbble"></i> </a>-->
+                    </div>
+                    <!-- /Share Buttons -->
+                </div>
+
+                <button class="btn btn-danger btn-likes" style="float: right;margin-top: 20px" id="submitVote"><i
+                        class="fa fa-heart-o" aria-hidden="true"></i>喜欢
+                </button>
+                <div class="post-comments" style="margin-top: 50px">
+                    <!-- 上下篇 start -->
+                    <div style="position: relative;left: 0%">
+                        <div><a th:href="@{/blog/}+${blogDetail.id-1}"><h4 class="label label-primary">上一篇:啦啦啦</h4></a>
+                        </div>
+                        <div><a th:href="@{/blog/}+${blogDetail.id+1}"><h4 class="label label-success">下一篇:哈哈哈</h4></a>
+                        </div>
+                    </div>
+                    <!-- 上下篇 end -->
+
+                    <div class="block-title">
+                        <!--<b th:text="${comment.size()}"></b>-->
+                        <h3>评论</h3>
+                    </div>
+                </div>
+
+                <div class="card-block" id="mainContainer">
+                    <div class="media" id="commentContainer" th:each="comment,commentStat : ${comments}"
+                         th:object="${comment}">
+                        <div class="media-body" id="mainContainerRepleace" style="margin-top: 20px">
+                            <a class="pull-left" style="padding-right: 0px">
+                                <img th:if="${commentStat.index % 2 == 1}" class="media-object"
+                                     style="width:auto;height: auto;max-width: 55%;max-height: 55%;"
+                                     src="/images/blog/comments/comment_photo_1.png" alt="">
+                                <img th:if="${commentStat.index % 2 == 0}" class="media-object"
+                                     style="width:auto;height: auto;max-width: 55%;max-height: 55%"
+                                     src="/images/blog/comments/comment_photo_2.png" alt="">
+                            </a>
+                            <div class="media-heading" style="margin-top: 15px;">
+                                <!--<a href="#" >John Doe</a> <span class="divider">|</span> <span class="light-gray">1 hour ago</span>-->
+                                <b style="font-size: large" th:text="${comment.commentUsername}">John Doe</b> <span
+                                    class="divider">|</span>
+                                <span class="light-gray">[[${commentStat.index} + 1]]楼  [[${#dates.format(comment.createTime, 'yyyy-MM-dd HH:mm')}]] </span>
+                            </div>
+                            <!--<p>Nam pellentesque laoreet augue sed facilisis. Suspendisse nec sollicitudin mauris.-->
+                            <h3 th:text="*{content}">Nam pellentesque laoreet augue sed facilisis. Suspendisse nec
+                                sollicitudin mauris.
+                                Integer fringilla a odio sit amet fermentum. Nunc nibh mauris, pretium eu risus et,
+                                finibus facilisis lorem.</h3>
+                            <hr/>
+
+
+                            <!--<div class="media-footer">-->
+                            <!--&lt;!&ndash;<a href="#"><i class="fa fa-reply"></i> Reply</a>&ndash;&gt;-->
+                            <!--<span class="divider"></span>-->
+                            <!--<i class="fa fa-thumbs-up"></i>-->
+                            <!--<span>0</span>-->
+                            <!--<i class="fa fa-thumbs-down"></i>-->
+                            <!--<span>0</span>-->
+                            <!--</div>-->
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <div class="post-comment-add">
                 <div class="block-title">
-                  <h3>Leave a Comment</h3>
+                    <h3>留言</h3>
                 </div>
-                <form class="form-add-comment">
+                <form class="form-add-comment" style="width: 100%">
                     <div class="form-group">
-                        <input class="form-control" placeholder="Your name" name="name">
+                        <input class="form-control" placeholder="Your name" required="required" name="commentUsername"
+                               id="commentUsername">
                         <div class="form-control-border"></div>
                         <i class="form-control-icon fa fa-user"></i>
                     </div>
                     <div class="form-group">
-                        <textarea class="form-control" placeholder="Message..." name="message"></textarea>
+                        <textarea class="form-control" placeholder="Message..." name="content"
+                                  id="commentContent" required="required"></textarea>
                         <div class="form-control-border"></div>
                         <i class="form-control-icon fa fa-comment"></i>
-                    </div> 
-                    <button class="button" type="submit">Add comment</button>
+                    </div>
+                    <button class="button add-comment" onclick="sendComment()" type="submit">提交</button>
                 </form>
             </div>
 
-          </div>
 
         </div>
-      </div>
+
     </div>
-    <!-- /Single Post page -->
+</div>
+</div>
+<!-- /Single Post page -->
 </div>
 <!-- content end-->
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/page-transition.js"></script>
-    <script src="js/imagesloaded.pkgd.min.js"></script>
-    <script src="js/validator.js"></script>
-    <script src="js/jquery.shuffle.min.js"></script>
-    <script src="js/masonry.pkgd.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/jquery.magnific-popup.min.js"></script>
-    <script src="js/jquery.hoverdir.js"></script>
-    <script src="js/main.js"></script>
-  </body>
+<script type="text/javascript">
+    var blogId = [[${blogDetail.id}]];
+    // 提交评论
+    function sendComment() {
+        var commentUsername = document.getElementById("commentUsername").value;
+        var content = document.getElementById("commentContent").value;
+//        alert(blogId+";"+commentUsername+";"+content);
+        if ("" == commentUsername || "" == content) {
+            swal("评论人和评论名不能为空，且至少两个字符");
+        } else {
+            $.ajax({
+                url: '/comments',
+                type: 'POST',
+//                dataType: "json",
+                data: {"blogId": blogId, "commentUsername": commentUsername, "content": content},
+                success: function (data) {
+                    // 刷新获取评论列表
+//                    history.go(0);
+//                    window.location.reload();
+//                    getComment(blogId);
+                    swal(data.msg);
+                    history.go(0);
+                },
+                error: function () {
+                    swal("error!");
+                }
+            });
+        }
+    }
+
+
+        //DOM加载完加载评论
+//    $(document).ready(function () {
+////    alert(blogId);
+//        $.ajax({
+//            url: '/comments',
+//            type: 'GET',
+//            data: {"blogId": blogId},
+//            success: function (data) {
+//                $("#mainContainer").html(data);
+//            },
+//            error: function () {
+//                swal("error!");
+//            }
+//        });
+//    });
+
+//    function getComment(blogId) {
+//        $.ajax({
+//            url: '/comments',
+//            type: 'GET',
+//            data: {"blogId": blogId},
+//            success: function (data) {
+//                $("#content").html(data);
+//            },
+//            error: function () {
+//                alert("error!");
+//            }
+//        });
+//    }
+
+
+        // 提交点赞
+        $('.btn-likes').click(function () {
+            $.ajax({
+                url: '/blog/likes/' + blogId,
+                type: 'PUT',
+                success: function (data) {
+                    if (data.success) {
+                        setTimeout(function () {
+                            swal("提示", data.msg, "success");
+                        }, 100);
+                        //2秒后刷新页面，足够显示swal()的信息
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 2000);
+
+//                    swal({
+//                        title: data.msg,
+//                        text: "2秒后自动关闭。",
+//                        timer: 2000,
+//                        showConfirmButton: false
+//                    });
+////                    swal(data.msg);
+//                    // 成功后，重定向
+//                    window.location.reload();
+                    } else {
+                        setTimeout(function () {
+                            swal("提示", data.msg, "fail");
+                        }, 100);
+                        //2秒后刷新页面，足够显示swal()的信息
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 2000);
+                    }
+                },
+                error: function () {
+                    swal("error!");
+                }
+            });
+
+        });
+
+
+</script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/page-transition.js"></script>
+<script src="/js/imagesloaded.pkgd.min.js"></script>
+<script src="/js/validator.js"></script>
+<script src="/js/jquery.shuffle.min.js"></script>
+<script src="/js/masonry.pkgd.min.js"></script>
+<script src="/js/owl.carousel.min.js"></script>
+<script src="/js/jquery.magnific-popup.min.js"></script>
+<script src="/js/jquery.hoverdir.js"></script>
+<script src="/js/main.js"></script>
+</body>
 
 <!-- Mirrored from lmpixels.com/demo/sunshine-demo/sunshine-version-2/sunshine-html-template/blog-post-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 24 Aug 2018 06:15:06 GMT -->
 </html>

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,12 +25,15 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
+@CrossOrigin
 @RestController
 @RequestMapping("/user")
 @Api(tags = "后台用户控制类")
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @GetMapping("/me")
     @ApiOperation(value = "查看当前用户基本信息")
@@ -89,16 +93,14 @@ public class UserController {
         if (user.getUserId() == null) {
             try {
                 userService.save(user);
-//                new ResultVO(true,"注册用户成功");
+                return ResponseEntity.ok().body(new ResultVO(true, "注册成功"));
             } catch (ConstraintViolationException e) {
-//                e.printStackTrace();
                 return ResponseEntity.ok().body(new ResultVO(false, ConstraintViolationExceptionHandler.getMessage(e)));
-//                return new ResultVO(false,"注册用户失败");
             }
         }
 
         userService.update(user);
-        return ResponseEntity.ok().body(new ResultVO(true, "处理成功"));
+        return ResponseEntity.ok().body(new ResultVO(true, "修改成功"));
 
     }
 
@@ -154,14 +156,12 @@ public class UserController {
     @ApiOperation("根据用户id查询并转发到管理员编辑页面")
     @GetMapping("/userDetail")
     public ModelAndView editForm(@RequestParam("userId") Integer userId, Model model) {
-        if (userId != 0) {
-            try {
-                User user = userService.getUserById(userId);
-                model.addAttribute("user", user);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        User user = (User) redisTemplate.opsForValue().get("user-" + userId);
+        if (user == null) {
+            user = userService.getUserById(userId);
+            redisTemplate.opsForValue().set("user-" + userId, user);
         }
+        model.addAttribute("user", user);
         return new ModelAndView("background/user-edit", "userModel", model);
     }
 

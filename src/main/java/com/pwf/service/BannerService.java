@@ -12,6 +12,7 @@ import java.util.List;
  * Created by PWF on 2019/1/17.
  */
 public interface BannerService {
+    Page<Banner> findAll(Pageable pageable);
     List<Banner> findAll();
     Banner findOne(Integer id);
     void save(Banner banner);
@@ -19,4 +20,6 @@ public interface BannerService {
     void delete(Integer id);
     @ApiOperation(value = "根据图片名进行分页模糊查询")
     Page<Banner> listBannerByNameLike(String searchText, Pageable pageable);
+
+    Integer findAllCount();
 }

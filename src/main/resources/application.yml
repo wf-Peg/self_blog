@@ -6,9 +6,11 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/self_blog?characterEncoding=utf8&useSSL=false
+#    url: jdbc:mysql://cd-cdb-5s2vm9be.sql.tencentcdb.com:63273/blog?characterEncoding=utf8&useSSL=false
     username: root
-#    password: 123456
-    password: root
+#    password: wenfeng5289863
+    password: 123456
+#    password: root
     #最大活跃数
     maxActive: 20
     #初始化数量
@@ -41,16 +43,18 @@ spring:
     static-locations: classpath:/templates/,classpath:/static/
   messages:
         basename: i18n.login
-  data:
-      elasticsearch:
-        cluster-nodes: localhost:9300
-        properties:
-          # 内嵌 Elasticsearch 实例。默认存储位置是工作目录的 elastic 目录
-          path:
-            home: target/elastic
-          # 设置连接超时时间
-          transport:
-            tcp:
-             connect_timeout: 120s
+  redis:
+    host: localhost
+#  data:
+#      elasticsearch:
+#        cluster-nodes: localhost:9300
+#        properties:
+#          # 内嵌 Elasticsearch 实例。默认存储位置是工作目录的 elastic 目录
+#          path:
+#            home: target/elastic
+#          # 设置连接超时时间
+#          transport:
+#            tcp:
+#             connect_timeout: 120s
 server:
   port: 8090

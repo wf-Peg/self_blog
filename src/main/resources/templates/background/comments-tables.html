@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Amaze UI Admin index Examples</title>
+    <meta name="description" content="这是一个 用户管理 页面">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
+    <script src="assets/js/echarts.min.js" th:src="@{assets/js/echarts.min.js}"></script>
+    <link rel="stylesheet" href="assets/css/amazeui.min.css" th:src="@{assets/css/amazeui.min.css}"/>
+    <link rel="stylesheet" href="assets/css/amazeui.datatables.min.css"
+          th:src="@{assets/css/amazeui.datatables.min.css}"/>
+    <link rel="stylesheet" href="assets/css/app.css" th:src="@{assets/css/app.css}">
+    <script src="assets/js/jquery.min.js" th:src="@{assets/js/jquery.min.js}"></script>
+    <script src="assets/js/theme.js"></script>
+    <script src="/asserts/js/do.js"></script>
+    <!-- 弹窗美化 -->
+    <link rel="stylesheet" type="text/css" href="/sweetalert/sweetalert.css">
+    <script type="text/javascript" src="/sweetalert/sweetalert-dev.js"></script>
+</head>
+<body>
+<div id="content">
+<!-- 风格切换 -->
+<div class="tpl-skiner">
+    <div class="tpl-skiner-toggle am-icon-cog">
+    </div>
+    <div class="tpl-skiner-content">
+        <div class="tpl-skiner-content-title">
+            选择主题
+        </div>
+        <div class="tpl-skiner-content-bar">
+            <span class="skiner-color skiner-white" data-color="theme-white"></span>
+            <span class="skiner-color skiner-black" data-color="theme-black"></span>
+        </div>
+    </div>
+</div>
+
+<!-- 内容区域 -->
+<div class="row-content am-cf">
+    <div class="row">
+        <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+            <div class="widget am-cf">
+                <div class="widget-head am-cf">
+                    <div class="widget-title  am-cf">评论管理</div>
+
+
+                </div>
+                <div class="widget-body  am-fr">
+
+                    <div class="am-u-sm-12 am-u-md-6 am-u-lg-6">
+                        <div class="am-form-group">
+                            <div class="am-btn-toolbar">
+                                <div class="am-btn-group am-btn-group-xs">
+                                    <!--<button type="button" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 新增</button>-->
+                                    <!--<button type="button" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span> 保存</button>-->
+                                    <!--<button type="button" class="am-btn am-btn-default am-btn-warning"-->
+                                            <!--onclick="loadPageForRegister('/registerIndex')">-->
+                                        <!--<span class="am-icon-archive"></span> 新增管理员-->
+                                    <!--</button>-->
+                                    <!--<button type="button" class="am-btn am-btn-default am-btn-danger"><span-->
+                                            <!--class="am-icon-trash-o"></span> 删除-->
+                                    <!--</button>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="am-u-sm-12 am-u-md-6 am-u-lg-3">-->
+                        <!--<div class="am-form-group tpl-table-list-select">-->
+                            <!--<select data-am-selected="{btnSize: 'sm'}">-->
+                                <!--<option value="option1">所有类别</option>-->
+                                <!--<option value="option2">用户名查询</option>-->
+                                <!--<option value="option3">用户权限查询</option>-->
+                            <!--</select>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <div class="am-u-sm-12 am-u-md-12 am-u-lg-3" style="float: right">
+                        <div class="am-input-group am-input-group-sm tpl-form-border-form cl-p">
+                            <input type="text" id="searchName" class="am-form-field " placeholder="根据评论内容查询">
+                            <span class="am-input-group-btn">
+                            <button class="am-btn  am-btn-default am-btn-success tpl-table-list-field am-icon-search"
+                                    type="button" onclick="getCommentByName()">
+                            </button>
+                          </span>
+                        </div>
+                    </div>
+
+                    <div class="am-u-sm-12">
+                        <table width="100%" class="am-table am-table-compact am-table-striped tpl-table-black "
+                               id="example-r">
+                            <thead>
+                            <tr>
+                                <th style="align:center;text-align: center">评论id</th>
+                                <th style="align:center;text-align: center">评论博客id</th>
+                                <th style="align:center;text-align: center">评论用户名</th>
+                                <th style="align:center;text-align: center">评论内容</th>
+                                <th style="align:center;text-align: center">评论时间</th>
+                                <th style="align:center;text-align: center">操作</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr th:if="${comments.size()} eq 0">
+                                <td colspan="6" align="center">
+                                    当前评论列表为空
+                                </td>
+                            </tr>
+                            <tr class="even gradeC" th:each="comment : ${comments}" style="align:center;text-align: center">
+                                <td th:text="${comment.id}">1</td>
+                                <td class="blogId" th:id="${comment.blogId}" th:text="${comment.blogId}">1</td>
+                                <!--<td><a th:onclick="'loadPageForRegister(\'/comment/commentDetail?commentId='+${comment.id}+'\')'"-->
+                                <td><a th:text="${comment.commentUsername}">pwf</a></td>
+                                <!--<td><a onclick="loadPageForRegister('/background/user-edit.html')" th:text="${user.userName}">pwf</a></td>-->
+                                <!--<td th:text="${user.passWord}">pwf</td>-->
+                                <td th:text="${comment.content}"></td>
+                                <td th:text="${#dates.format(comment.createTime, 'yyyy-MM-dd HH:mm')}">[[${comment.createTime}]]</td>
+                                <td>
+                                    <div class="tpl-table-black-operation" style="align:center;text-align: center">
+                                        <button type="button" class="am-btn am-btn-danger am-btn-xs del-comment"
+                                                th:id="${comment.id}">
+                                            <i class="am-icon-trash"></i> 删除
+                                        </button>
+                                            <!--<i class="am-icon-trash"></i> 删除-->
+                                        <!--</a>-->
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- more data -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 分页 -->
+                    <div class="am-cf">
+                        <div class="am-fr">
+                            <ul class="am-pagination tpl-pagination">
+                                <li><a th:onclick="'loadPage(\'/blog/examine?page=0\')'">«</a></li>
+                                <li th:each="i : ${#numbers.sequence(1,totalPage,1)}"
+                                    th:id="'page'+${i}">
+                                    <a th:text="${i}"
+                                       th:onclick="'loadPage(\'/blog/examine?page='+${i-1}+'\')'">1</a>
+                                </li>
+                                <li>
+                                    <a th:onclick="'loadPage(\'/blog/examine?page='+${totalPage-1}+'\')'">»</a>
+                                </li>
+                            </ul>
+                            <script th:inline="javascript" type="text/javascript">
+                                var id = [[${currentPage+1}]];
+                                $("#page" + id).attr("class", "am-active");
+                            </script>
+                        </div>
+                    </div>
+                    <!-- /分页 -->
+
+                    <!--<div class="am-u-lg-12 am-cf">-->
+                        <!--<div class="am-fr">-->
+                            <!--<ul class="am-pagination tpl-pagination">-->
+                                <!--<li class="am-disabled"><a href="#">«</a></li>-->
+                                <!--<li class="am-active"><a href="#">1</a></li>-->
+                                <!--<li><a href="#">2</a></li>-->
+                                <!--<li><a href="#">3</a></li>-->
+                                <!--<li><a href="#">4</a></li>-->
+                                <!--<li><a href="#">5</a></li>-->
+                                <!--<li><a href="#">»</a></li>-->
+                            <!--</ul>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+<script src="assets/js/amazeui.min.js"></script>
+<script src="assets/js/amazeui.datatables.min.js"></script>
+<script src="assets/js/dataTables.responsive.min.js"></script>
+<script src="assets/js/app.js"></script>
+</html>
