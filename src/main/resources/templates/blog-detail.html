@@ -137,7 +137,7 @@
                 <div class="post-info">
                     <span class="autor" th:text="${blogDetail.author}"><i class="fa fa-fw fa-user"></i> John Doe</span>
                     <span class="divider">|</span>
-                    <time class="date" th:text="${#dates.format(blogDetail.updateTime, 'yyyy-MM-dd HH:mm')}"><i class="fa fa-fw fa-clock-o"></i> 12 December, 2016</time>
+                    <time class="date" th:text="'最后更新:'+${#dates.format(blogDetail.updateTime, 'yyyy-MM-dd HH:mm')}"><i class="fa fa-fw fa-clock-o"></i> 12 December, 2016</time>
                     <!-- Share Buttons -->
                     <div class="btn-group share-buttons pull-right hidden-xs">
                         <i class="fa fa-eye" aria-hidden="true"><b th:text="${blogDetail.reading}">1</b></i>
@@ -253,13 +253,13 @@
                 url: '/comments',
                 type: 'POST',
 //                dataType: "json",
-                data: {"blogId": blogId, "commentUsername": commentUsername, "content": content},
+                data: {"blogId": blogId, "commentUsername": commentUsername, "content": content,
+                    "async":true},
                 success: function (data) {
                     // 刷新获取评论列表
-//                    history.go(0);
 //                    window.location.reload();
-//                    getComment(blogId);
                     swal(data.msg);
+//                    getComment(blogId);
                     history.go(0);
                 },
                 error: function () {

@@ -6,6 +6,7 @@ import com.pwf.dao.MessageRepository;
 import com.pwf.domain.Blog;
 import com.pwf.domain.Comment;
 import com.pwf.domain.Message;
+import com.pwf.domain.PageBean;
 import com.pwf.util.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -60,6 +61,9 @@ public class MessageService {
         repository.deleteById(id);
     }
 
+    public Page<Message> findAll(PageBean pageBean) {
+        return repository.findAll(PageRequest.of(pageBean.getPage(),pageBean.getSize()));
+    }
     public List<Message> findAll() {
         return repository.findAll();
     }

@@ -1,10 +1,12 @@
 package com.pwf.controller;
 
 import com.pwf.domain.Message;
+import com.pwf.domain.PageBean;
 import com.pwf.service.MessageService;
 import com.pwf.util.ConstraintViolationExceptionHandler;
 import com.pwf.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,9 +39,11 @@ public class MessageController {
     }
 
     @GetMapping("/list")
-    public String messageList(Model model){
-        List<Message> all = messageService.findAll();
-        model.addAttribute("messageList",all);
+    public String messageList(Model model, PageBean pageBean){
+        Page<Message> list = messageService.findAll(pageBean);
+        model.addAttribute("messageList",list.getContent());
+        model.addAttribute("totalPage", list.getTotalPages());
+        model.addAttribute("currentPage", pageBean.getPage());
         return "background/message-tables";
     }
 

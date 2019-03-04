@@ -299,6 +299,20 @@
                 </li>
             </div>
 
+            <li class="sidebar-nav-link">
+                <a href="#" onclick="loadPage('/print/add')">
+                    <i class="am-icon-wpforms sidebar-nav-link-logo"></i> 云打印
+                </a>
+            </li>
+
+            <div sec:authorize="hasRole('admin')">
+                <li class="sidebar-nav-link">
+                    <a href="#" onclick="loadPage('/print/list?page=0&size=10')">
+                        <i class="am-icon-wpforms sidebar-nav-link-logo"></i> 云打印管理
+                    </a>
+                </li>
+            </div>
+
             <div sec:authorize="hasRole('admin')">
                 <li class="sidebar-nav-link">
                     <a href="#" onclick="loadPage('/message/list?page=0&size=10')"><!--/background/user-tables.htm-->

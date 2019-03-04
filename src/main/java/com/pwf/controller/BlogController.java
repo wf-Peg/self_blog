@@ -53,7 +53,7 @@ public class BlogController {
         return "background/blog-form";
     }
 
-    @ApiOperation("查询所有博文")
+    @ApiOperation("后台分页查询博文")
     @RequestMapping("/list")
     private String findAll(PageBean pageBean, Model model) {
         Page<Blog> all = service.pageFindAll(pageBean);
@@ -63,38 +63,43 @@ public class BlogController {
         return "/background/blog-tables";
     }
 
-    @ApiOperation("根据分类查询所有博文")
+//    @ApiOperation("前台分页查询博文")
+//    @RequestMapping("/blogList")
+//    private String findAllup(PageBean pageBean, Model model) {
+//        Page<Blog> all = service.pageFindAllByUpdataTime(pageBean);
+//        model.addAttribute("blogList", all.getContent());
+//        model.addAttribute("totalPage", all.getTotalPages());
+//        model.addAttribute("currentPage", pageBean.getPage());
+//        return "index :: #content";
+//    }
+
+    @ApiOperation("前端根据分类查询所有博文")
     @RequestMapping("/orderList")
     private String orderList(Model model, PageBean pageBean,
                              @RequestParam(value = "category", required = false, defaultValue = "") String category) {
+        Page<Blog> blogs=service.pageFindAllByUpdataTime(pageBean);
         if (category.equals("生活") || category.equals("技术") || category.equals("游戏")) {
-            Page<Blog> blogs = service.findByCategory(pageBean, category);
+            blogs = service.findByCategory(new PageBean(0,30), category);
             model.addAttribute("blogList", blogs.getContent());
-            model.addAttribute("totalPage", blogs.getTotalPages());
-            model.addAttribute("currentPage", pageBean.getPage());
+            model.addAttribute("all", false);
             return "index :: #content";
         }
         if (category.equals("最热")) {
-            Page<Blog> blogs = service.hotlist(pageBean);
+            blogs = service.hotlist(new PageBean(0,30));
             model.addAttribute("blogList", blogs.getContent());
-            model.addAttribute("totalPage", blogs.getTotalPages());
-            model.addAttribute("currentPage", pageBean.getPage());
+            model.addAttribute("all", false);
             return "index :: #content";
         }
         if (category.equals("最新")) {
-//            Pageable pageable = PageRequest.of(0, 10, sort);
-            Page<Blog> blogs = service.newlist(pageBean);
-//            PageResult<Blog> pageResult = new PageResult<>(blogs.getTotalElements(),blogs.getContent());
+            blogs = service.newlist(new PageBean(0,30));
             model.addAttribute("blogList", blogs.getContent());
-            model.addAttribute("totalPage", blogs.getTotalPages());
-            model.addAttribute("currentPage", pageBean.getPage());
+            model.addAttribute("all", false);
             return "index :: #content";
         }
-
-        Page<Blog> all = service.pageFindAll(pageBean);
-        model.addAttribute("blogList", all.getContent());
-//        model.addAttribute("totalPage", all.getTotalPages());
-//        model.addAttribute("currentPage", pageBean.getPage());
+        model.addAttribute("blogList", blogs.getContent());
+        model.addAttribute("totalPage", blogs.getTotalPages());
+        model.addAttribute("currentPage", pageBean.getPage());
+        model.addAttribute("all", true);
         return "index :: #content";
     }
 
@@ -108,6 +113,7 @@ public class BlogController {
 //        }
 //        Blog blog = service.findById(id);
         List<Comment> comments = blog.getCommentList();
+
         model.addAttribute("blogDetail", blog);
         model.addAttribute("comments", comments);
         service.readingIncrease(id);
@@ -221,9 +227,9 @@ public class BlogController {
 //        model.addAttribute("blogList", list);
 //        model.addAttribute("totalPage", list.getTotalPages());
 //        model.addAttribute("currentPage", pageBean.getPage());
-        List<Blog> list = service.findByTitleContainingOrSummaryContainingOrContentContaining(searchText, pageBean);
-        model.addAttribute("blogList", list);
-        model.addAttribute("totalPage", 1);
+        Page<Blog> list = service.findByTitleContainingOrSummaryContainingOrContentContaining(searchText, pageBean);
+        model.addAttribute("blogList", list.getContent());
+//        model.addAttribute("totalPage", 1);
         model.addAttribute("currentPage", pageBean.getPage());
         return "background/blog-tables";
     }
@@ -242,9 +248,9 @@ public class BlogController {
     @GetMapping("/esSearch")
     public String esSearch(@RequestParam(value = "searchText", required = false, defaultValue = "") String searchText,
                            PageBean pageBean, Model model) {
-        List<Blog> list = service.findByTitleContainingOrSummaryContainingOrContentContaining(searchText, pageBean);
-        model.addAttribute("blogList", list);
-        model.addAttribute("totalPage", 1);
+        Page<Blog> list = service.findByTitleContainingOrSummaryContainingOrContentContaining(searchText, pageBean);
+        model.addAttribute("blogList", list.getContent());
+//        model.addAttribute("totalPage", list.getTotalPages());
         model.addAttribute("currentPage", pageBean.getPage());
         return "index :: #content";
     }

@@ -2,10 +2,12 @@ package com.pwf.service.impl;
 
 import com.pwf.dao.BannerRepository;
 import com.pwf.domain.Banner;
+import com.pwf.domain.PageBean;
 import com.pwf.service.BannerService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +22,8 @@ public class BannerServiceImpl implements BannerService {
     private BannerRepository repository;
 
     @Override
-    public Page<Banner> findAll(Pageable pageable) {
-        return repository.findAll(pageable);
+    public Page<Banner> findAll(PageBean pageBean) {
+        return repository.findAll(PageRequest.of(pageBean.getPage(),pageBean.getSize()));
     }
 
     @Override
@@ -53,10 +55,10 @@ public class BannerServiceImpl implements BannerService {
     }
 
     @Override
-    public Page<Banner> listBannerByNameLike(String searchText, Pageable pageable) {
+    public Page<Banner> listBannerByNameLike(String searchText, PageBean pageBean) {
         // 模糊查询
         searchText = "%" + searchText + "%";
-        Page<Banner> banners = repository.findByNameLike(searchText, pageable);
+        Page<Banner> banners = repository.findByNameLike(searchText, PageRequest.of(pageBean.getPage(),pageBean.getSize()));
         return banners;
     }
 

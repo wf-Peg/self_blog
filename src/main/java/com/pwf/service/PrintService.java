@@ -1,11 +1,14 @@
-package com.pwf.service.impl;
+package com.pwf.service;
 
 import com.pwf.dao.BannerRepository;
+import com.pwf.dao.PrintRepository;
 import com.pwf.domain.Banner;
-import com.pwf.service.BannerService;
+import com.pwf.domain.PageBean;
+import com.pwf.domain.Print;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -15,52 +18,44 @@ import java.util.List;
  * Created by PWF on 2019/1/17.
  */
 @Service
-public class BannerServiceImpl implements BannerService {
+public class PrintService {
     @Autowired
-    private BannerRepository repository;
+    private PrintRepository repository;
 
-    @Override
-    public Page<Banner> findAll(Pageable pageable) {
-        return repository.findAll(pageable);
+    public Page<Print> findAll(PageBean pageBean) {
+        return repository.findAll(PageRequest.of(pageBean.getPage(),pageBean.getSize()));
     }
 
-    @Override
-    public List<Banner> findAll() {
+    public List<Print> findAll() {
         return repository.findAll();
     }
 
-    @Override
-    public Banner findOne(Integer id) {
+    public Print findOne(Integer id) {
         return repository.getOne(id);
     }
 
-    @Override
-    public void save(Banner banner) {
+    public void save(Print banner) {
         repository.save(banner);
     }
 
-    @Override
-    public void update(Banner newBanner) {
-        Banner updateBanner = repository.getOne(newBanner.getId());
+    public void update(Print newPrint) {
+        Print updatePrint = repository.getOne(newPrint.getId());
         //前赋值后
-        BeanUtils.copyProperties(newBanner, updateBanner);
-        repository.saveAndFlush(updateBanner);
+        BeanUtils.copyProperties(newPrint, updatePrint);
+        repository.saveAndFlush(updatePrint);
     }
 
-    @Override
     public void delete(Integer id) {
         repository.deleteById(id);
     }
 
-    @Override
-    public Page<Banner> listBannerByNameLike(String searchText, Pageable pageable) {
+    public Page<Print> listPrintByFilenameLike(String searchText, PageBean pageBean) {
         // 模糊查询
         searchText = "%" + searchText + "%";
-        Page<Banner> banners = repository.findByNameLike(searchText, pageable);
-        return banners;
+        Page<Print> prints = repository.findByFilenameLike(searchText, PageRequest.of(pageBean.getPage(),pageBean.getSize()));
+        return prints;
     }
 
-    @Override
     public Integer findAllCount() {
         return repository.findAll().size();
     }

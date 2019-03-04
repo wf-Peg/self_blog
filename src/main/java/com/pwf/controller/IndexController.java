@@ -1,9 +1,6 @@
 package com.pwf.controller;
 
-import com.pwf.domain.Banner;
-import com.pwf.domain.Blog;
-import com.pwf.domain.Message;
-import com.pwf.domain.User;
+import com.pwf.domain.*;
 import com.pwf.service.*;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import io.swagger.annotations.Api;
@@ -40,10 +37,6 @@ public class IndexController {
     @RequestMapping({"/","index"})
     @ApiOperation(value = "跳转前台首页")
     public String index(Model model) {
-        Page<Banner> bannerList = bannerService.findAll(PageRequest.of(0,30));
-//        List<Banner> bannerList = bannerService.findAll();
-        Page<Blog> blogList=blogService.findBlogsByIsVisibleIsTrue(PageRequest.of(0,10));
-
         //取出前三十篇热门的文章的所有标签
         StringBuilder sb = null;
         try {
@@ -71,23 +64,22 @@ public class IndexController {
         sb2.deleteCharAt(0);
         System.out.println(sb2);
 
-
-        model.addAttribute("totalPage", blogList.getTotalPages());
+        Page<Banner> bannerList = bannerService.findAll(new PageBean(0,80));
+        model.addAttribute("bannerList", bannerList.getContent());
+        model.addAttribute("totalPage", bannerList.getTotalPages());
         model.addAttribute("currentPage", 1);
 
-        model.addAttribute("bannerList", bannerList.getContent());
-//        model.addAttribute("bannerList", bannerList);
-        model.addAttribute("blogList", blogList.getContent());
+//        model.addAttribute("blogList", blogList.getContent());
         model.addAttribute("keywordList", sb2);
         return "index";
     }
 
 //    @GetMapping("/bannerIndex")
 //    @ApiOperation(value = "跳转前台banner")
-//    public String bannerIndex(Model model) {
-//        List<Banner> bannerList = bannerService.findAll();
-//        model.addAttribute("bannerList", bannerList);
-//        return "index :: #portfolio";
+//    public String bannerIndex(Model model,PageBean pageBean) {
+//        Page<Banner> bannerList = bannerService.findAll(pageBean);
+//        model.addAttribute("bannerList", bannerList.getContent());
+//        return "index :: #portfolio_grid";
 //    }
 
     @RequestMapping("/userlogin")
@@ -100,7 +92,7 @@ public class IndexController {
     @RequestMapping("/background/index")
     @ApiOperation(value = "跳转后台首页")
     public String backgroundIndex(Model model) {
-        Page<Blog> blogs = blogService.findBlogsByIsVisibleIsTrue(PageRequest.of(0, 5));
+        Page<Blog> blogs = blogService.findBlogsByIsVisibleIsTrue(new PageBean(0,5));
         Integer needLooks = blogService.findBlogsByIsVisibleIsFalseCount();
         User mostBlogsUser=userService.findMostBlogsUser();
         Integer messageCount = messageService.findAllCount();

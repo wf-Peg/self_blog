@@ -13,31 +13,29 @@ import java.io.Serializable;
 @Data
 @Entity
 @Proxy(lazy = false)
-@Table(name = "banner")
-public class Banner implements Serializable{
+@Table(name = "print")
+public class Print implements Serializable{
 
-    private static final long serialVersionUID = -6858593469611808385L;
+    private static final long serialVersionUID = -6858593469611808785L;
     //图片id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    //图片名字:title名（项目名）、
 
-    @NotEmpty(message = "图片名称不能为空")
-    private String name;
-    //图片链接:img文件地址、
+    @NotEmpty(message = "文件名称不能为空")
+    private String filename;
 
-//    @NotEmpty(message = "图片不能为空")
-    private String img;
-    //图片key：data-groups、标签名、i 图标class的值
-    private String bannerkey;
+    @NotEmpty(message = "文件不能为空")
+    private String filepath;
 
-    protected Banner() {
+//    private String filegroup;
+
+    protected Print() {
     }
 
-    public Banner(String name, String img, String bannerkey) {
-        this.name = name;
-        this.img = img;
-        this.bannerkey = bannerkey;
+    public Print(@NotEmpty(message = "文件名称不能为空") String filename, String filepath) {
+        this.filename = filename;
+        this.filepath = filepath;
+//        this.filegroup = filegroup;
     }
 }

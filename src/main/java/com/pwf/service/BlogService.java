@@ -38,25 +38,37 @@ public class BlogService {
     @Autowired
     private IdWorker idWorker;
 
-    public static final String CACHE_BLOG_TYPE_NAME = "CACHE_BLOG_TYPE_NAME";
-    public static final String CACHE_FIND_ALL = "CACHE_BLOG_TYPE_FIND_ALL";
-
     public Integer findAllCount(){
         return repository.findAll().size();
     }
 
-//    @Cacheable(value = CACHE_FIND_ALL, key = "'findAllOrderByCreateDate_'+#pageBean.getPage()+'_'+#pageBean.getSize()")
+    /**
+     * 前台默认根据博文更新时间排序且不显示未审核文章
+     * @param pageBean
+     * @return
+     */
+    public Page<Blog> pageFindAllByUpdataTime(PageBean pageBean){
+        Sort sort = new Sort(Sort.Direction.DESC,"updateTime");
+        return repository.findBlogsByIsVisibleIsTrue(PageRequest.of(pageBean.getPage(), pageBean.getSize(), sort));
+    }
+
+    /**
+     * 后台查询博文列表默认根据博文更新时间排序且显示所有文章
+     * @param pageBean
+     * @return
+     */
     public Page<Blog> pageFindAll(PageBean pageBean){
-        Sort sort = new Sort(Sort.Direction.DESC,"releaseTime");
+        Sort sort = new Sort(Sort.Direction.DESC,"updateTime");
         return repository.findAll(PageRequest.of(pageBean.getPage(), pageBean.getSize(), sort));
     }
 
-    public List<Blog> findByTitleContainingOrSummaryContainingOrContentContaining(String text,PageBean pageBean){
+
+    public Page<Blog> findByTitleContainingOrSummaryContainingOrContentContaining(String text,PageBean pageBean){
         text = "%" + text + "%";
-        return repository.findByAttr(text,pageBean.getPage(),pageBean.getSize());
+//        return repository.findByAttr(text,pageBean.getPage(),pageBean.getSize());
+        return repository.findByAttr2(text,PageRequest.of(pageBean.getPage(),pageBean.getSize()));
     }
 
-//    @Cacheable(value = CACHE_BLOG_TYPE_NAME, key = "'blog_type_'+#id")
     public Blog findById(Long id){
         Optional<Blog> byId = repository.findById(id);
         return byId.isPresent()?byId.get():null;
@@ -172,10 +184,9 @@ public class BlogService {
     public Blog createComment(Long blogId, String commentUsername,String commentContent) {
         Blog originalBlog = repository.findById(blogId).get();
         Comment comment = new Comment(commentUsername, commentContent,blogId);
-//        commentRepository.save(comment);
         originalBlog.addComment(comment);
-//        originalBlog.setComments(originalBlog.getComments()+1);
-//        repository.addCommentCount(blogId);
+        repository.addCommentCount(blogId);
+
         return repository.save(originalBlog);
     }
 
@@ -201,39 +212,44 @@ public class BlogService {
         repository.upateLikes(id);
     }
 
-    public Page<Blog> findBlogsByIsVisibleIsTrue(Pageable pageable) {
-        return repository.findBlogsByIsVisibleIsTrue(pageable);
+    public Page<Blog> findBlogsByIsVisibleIsTrue(PageBean pageBean) {
+        return repository.findBlogsByIsVisibleIsTrue(PageRequest.of(pageBean.getPage(),pageBean.getSize()));
     }
 
     public Page<Blog> findByCategory(PageBean pageBean,String category) {
-        return repository.findBlogsByCategory(PageRequest.of(pageBean.getPage(),pageBean.getSize()),category);
+        return repository.findBlogsByCategoryAndIsVisibleIsTrue(PageRequest.of(pageBean.getPage(),pageBean.getSize()),category);
     }
 
     public Page<Blog> hotlist(PageBean pageBean) {
         //1.创建分页对象
-        Sort sort = new Sort(Sort.Direction.DESC,"likes","reading","comments");
+        Sort sort = new Sort(Sort.Direction.DESC,"likes");
         PageRequest pageRequest = PageRequest.of(pageBean.getPage(),pageBean.getSize(),sort);
         //2.调用持久层查询,并返回
-        return repository.findAll(pageRequest);
+        return repository.findBlogsByIsVisibleIsTrue(pageRequest);
     }
 
     public List<Blog> getTop30Keywords() {
         //1.创建分页对象
-        Sort sort = new Sort(Sort.Direction.DESC,"reading","likes","comments");
+        Sort sort = new Sort(Sort.Direction.DESC,"reading");
         PageRequest pageRequest = PageRequest.of(0,30,sort);
-        //2.调用持久层查询,并返回
-        Page<Blog> top30 = repository.findAll(pageRequest);
+        //2.调用持久层查询TOP30最热且审核通过的文章,并返回
+        Page<Blog> top30 = repository.findBlogsByIsVisibleIsTrue(pageRequest);
         return top30.getContent();
     }
 
+    /**
+     * 最新默认根据发布时间排序
+     * @param pageBean
+     * @return
+     */
     public Page<Blog> newlist(PageBean pageBean) {
-        Sort sort = new Sort(Sort.Direction.DESC,"updateTime");
-        return repository.findAll(PageRequest.of(pageBean.getPage(),pageBean.getSize(),sort));
+        Sort sort = new Sort(Sort.Direction.DESC,"releaseTime");
+        return repository.findBlogsByIsVisibleIsTrue(PageRequest.of(pageBean.getPage(),pageBean.getSize(),sort));
     }
 
     public Page<Blog> findSearch(String keyword,PageBean pageBean) {
         // 模糊查询
         keyword = "%" + keyword + "%";
-        return repository.findBlogsByKeywordsLike(keyword,PageRequest.of(pageBean.getPage(),pageBean.getSize()));
+        return repository.findBlogsByKeywordsLikeAndIsVisibleIsTrue(keyword,PageRequest.of(pageBean.getPage(),pageBean.getSize()));
     }
 }

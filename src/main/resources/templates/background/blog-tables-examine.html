@@ -55,11 +55,11 @@
                                        id="example-r">
                                     <thead>
                                     <tr>
-                                        <th style="align:center;text-align: center">文章id</th>
-                                        <th style="align:center;text-align: center">文章标题</th>
-                                        <th style="align:center;text-align: center">作者</th>
-                                        <th style="align:center;text-align: center">更新时间</th>
-                                        <th style="align:center;text-align: center">操作</th>
+                                        <th style="align:center;text-align: center;width: 10%">文章id</th>
+                                        <th style="align:center;text-align: center;width: 40%">文章标题</th>
+                                        <th style="align:center;text-align: center;width: 10% ">作者</th>
+                                        <th style="align:center;text-align: center;width: 20%">更新时间</th>
+                                        <th style="align:center;text-align: center;width: 20%">操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -69,16 +69,16 @@
                                         </td>
                                     </tr>
                                     <tr class="gradeX" th:each="blog : ${blogList}">
-                                        <td style="align:center;text-align: center" th:text="${blog.id}">id</td>
-                                        <td style="align:center;text-align: center">
+                                        <td style="align:center;text-align: center;width: 10%" th:text="${blog.id}">id</td>
+                                        <td style="align:center;text-align: center;width: 40%">
                                             <a th:onclick="'loadPage(\'/blog/blogDetail?id='+${blog.id}+'\')'"
                                                th:text="${blog.title}">title</a>
                                         </td>
-                                        <td style="align:center;text-align: center" th:text="${blog.author}">author</td>
-                                        <td style="align:center;text-align: center" th:text="${#dates.format(blog.updateTime, 'yyyy-MM-dd HH:mm')}">
+                                        <td style="align:center;text-align: center;width: 10%" th:text="${blog.author}">author</td>
+                                        <td style="align:center;text-align: center;width: 20%" th:text="${#dates.format(blog.updateTime, 'yyyy-MM-dd HH:mm')}">
                                             2016-09-26
                                         </td>
-                                        <td style="align:center;text-align: center">
+                                        <td style="align:center;text-align: center;width: 20%">
                                             <div class="tpl-table-black-operation"
                                                  style="align:center;text-align: center">
                                                 <button type="button"

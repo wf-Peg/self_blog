@@ -29,6 +29,7 @@ public class Banner implements Serializable{
 
 //    @NotEmpty(message = "图片不能为空")
     private String img;
+
     //图片key：data-groups、标签名、i 图标class的值
     private String bannerkey;
 

@@ -7,12 +7,12 @@
 
 (function($) {
 "use strict";
-    
+
     // Portfolio subpage filters
     function portfolio_init() {
         var portfolio_grid = $('#portfolio_grid'),
             portfolio_filter = $('#portfolio_filters');
-            
+
         if (portfolio_grid) {
 
             portfolio_grid.shuffle({
@@ -118,7 +118,8 @@
         $(".preloader").fadeOut("slow");
     });
 
-    $(document).ready(function(){
+    $(window).on('load', function() {
+    // $(document).ready(function(){
 
         // Initialize Portfolio grid
         var $portfolio_container = $("#portfolio_grid");

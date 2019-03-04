@@ -80,7 +80,7 @@
                     <!--</div>-->
                     <!--</div>-->
                     <!--查询 start-->
-                    <div class="am-u-sm-12 am-u-md-12 am-u-lg-3" style="float: right">
+                    <div class="am-u-sm-12 am-u-md-12 am-u-lg-3" style="float: right;width: 35%">
                         <div class="am-input-group am-input-group-sm tpl-form-border-form cl-p">
                             <input type="text" id="searchName" class="am-form-field " placeholder="根据blog名称、关键词、分类、摘要、作者进行查询">
                             <span class="am-input-group-btn">
@@ -97,12 +97,12 @@
                                id="example-r">
                             <thead>
                             <tr>
-                                <th style="align:center;text-align: center">文章id</th>
-                                <th style="align:center;text-align: center">文章标题</th>
-                                <th style="align:center;text-align: center">作者</th>
-                                <th style="align:center;text-align: center">更新时间</th>
-                                <!--<th style="align:center;text-align: center">评论数量</th>-->
-                                <th style="align:center;text-align: center">操作</th>
+                                <th style="align:center;text-align: center;width: 10%">id</th>
+                                <th style="align:center;text-align: center;width: 40%">标题</th>
+                                <th style="align:center;text-align: center;width: 10%">作者</th>
+                                <th style="align:center;text-align: center;width: 10%">审核状态</th>
+                                <th style="align:center;text-align: center;width: 15%">更新时间</th>
+                                <th style="align:center;text-align: center;width: 15%">操作</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -112,15 +112,17 @@
                                 </td>
                             </tr>
                             <tr class="gradeX" th:each="blog : ${blogList}">
-                                <td style="align:center;text-align: center" th:text="${blog.id}">id</td>
-                                <td style="align:center;text-align: center">
+                                <td style="align:center;text-align: center;width: 10%" th:text="${blog.id}">id</td>
+                                <td style="align:center;text-align: center;width: 40%">
                                     <a th:onclick="'loadPage(\'/blog/blogDetail?id='+${blog.id}+'\')'" th:text="${blog.title}">title</a>
                                 </td>
-                                <td style="align:center;text-align: center" th:text="${blog.author}">author</td>
-                                <td style="align:center;text-align: center"
+                                <td style="align:center;text-align: center;width: 10%" th:text="${blog.author}">author</td>
+                                <td style="align:center;text-align: center;width: 10%" th:if="${blog.isVisible==true}">通过</td>
+                                <td style="align:center;text-align: center;width: 10%" th:if="${blog.isVisible==false}">待审核</td>
+                                <td style="align:center;text-align: center;width: 15%"
                                     th:text="${#dates.format(blog.updateTime, 'yyyy-MM-dd HH:mm')}">2018-09-26</td>
                                 <!--<td style="align:center;text-align: center" th:text="${blog.comments}">2016-09-26</td>-->
-                                <td style="align:center;text-align: center">
+                                <td style="align:center;text-align: center;width: 15%">
                                     <div class="tpl-table-black-operation" style="align:center;text-align: center">
                                     <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary"
                                             th:onclick="'loadPage(\'/blog/blogDetail?id='+${blog.id}+'\')'">
@@ -138,118 +140,13 @@
                                 </td>
                             </tr>
 
-                            <!--<tr class="gradeX">-->
-                                <!--<td>Amaze UI 模式窗口</td>-->
-                                <!--<td>张鹏飞</td>-->
-                                <!--<td>2016-09-26</td>-->
-                                <!--<td>-->
-                                    <!--<div class="tpl-table-black-operation">-->
-                                        <!--<a href="javascript:;">-->
-                                            <!--<i class="am-icon-pencil"></i> 编辑-->
-                                        <!--</a>-->
-                                        <!--<a href="javascript:;" class="tpl-table-black-operation-del">-->
-                                            <!--<i class="am-icon-trash"></i> 删除-->
-                                        <!--</a>-->
-                                    <!--</div>-->
-                                <!--</td>-->
-                            <!--</tr>-->
-                            <!--<tr class="even gradeC">-->
-                                <!--<td>有适配微信小程序的计划吗</td>-->
-                                <!--<td>天纵之人</td>-->
-                                <!--<td>2016-09-26</td>-->
-                                <!--<td>-->
-                                    <!--<div class="tpl-table-black-operation">-->
-                                        <!--<a href="javascript:;">-->
-                                            <!--<i class="am-icon-pencil"></i> 编辑-->
-                                        <!--</a>-->
-                                        <!--<a href="javascript:;" class="tpl-table-black-operation-del">-->
-                                            <!--<i class="am-icon-trash"></i> 删除-->
-                                        <!--</a>-->
-                                    <!--</div>-->
-                                <!--</td>-->
-                            <!--</tr>-->
-                            <!--<tr class="gradeX">-->
-                                <!--<td>请问有没有amazeui 分享插件</td>-->
-                                <!--<td>王宽师</td>-->
-                                <!--<td>2016-09-26</td>-->
-                                <!--<td>-->
-                                    <!--<div class="tpl-table-black-operation">-->
-                                        <!--<a href="javascript:;">-->
-                                            <!--<i class="am-icon-pencil"></i> 编辑-->
-                                        <!--</a>-->
-                                        <!--<a href="javascript:;" class="tpl-table-black-operation-del">-->
-                                            <!--<i class="am-icon-trash"></i> 删除-->
-                                        <!--</a>-->
-                                    <!--</div>-->
-                                <!--</td>-->
-                            <!--</tr>-->
-                            <!--<tr class="even gradeC">-->
-                                <!--<td>关于input输入框的问题</td>-->
-                                <!--<td>着迷</td>-->
-                                <!--<td>2016-09-26</td>-->
-                                <!--<td>-->
-                                    <!--<div class="tpl-table-black-operation">-->
-                                        <!--<a href="javascript:;">-->
-                                            <!--<i class="am-icon-pencil"></i> 编辑-->
-                                        <!--</a>-->
-                                        <!--<a href="javascript:;" class="tpl-table-black-operation-del">-->
-                                            <!--<i class="am-icon-trash"></i> 删除-->
-                                        <!--</a>-->
-                                    <!--</div>-->
-                                <!--</td>-->
-                            <!--</tr>-->
-                            <!--<tr class="even gradeC">-->
-                                <!--<td>有没有发现官网上的下载包不好用</td>-->
-                                <!--<td>醉里挑灯看键</td>-->
-                                <!--<td>2016-09-26</td>-->
-                                <!--<td>-->
-                                    <!--<div class="tpl-table-black-operation">-->
-                                        <!--<a href="javascript:;">-->
-                                            <!--<i class="am-icon-pencil"></i> 编辑-->
-                                        <!--</a>-->
-                                        <!--<a href="javascript:;" class="tpl-table-black-operation-del">-->
-                                            <!--<i class="am-icon-trash"></i> 删除-->
-                                        <!--</a>-->
-                                    <!--</div>-->
-                                <!--</td>-->
-                            <!--</tr>-->
 
-                            <!--<tr class="even gradeC">-->
-                                <!--<td>我建议WEB版本文件引入问题</td>-->
-                                <!--<td>罢了</td>-->
-                                <!--<td>2016-09-26</td>-->
-                                <!--<td>-->
-                                    <!--<div class="tpl-table-black-operation">-->
-                                        <!--<a href="javascript:;">-->
-                                            <!--<i class="am-icon-pencil"></i> 编辑-->
-                                        <!--</a>-->
-                                        <!--<a href="javascript:;" class="tpl-table-black-operation-del">-->
-                                            <!--<i class="am-icon-trash"></i> 删除-->
-                                        <!--</a>-->
-                                    <!--</div>-->
-                                <!--</td>-->
-                            <!--</tr>-->
-                            <!-- more data -->
                             </tbody>
                         </table>
                     </div>
 
-                    <!--<div class="am-u-lg-12 am-cf">-->
-                        <!--<div class="am-fr">-->
-                            <!--<ul class="am-pagination tpl-pagination">-->
-                                <!--<li class="am-disabled"><a href="#">«</a></li>-->
-                                <!--<li class="am-active"><a href="#">1</a></li>-->
-                                <!--<li><a href="#">2</a></li>-->
-                                <!--<li><a href="#">3</a></li>-->
-                                <!--<li><a href="#">4</a></li>-->
-                                <!--<li><a href="#">5</a></li>-->
-                                <!--<li><a href="#">»</a></li>-->
-                            <!--</ul>-->
-                        <!--</div>-->
-                    <!--</div>-->
-
                     <!-- 分页 -->
-                    <div class="am-cf">
+                    <div class="am-cf" th:if="${totalPage}">
                         <div class="am-fr">
                             <ul class="am-pagination tpl-pagination">
                                 <li><a th:onclick="'loadPage(\'/blog/list?page=0\')'">«</a></li>
@@ -275,7 +172,7 @@
         </div>
     </div>
 </div>
-
+</div>
 </body>
 <!--<script>-->
     <!--//myJavaScript代码区域-->

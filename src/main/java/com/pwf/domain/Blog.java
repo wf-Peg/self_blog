@@ -111,14 +111,6 @@ public class Blog implements Serializable {
         this.htmlContent = Processor.process(content);
     }
 
-    public List<Comment> getCommentList() {
-        return commentList;
-    }
-
-    public void setCommentList(List<Comment> commentList) {
-        this.commentList = commentList;
-        this.comments=commentList.size();
-    }
 
     /**
      * 添加评论
@@ -126,21 +118,20 @@ public class Blog implements Serializable {
      */
     public void addComment(Comment comment) {
         this.commentList.add(comment);
-        this.comments = this.commentList.size();
+//        this.comments = this.commentList.size();
     }
 
     /**
      * 删除评论
      * @param commentId
      */
-    public void removeComment(Long commentId) {
-//        Integer id=commentId.intValue();
+    public void removeComment(long commentId) {
         for (int index=0; index < this.commentList.size(); index ++ ) {
             if (commentList.get(index).getId() .equals(commentId) ) {
                 this.commentList.remove(index);
                 break;
             }
         }
-        this.comments = this.commentList.size();
+//        this.comments = this.commentList.size();
     }
 }
