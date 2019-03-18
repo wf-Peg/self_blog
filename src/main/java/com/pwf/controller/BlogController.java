@@ -34,7 +34,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/blog")
-@Api(tags = "博文逻辑控制层")
+@Api(tags = "博文控制层")
 public class BlogController {
     @Autowired
     private BlogService service;
@@ -99,7 +99,8 @@ public class BlogController {
         model.addAttribute("blogList", blogs.getContent());
         model.addAttribute("totalPage", blogs.getTotalPages());
         model.addAttribute("currentPage", pageBean.getPage());
-        model.addAttribute("all", true);
+//        model.addAttribute("all", true);
+        System.out.println("current:"+pageBean.getPage());
         return "index :: #content";
     }
 
@@ -112,11 +113,15 @@ public class BlogController {
 //            redisTemplate.opsForValue().set("VisitsCount");
 //        }
 //        Blog blog = service.findById(id);
-        List<Comment> comments = blog.getCommentList();
 
-        model.addAttribute("blogDetail", blog);
-        model.addAttribute("comments", comments);
+        Blog preBlog = service.findPreBlog(id);
+        Blog nextBlog = service.findNextBlog(id);
         service.readingIncrease(id);
+        model.addAttribute("comments", blog.getCommentList());
+        model.addAttribute("commentCount", service.findBlogsCommentCount(id));
+        model.addAttribute("blogDetail", blog);
+        model.addAttribute("preBlog", preBlog);
+        model.addAttribute("nextBlog", nextBlog);
         return "blog-detail";
     }
 

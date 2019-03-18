@@ -10,6 +10,7 @@ import com.pwf.service.PrintService;
 import com.pwf.util.ConstraintViolationExceptionHandler;
 import com.pwf.util.Word2PdfUtil;
 import com.pwf.vo.ResultVO;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.ConstraintViolationException;
 import java.io.IOException;
@@ -31,6 +33,7 @@ import static jdk.nashorn.internal.objects.NativeArray.lastIndexOf;
  */
 @Controller
 @CrossOrigin
+@Api(tags = "打印服务控制层")
 @RequestMapping("/print")
 public class PrintController {
     @Autowired
@@ -51,6 +54,15 @@ public class PrintController {
     @GetMapping("/add")
     public String add() {
         return "background/print_add";
+    }
+
+    @GetMapping("/upPay")
+    public ModelAndView upAdd(int page, Model model) {
+        model.addAttribute("page",page);
+        DecimalFormat decimalFormat=new DecimalFormat("##0.00");
+        String count=decimalFormat.format(page*0.2f);
+        model.addAttribute("count",count+"元");
+        return new ModelAndView("print-upPay","payModel",model);
     }
 
     @GetMapping("/pay")
@@ -111,32 +123,6 @@ public class PrintController {
         System.out.println(new ResultVO(true, "提交print成功",pagecount));
         return new ResultVO(true, "提交print成功",pagecount);
     }
-
-//    @GetMapping("/update")
-//    public String update(Integer id, Model model) {
-//        Banner banner = printService.findOne(id);
-//        banner.setBannerkey(banner.getBannerkey().replace("\"", ""));
-//        model.addAttribute("banner", banner);
-//        return "background/banner_update";
-//    }
-
-//    @PostMapping("/update")
-//    @ResponseBody // 响应给客户端的是数据
-//    public Map<String, Object> update(Banner banner, MultipartFile uploadFile) throws IOException {
-//        //如果有新的文件，进行上传
-//        if (!"".equals(uploadFile.getOriginalFilename())) {
-//            String filePath = fileUploadService.upload(uploadFile);
-//            banner.setImg(filePath);
-//        }
-////        banner.setBannerkey("\""+banner.getBannerkey()+"\'");
-//        banner.setBannerkey("\"" + banner.getBannerkey() + "\"");
-//        bannerService.update(banner);
-//        Map<String, Object> r = new HashMap<>();
-//        r.put("code", 0);//成功
-//        r.put("msg", "更新Banner成功");
-//        return r;
-////        return "redirect:/banner/list";
-//    }
 
     @DeleteMapping("/delete")
     @ResponseBody

@@ -323,7 +323,7 @@
 
             <div sec:authorize="hasRole('admin')">
                 <li class="sidebar-nav-link">
-                    <a href="#" onclick="loadPage('/user/users?page=0&size=10')"><!--/background/user-tables.htm-->
+                    <a href="#" onclick="loadPage('/user/users')"><!--/background/user-tables.htm-->
                         <i class="am-icon-table sidebar-nav-link-logo"></i> 用户管理
                     </a>
                 </li>
@@ -375,6 +375,8 @@
                         <small>PinPon巷</small>
                     </div>
                     <p class="page-header-description">碎碎念，树洞，心情，技术，Whatever.</p>
+                    <br/>
+                    <strong class="page-header-description" style="font-size: larger">当前用户的ip地址为:[[${ip}]]</strong>
                 </div>
             </div>
 

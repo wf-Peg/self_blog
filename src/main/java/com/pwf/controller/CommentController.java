@@ -6,6 +6,7 @@ import com.pwf.service.BlogService;
 import com.pwf.service.CommentService;
 import com.pwf.util.ConstraintViolationExceptionHandler;
 import com.pwf.vo.ResultVO;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
+@Api(tags = "评论控制层")
 @RequestMapping("/comments")
 public class CommentController {
 	

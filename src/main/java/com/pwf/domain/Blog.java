@@ -54,8 +54,6 @@ public class Blog implements Serializable {
 
     private int reading = 0; // 访问量、阅读量
 
-    private Integer comments = 0;  // 评论量
-
 //    name是本类（表）在数据库的字段名，referencedColumnName 是关联类（表）在数据库中的关联字段名
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "blog_comment", joinColumns = @JoinColumn(name = "blog_id", referencedColumnName = "id"),
@@ -118,7 +116,6 @@ public class Blog implements Serializable {
      */
     public void addComment(Comment comment) {
         this.commentList.add(comment);
-//        this.comments = this.commentList.size();
     }
 
     /**
@@ -132,6 +129,5 @@ public class Blog implements Serializable {
                 break;
             }
         }
-//        this.comments = this.commentList.size();
     }
 }

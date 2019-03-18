@@ -18,7 +18,6 @@ public class FileUploadService {
     @Value("${aliyun.ak}")
     private String accessKeyId;
 
-
     @Value("${aliyun.sk}")
     private String accessKeySecret;
 
@@ -29,16 +28,13 @@ public class FileUploadService {
     public String upload(MultipartFile uploadFile) throws IOException {
         // 创建OSSClient实例。
         OSSClient ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
-
         // 上传文件流。
         InputStream inputStream = uploadFile.getInputStream();
         String fileName = uploadFile.getOriginalFilename();
         String hz = fileName.substring(fileName.lastIndexOf("."));
         String uuid = UUID.randomUUID().toString();
         String newFileName = uuid + hz;
-
         // 上传文件到云服务器
-//        ossClient.putObject("i-house", newFileName, inputStream);
         ossClient.putObject("blog-banner", newFileName, inputStream);
         // 关闭OSSClient。
         ossClient.shutdown();

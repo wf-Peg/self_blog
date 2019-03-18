@@ -1,7 +1,6 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="en" class="no-js">
 <!DOCTYPE html>
-<html lang="en" class="no-js">
-
 <!-- Mirrored from lmpixels.com/demo/sunshine-demo/sunshine-version-2/sunshine-html-template/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 24 Aug 2018 06:11:58 GMT -->
 <head>
     <meta charset="UTF-8"/>
@@ -39,13 +38,15 @@
     <script src="js/main.js"></script>
     <script src="/asserts/js/do.js"></script>
 
+    <script src="preview/lmpixels-demo-panel.js"></script>
+
     <!-- 引入 ECharts 文件 -->
     <script src="/js/echarts.min.js"></script>
     <!-- 弹窗美化 -->
     <link rel="stylesheet" type="text/css" href="/sweetalert/sweetalert.css">
     <script type="text/javascript" src="/sweetalert/sweetalert-dev.js"></script>
 
-    <link rel="stylesheet" href="css/layui.css"  media="all">
+    <link rel="stylesheet" href="css/layui.css" media="all">
     <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
     <script src="js/layui.js" charset="utf-8"></script>
     <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
@@ -65,7 +66,7 @@
         }
 
         function loadPageForBannerContent(tag) {
-            window.location.href = "#portfolio";
+            window.location.href = "#portfolio_grid";
             $("#portfolio_grid").load(tag);
         }
 
@@ -153,7 +154,8 @@
                     <a th:onclick="loadPageForBlogContent2('/blog/keySearch?page=0&size=10&keyword='+[[${keyword}]])"
                        th:each="keyword : ${#strings.arraySplit(keywordList , ',')}">
                         <!--<a th:href="'/blog/search?keyword='+${keyword}" th:each="keyword : ${#strings.arraySplit(keywordList, ',')}">-->
-                        <span class="badge badge-default" th:text="${keyword}">Web Design</span>
+                        <span class="badge badge-default" style="margin-top: 5px;"
+                              th:text="${keyword}">Web Design</span>
                         <!--<span class="badge badge-default" th:onclick="'loadPageForBlogContent2(\'/blog/search?keyword=\''+${keyword}+'\')'" th:text="${keyword}">Web Design</span>-->
                     </a>
                     <!--<a href="/blogs?tag=1"> <span class="badge badge-default">Jersey</span></a>-->
@@ -211,15 +213,15 @@
 
                             <div class="block end" style="text-align: center">
                                 <ul class="info-list">
-                                    <li><span class="title">Age</span><span class="value">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp23</span>
+                                    <li><span class="title">Age</span><span class="value">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp24</span>
                                     </li>
                                     <li><span class="title">Address</span><span class="value">福建 厦门,中国</span></li>
                                     <li><span class="title">e-mail</span><span class="value"><a
-                                            href="http://lmpixels.com/cdn-cgi/l/email-protection#dabfb7bbb3b69abfa2bbb7aab6bff4b9b5b7"><span
-                                            class="__cf_email__" data-cfemail="d9bcb4b8b0b599bca1b8b4a9b5bcf7bab6b4"><!--[email&#160;protected]-->
-                         &nbsp15860167093@163.com</span></a></span></li>
+                                            href="#"><span
+                                            class="__cf_email__"><!--[email&#160;protected]-->
+                                    &nbsp;15860167093@163.com</span></a></span></li>
                                     <li><span class="title">Phone</span><span
-                                            class="value">&nbsp&nbsp+86 17750598420</span></li>
+                                            class="value">&nbsp&nbsp+86 1775059xxxx</span></li>
                                 </ul>
                             </div>
                         </div>
@@ -231,32 +233,33 @@
                 <section class="pt-page pt-page-2" data-id="about_me">
                     <div class="section-title-block">
                         <h2 class="section-title">关于我</h2>
-                        <h5 class="section-description">PPPWF</h5>
+                        <h5 class="section-description">我是PPPWF，所见、所思不定时记录于此。输出即获得，分享即反哺。</h5>
                     </div>
 
                     <div class="row">
                         <div class="col-sm-6 col-md-6 subpage-block">
                             <div class="general-info">
-                                <h3>Java工程师</h3>
+                                <h3>Java工程师</h3><br/>
                                 <p>
-                                    个人自传本人良好的团队合作精神，能迅速融入新的团队。易和人相处，拥有良好的亲和力。能吃苦耐劳，能在较大的压力下保持良好的工作状态，善于自我调节。具有强烈的责任感，工作踏实。性格开朗乐观，积极上进。非常热爱编程，喜欢钻研新的技术，喜欢接受各种不同的挑战，具有较好的自学能力和良好的学习方法。</p>
-                                <p>教育背景</p>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;个人自传本人良好的团队合作精神，能迅速融入新的团队。易和人相处，拥有良好的亲和力。能吃苦耐劳，能在较大的压力下保持良好的工作状态，善于自我调节。具有强烈的责任感，工作踏实。性格开朗乐观，积极上进。非常热爱编程，喜欢钻研新的技术，喜欢接受各种不同的挑战，具有较好的自学能力和良好的学习方法。</p>
+                                <p>教育背景</p><br/>
                                 <p>毕业院校：厦门理工学院</p>
                                 <p>学历：本科</p>
                                 <p>毕业日期：2019-07</p>
-                                <p>专业：软件工程</p>
+                                <p>专业：软件工程</p><br/>
                                 <p>专业技能：</p>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.具备较为系统、扎实的计算机理论基础。有一定的JAVA EE项目开发经验。
+                                <br/>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.具备较为系统、扎实的计算机理论基础。有一定的JAVA EE项目开发经验。
                                 </p>
-                                　　2.熟练掌握JAVA语言开发技术。熟悉OOP编程思想，有一定的OOA/OOD能力，能使用UML对项目进行分析。熟知常见的GoF设计模式：如Singleton、Factory等。理解分层架构、DAO模式。
+                                　　2.熟练掌握JAVA语言开发技术，熟知常见的GoF设计模式：如Singleton、Factory等。理解分层架构、DAO模式。
                                 </p>
-                                　　3.了解工作流，有JBOSS JBPM工作流引擎的使用经验。了解基于RBAC模式的授权认证。
+                                　　3.了解git、svn，具备一定的团队开发能力。
                                 </p>
                                 4.了解Linux，有Linux下的JAVA环境搭建和开发经验，以及tomcat的搭建和项目的部署。
                                 </p>
-                                　　5.熟悉tomcat、maven下的项目部署。
+                                　　5.熟悉HTML5+CSS3+Ajax+JQuery等技术。
                                 </p>
-                                　　6.掌握JAVA Web技术，如JSP、Servlet、JSTL、EL等。了解OGNL。
+                                　　6.掌握JAVA Web技术，如JSP、Servlet、JSTL、EL等。
                                 </p>
                                 　　7.了解Ajax和JavaScript，有一定的使用经验。
                                 </p>
@@ -339,61 +342,43 @@
                         <h5 class="section-description">基于校园的线上打印平台</h5>
                     </div>
 
+                    <div id="printContent">
+                        <form class="am-form tpl-form-line-form"
+                              enctype="multipart/form-data" id="printAddForm">
 
-                    <form class="am-form tpl-form-line-form"
-                          enctype="multipart/form-data" id="printAddForm">
-
-                        <div class="row" style="position:absolute;top:55%;left:55%;margin:-150px 0 0 -200px;
+                            <div class="row" style="position:absolute;top:55%;left:55%;margin:-150px 0 0 -200px;
                                 width:1000px;height:500px;">
-                            <div class="form-group" style="display:flex;">
-                                <input id="filename" name="filename" type="text" style="display: block;width:40%;border-width:0 0 1px;border-style: solid;
+                                <div class="form-group" style="display:flex;">
+                                    <input id="filename" name="filename" type="text" style="display: block;width:40%;border-width:0 0 1px;border-style: solid;
                                 border-color: rgba(0,0,0,.12);
                                 box-shadow: inset 0 -1px 0 rgba(0,0,0,0);
                                 background: transparent;outline: none;"
-                                       placeholder="文件名称必填,请填写文件描述10-20字左右" required>
-                                <br>
-                            </div>
+                                           placeholder="请填写格式为：宿舍号+备注的内容" required>
+                                    <br>
+                                </div>
 
-                            <div class="form-group" style="display:flex;margin: 0 auto;">
-                                <input id="filepath" name="filepath" style="display: block;width:40%;border-width:0 0 1px;border-style: solid;
+                                <div class="form-group" style="display:flex;margin: 0 auto;">
+                                    <input id="filepath" name="filepath" style="display: block;width:40%;border-width:0 0 1px;border-style: solid;
                                 border-color: rgba(0,0,0,.12);
                                 box-shadow: inset 0 -1px 0 rgba(0,0,0,0);
-                                background: transparent;outline: none;"
-                                       placeholder="当前仅支持word和pdf相关格式的内容,请勿随意上传">
-                                <input type="button" style="margin-top: 3px" id="i-check" value="浏览" class="btn"
-                                       onclick="$('#uploadFile').click();">
-                                <input type="file" id="uploadFile" name="uploadFile" accept=".nse"
-                                       onchange="handleFileUP(this)" style="display: none">
-                                <br>
+                                background: transparent;outline: none;margin-top: 10px"
+                                           placeholder="当前仅支持word和pdf相关格式的内容,请勿随意上传">
+                                    <input type="file" id="uploadFile" name="uploadFile" accept=".nse"
+                                           onchange="handleFileUP(this)" style="display: none">
+                                    <br>
+                                </div>
+                                <div style="display: block;margin-top: 20px">
+                                    <input type="button" id="i-check" value="浏览"
+                                           onclick="$('#uploadFile').click();">
+                                    <!--<input type="submit" class="button btn-send" onclick="upSavePrint()" value="提交">-->
+                                    <input type="button" onclick="upSavePrint()" value="提交">
+                                </div>
+                                <!--<a class="btn btn-primary btn-lg" onclick="upSavePrint()"-->
+                                <!--style="margin-top: 20px" href="#">提交</a>-->
                             </div>
-                            <input type="submit" class="button btn-send" onclick="savePrint()" value="提交">
-                        </div>
-                        <!--<div class="form-control">-->
-                        <!--<label for="filename" class="am-u-sm-3 am-form-label">文件描述</label>-->
-                        <!--<div class="controls">-->
-                        <!--<input name="filename" id="filename" placeholder="文件描述"-->
-                        <!--required="required" data-error="请输入文件描述">-->
-                        <!--<small style="color: red;">必填,请填写文件描述10-20字左右</small>-->
-                        <!--</div>-->
-                        <!--</div>-->
 
-                        <!--<label for="filepath" class="am-u-sm-3 am-form-label">文件</label>-->
-                        <!--&lt;!&ndash;<div class="form-control" style="display:flex;margin: 0 auto;">&ndash;&gt;-->
-                        <!--<div align="center" disabled style="display:flex;margin: 0 auto;">-->
-                        <!--<input id="filepath" name="filepath">-->
-                        <!--<input type="button" style="margin-top: 3px" id="i-check" value="浏览" class="btn"-->
-                        <!--onclick="$('#uploadFile').click();">-->
-                        <!--&lt;!&ndash;<input value="上传文件" id="uploadFile" type="file" multiple="" name="uploadFile">&ndash;&gt;-->
-                        <!--<input type="file" id='uploadFile' accept=".nse"-->
-                        <!--onchange="$('#filepath').val($('#uploadFile').val());" style="display: none">-->
-                        <!--</div>-->
-                        <!--<small style="color: red;">当前仅支持word和pdf相关格式的内容,请勿随意上传</small>-->
-                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                        <!--<br>-->
-
-
-                    </form>
-
+                        </form>
+                    </div>
 
                 </section>
                 <!-- End Resume Subpage -->
@@ -433,55 +418,16 @@
                         </ul>
                         <!-- End of Portfolio filter -->
 
-                        <!--<script>-->
-                            <!--var currentPage = [[${currentPage}]];-->
-                            <!--layui.use('flow', function(){-->
-                                <!--var flow = layui.flow;-->
-<!--//                                var totalPage=[[${totalPage}]];-->
-                                <!--flow.load({-->
-                                    <!--elem: '#LAY_demo2' //流加载容器-->
-                                    <!--,scrollElem: '#LAY_demo2' //滚动条所在元素，一般不用填，此处只是演示需要。-->
-                                    <!--,isAuto: true-->
-                                    <!--,isLazyimg: true-->
-                                    <!--,done: function(page, next){ //执行下一页的回调-->
-                                        <!--//模拟数据插入-->
-                                        <!--setTimeout(function(){-->
-                                            <!--var lis = [];-->
-                                            <!--$.ajax({-->
-                                                <!--url: "/banner/bannerList?page="+currentPage+"&size=2",-->
-                                                <!--contentType: 'application/json',-->
-                                                <!--dataType: 'json',-->
-                                                <!--success: function (data) {-->
-                                                    <!--layui.each(data.body, function(index, banner) {-->
-                                                        <!--var str='<a href="'+banner.img+'" title="'+banner.name+'" class="lightbox"> <img id="img" name="img" src="'+banner.img+'?x-oss-process=image/resize,w_300,h_300/watermark,type_d3F5LXplbmhlaQ,size_15,text_RkZzaGluZQ==,color_FFFAFA,shadow_100,order_0,align_2,interval_10,t_100,g_se,x_10,y_10">';-->
-                                                        <!--str+='<div><h5 class="name" text="'+banner.name+'"></h5><small>'+banner.bannerkey+'</small><i class="fa fa-image"></i>';-->
-                                                        <!--str+='</div></a>';-->
-                                                        <!--lis.push('<figure class="item" data-groups='+"["+banner.bannerkey+"]"+'>' + str + '</figure>');-->
-                                                    <!--});-->
-                                                    <!--next(lis.join(''), page < totalPage-1); //假设总页数为 6-->
-                                                    <!--currentPage = currentPage+1;-->
-                                                <!--},-->
-                                                <!--error: function () {-->
-                                                    <!--swal("error!");-->
-                                                <!--}-->
-                                            <!--});-->
-                                        <!--}, 500);-->
-                                    <!--}-->
-                                <!--});-->
-
-
-                            <!--});-->
-                        <!--</script>-->
-
                         <!-- Portfolio Grid -->
-                        <div id="portfolio_grid"  class="portfolio-grid portfolio-masonry masonry-grid-3">
+                        <div id="portfolio_grid" class="portfolio-grid portfolio-masonry masonry-grid-3">
 
                             <!-- sql data start -->
                             <figure class="item" th:data-groups='[+${banner.bannerkey}+]'
                                     th:each="banner : ${bannerList}">
                                 <a href="#" class="lightbox" th:title="${banner.name}"
                                    th:href="(${banner.img})">
-                                    <img id="img" name="img" th:src="${banner.img}+'?x-oss-process=image/resize,w_300,h_300/watermark,type_d3F5LXplbmhlaQ,size_15,text_RkZzaGluZQ==,color_FFFAFA,shadow_100,order_0,align_2,interval_10,t_100,g_se,x_10,y_10'">
+                                    <img id="img" name="img"
+                                         th:src="${banner.img}+'?x-oss-process=image/resize,w_300,h_300/watermark,type_d3F5LXplbmhlaQ,size_15,text_RkZzaGluZQ==,color_FFFAFA,shadow_100,order_0,align_2,interval_10,t_100,g_se,x_10,y_10'">
                                     <div>
                                         <h5 class="name" th:text="${banner.name}">项目名
                                         </h5>
@@ -492,30 +438,35 @@
                             </figure>
                             <!-- sql data end -->
                         </div>
-                        <div class="portfolio-grid portfolio-masonry masonry-grid-3" id="LAY_demo2"></div>
-                    </div>
-                     <!--/Portfolio Content -->
+                        <!-- 所有图片的分页 -->
+                        <div class="am-fr" align="center">
+                            <ul class="pagination">
+                                <li>
+                                    <a th:onclick="'loadPageForBannerContent(\'/banner/bannerList?page=0&size=40\')'">«</a>
+                                </li>
+                                <li th:each="i : ${#numbers.sequence(1,bannerTotalPage,1)}">
+                                    <!--th:id="'page'+${i}">-->
+                                    <a th:text="${i}"
+                                       th:onclick="'loadPageForBannerContent(\'/banner/bannerList?size=40&page='+${i-1}+'\')'">1</a>
+                                </li>
+                                <li>
+                                    <a th:onclick="'loadPageForBannerContent(\'/banner/bannerList?size=40&page='+${bannerTotalPage-1}+'\')'">»</a>
+                                </li>
+                            </ul>
+                            <!--<script th:inline="javascript" type="text/javascript">-->
+                            <!--var id = [[${bannerCurrentPage+1}]];-->
+                            <!--$("#page" + id).attr("class", "active");-->
+                            <!--</script>-->
+                        </div>
+                        <!-- 所有图片的分页end -->
 
+                    </div>
+                    <!--<div class="portf
+                    olio-grid portfolio-masonry masonry-grid-3" id="LAY_demo2"></div>-->
+
+                    <!--/Portfolio Content -->
                 </section>
-                <!-- 所有图片的分页 -->
-                <!--<div class="am-fr">-->
-                <!--<ul class="pagination square" style="margin-left: 470px">-->
-                <!--<li><a th:onclick="'loadPageForBannerContent(\'/banner/bannerList?page=0\')'">«</a></li>-->
-                <!--<li th:each="i : ${#numbers.sequence(1,totalPage,1)}"-->
-                <!--th:id="'page'+${i}">-->
-                <!--<a th:text="${i}"-->
-                <!--th:onclick="'loadPageForBannerContent(\'/banner/bannerList?page='+${i-1}+'\')'">1</a>-->
-                <!--</li>-->
-                <!--<li>-->
-                <!--<a th:onclick="'loadPageForBannerContent(\'/banner/bannerList?page='+${totalPage-1}+'\')'">»</a>-->
-                <!--</li>-->
-                <!--</ul>-->
-                <!--<script th:inline="javascript" type="text/javascript">-->
-                <!--var id = [[${currentPage+1}]];-->
-                <!--$("#page" + id).attr("class", "am-active");-->
-                <!--</script>-->
-                <!--</div>-->
-                 <!--/Portfolio Subpage -->
+                <!--/Portfolio Subpage -->
 
                 <!-- Blog Subpage -->
                 <section class="pt-page pt-page-5" data-id="blog" id="blog">
@@ -534,7 +485,8 @@
                                 background: transparent;outline: none;"
                                placeholder="搜索名称、摘要、作者、内容等">
                         <!--<button class="fa fa-search" style="outline: none;"  onclick="getContentBySearchText()"></button>-->
-                        <input type="submit" class="fa fa-search button btn-send" onclick="getContentBySearchText()" value="搜索">
+                        <input type="button" class="fa fa-search" onclick="getContentBySearchText()"
+                               value="搜索">
                     </div>
 
 
@@ -550,6 +502,7 @@
                     <!--</div>-->
 
                     <div id="container" style="margin-top: 20px">
+
                         <div id="category"><h2>分类：
                             <a href="#"
                                onclick="loadPageForBlogContent('blog/orderList?page=0&size=10')">全部&nbsp;&nbsp;</a>
@@ -567,7 +520,6 @@
                         </div>
 
                         <div id="content">
-
                             <article class="article" th:each="blog : ${blogList}">
                                 <!--<h2 class="title"><a href="article?id=${article.id}">${article.title}</a></h2>-->
                                 <h1 class="title" style="padding-top: 25px"><a th:href="@{/blog/}+${blog.id}"
@@ -590,9 +542,9 @@
                             </article>
 
                             <!-- 所有文章的分页 -->
-                            <div class="am-cf" th:if="${all}">
-                                <div class="am-fr">
-                                    <ul class="pagination square" style="margin-left: 470px">
+                            <div class="cf" align="center" th:if="${totalPage}">
+                                <div class="fr" align="center">
+                                    <ul class="pagination">
                                         <li><a href="#blog" target="_self"
                                                th:onclick="'loadPageForBlogContent(\'/blog/orderList?page=0\')'">«</a>
                                         </li>
@@ -608,13 +560,15 @@
                                     </ul>
                                     <script th:inline="javascript" type="text/javascript">
                                         var id = [[${currentPage+1}]];
-                                        $("#page" + id).attr("class", "am-active");
+                                        $("#page" + id).attr("class", "active");
                                     </script>
                                 </div>
                             </div>
-                            <a href="#blog" target="_self" id="top"
-                               style="color: darkseagreen;padding-right: 200px">Top</a>
+
                         </div>
+
+                        <a href="#blog" target="_self" id="top"
+                           style="color: darkseagreen;padding-right: 200px">Top</a>
 
                     </div>
                 </section>
@@ -646,10 +600,9 @@
                                     <i class="pe-7s-icon pe-7s-mail"></i>
                                 </div>
                                 <div class="ci-text">
-                                    <h5><a href="#" class="__cf_email__"
-                                           data-cfemail="9afbf6ffe2e9f7f3eef2daffe2fbf7eaf6ffb4f9f5f7">
+                                    <h5><a href="#" class="__cf_email__">
                                         <!--[email&#160;protected]-->
-                                        827906388@qq.com
+                                        15860167093@163.com
                                     </a></h5>
                                 </div>
                             </div>
@@ -662,14 +615,14 @@
                             <!--</div>-->
                             <!--</div>-->
 
-                            <!--<div class="contact-info-block">-->
-                            <!--<div class="ci-icon">-->
-                            <!--<i class="pe-7s-icon pe-7s-check"></i>-->
-                            <!--</div>-->
-                            <!--<div class="ci-text">-->
-                            <!--<h5>Freelance Available</h5>-->
-                            <!--</div>-->
-                            <!--</div>-->
+                            <div class="contact-info-block">
+                                <div class="ci-icon">
+                                    <i class="pe-7s-icon pe-7s-check"></i>
+                                </div>
+                                <div class="ci-text">
+                                    <h5>Freelance Available</h5>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="col-sm-6 col-md-6 subpage-block">
@@ -730,7 +683,7 @@
 
     a:hover {
         /*background-color: green;*/
-        text-decoration: underline
+        text-decoration: underline;
     }
 
 </style>

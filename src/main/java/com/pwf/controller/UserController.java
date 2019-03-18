@@ -1,5 +1,6 @@
 package com.pwf.controller;
 
+import com.pwf.domain.PageBean;
 import com.pwf.domain.User;
 import com.pwf.service.UserService;
 import com.pwf.util.ConstraintViolationExceptionHandler;
@@ -28,7 +29,7 @@ import java.util.Map;
 @CrossOrigin
 @RestController
 @RequestMapping("/user")
-@Api(tags = "后台用户控制类")
+@Api(tags = "后台用户控制层")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -68,13 +69,13 @@ public class UserController {
     //    @PreAuthorize("hasRole('admin')")
     @GetMapping("/users")
     @ApiOperation(value = "根据创建时间分页查询所有用户数据")
-    private ModelAndView queryAll(/*PageBean pageBean,*/ Model model) {
-//        Page<User> userPage = userService.listAllOrderByCreateDate(pageBean);
-//        model.addAttribute("userList",userPage.getContent());
-//        model.addAttribute("totalPage", userPage.getTotalPages());
-//        model.addAttribute("currentPage", pageBean.getPage());
+    private ModelAndView queryAll(PageBean pageBean, Model model) {
+        Page<User> userPage = userService.listUsersPage(pageBean);
+        model.addAttribute("userList", userPage.getContent());
+        model.addAttribute("totalPage", userPage.getTotalPages());
+        model.addAttribute("currentPage", pageBean.getPage());
 //        return "admin/person-list";
-        model.addAttribute("userList", userService.listUsers());
+//        model.addAttribute("userList", userService.listUsers());
         return new ModelAndView("background/user-tables", "userModel", model);
     }
 
@@ -96,10 +97,16 @@ public class UserController {
                 return ResponseEntity.ok().body(new ResultVO(true, "注册成功"));
             } catch (ConstraintViolationException e) {
                 return ResponseEntity.ok().body(new ResultVO(false, ConstraintViolationExceptionHandler.getMessage(e)));
+            } catch (Exception e) {
+                return ResponseEntity.ok().body(new ResultVO(false, e.getMessage()));
             }
         }
 
-        userService.update(user);
+        try {
+            userService.update(user);
+        } catch (Exception e) {
+            return ResponseEntity.ok().body(new ResultVO(false, e.getMessage()));
+        }
         return ResponseEntity.ok().body(new ResultVO(true, "修改成功"));
 
     }
@@ -156,11 +163,11 @@ public class UserController {
     @ApiOperation("根据用户id查询并转发到管理员编辑页面")
     @GetMapping("/userDetail")
     public ModelAndView editForm(@RequestParam("userId") Integer userId, Model model) {
-        User user = (User) redisTemplate.opsForValue().get("user-" + userId);
-        if (user == null) {
-            user = userService.getUserById(userId);
-            redisTemplate.opsForValue().set("user-" + userId, user);
-        }
+//        User user = (User) redisTemplate.opsForValue().get("user-" + userId);
+//        if (user == null) {
+        User user = userService.getUserById(userId);
+//            redisTemplate.opsForValue().set("user-" + userId, user);
+//        }
         model.addAttribute("user", user);
         return new ModelAndView("background/user-edit", "userModel", model);
     }

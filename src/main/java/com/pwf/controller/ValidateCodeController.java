@@ -2,6 +2,7 @@
 package com.pwf.controller;
 
 import com.pwf.validate.code.image.ImageCode;
+import io.swagger.annotations.Api;
 import lombok.Data;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
@@ -18,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Random;
 
+@Api(tags = "验证码效验控制层")
 @RestController
 public class ValidateCodeController {
     public static final String SESSION_KEY = "SESSION_KEY_IMAGE_CODE";

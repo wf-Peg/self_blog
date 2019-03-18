@@ -110,16 +110,18 @@
                             </tr>
                             <tr class="even gradeC" th:each="comment : ${comments}" style="align:center;text-align: center">
                                 <td style="width:10%;align:center;text-align: center" th:text="${comment.id}">1</td>
-                                <td style="width:10%;align:center;text-align: center" class="blogId" th:id="${comment.blogId}" th:text="${comment.blogId}">1</td>
+
+                                <td style="width:10%;align:center;text-align: center" th:text="${comment.blogId}">1</td>
                                 <!--<td><a th:onclick="'loadPageForRegister(\'/comment/commentDetail?commentId='+${comment.id}+'\')'"-->
                                 <td style="width:10%;align:center;text-align: center"><a th:text="${comment.commentUsername}">pwf</a></td>
-                                <!--<td><a onclick="loadPageForRegister('/background/user-edit.html')" th:text="${user.userName}">pwf</a></td>-->
+                                <!--<td><a onclick="loadPageForRegister('/bbackground/user-edit.html')" th:text="${user.userName}">pwf</a></td>-->
                                 <!--<td th:text="${user.passWord}">pwf</td>-->
                                 <td style="width:40%;align:center;text-align: center" th:text="${comment.content}"></td>
                                 <td style="width:20%;align:center;text-align: center" th:text="${#dates.format(comment.createTime, 'yyyy-MM-dd HH:mm')}">[[${comment.createTime}]]</td>
                                 <td style="align:center;width:10%;text-align: center">
                                     <div class="tpl-table-black-operation">
-                                        <button type="button" class="am-btn am-btn-danger am-btn-xs del-comment" th:id="${comment.id}">
+                                        <button type="button" class="am-btn am-btn-danger am-btn-xs del-comment"
+                                                th:blogId="${comment.blogId}" th:id="${comment.id}">
                                             <i class="am-icon-trash"></i> 删除
                                         </button>
                                             <!--<i class="am-icon-trash"></i> 删除-->

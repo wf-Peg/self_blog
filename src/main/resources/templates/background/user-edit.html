@@ -125,6 +125,13 @@
                                    readonly="readonly">
                         </div>
 
+                        <label for="createTime" class="am-u-sm-3 am-form-label">用户创建时间</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" class="tpl-form-input" name="createTime" id="createTime"
+                                   th:value="${#dates.format(userModel.user.createTime, 'yyyy-MM-dd HH:mm')}"
+                                   readonly="readonly">
+                        </div>
+
                         <div class="am-form-group">
                             <div class="am-u-sm-9 am-u-sm-push-3">
                                 <button type="button" onclick="updateUser()" class="am-btn am-btn-primary">保存</button>

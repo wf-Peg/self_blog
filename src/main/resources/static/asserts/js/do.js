@@ -141,8 +141,8 @@ function login() {
     // var imageCode=formData.get("imageCode");
     // var rememberme=formData.get("remember-me");
     // formData.append("token","kshdfiwi3rh");
-    console.info(formData.get("username"));
-    console.info(formData.get("password"));
+    // console.info(formData.get("username"));
+    // console.info(formData.get("password"));
     $.ajax({
         url: '/login',
         type: 'POST',
@@ -163,9 +163,9 @@ function login() {
                     swal("提示", msg, "warning");
                 }, 100);
                 //2秒后刷新页面，足够显示swal()的信息
-                setTimeout(function () {
-                    window.location.href = '/userlogin';
-                }, 2000);
+                // setTimeout(function () {
+                //     window.location.href = '/userlogin';
+                // }, 2000);
                 // window.location.href = '/userlogin';
             }
         }
@@ -183,10 +183,13 @@ function forgotPassword() {
         // var email= $('#email').val();
         var pwd1 = $('#passWord').val();
         var pwd2 = $('#rePassword').val();
+        if (pwd1==null||""==pwd1||pwd1==null||""==pwd1) {
+            swal("密码不能为空！");
+            return;
+        }
         if (pwd1 != pwd2) {
-            console.info(pwd1);
-            console.info(pwd2);
-            alert("输入的两次密码不一致，请重新输入！");
+            swal("输入的两次密码不一致，请重新输入！");
+            return
         } else {
             $.ajax({
                 url: '/user/update',
@@ -261,10 +264,6 @@ function saveUserForUser() {
             dataType: 'json',  //告诉服务器，我要想什么类型的数据
             processData: false,// 注意这里应设为false
             success: function (Result) {
-                // var msg = Result.msg;
-                // console.info("进入注册用户");
-                // console.info(Result.msg);
-                // console.info(Result);
                 if (Result.success === true) {
                     // swal(Result.msg);
                     setTimeout(function () {
@@ -284,10 +283,7 @@ function saveUserForUser() {
                     setTimeout(function () {
                         window.location.href = '/registerUserIndex';
                     }, 2000);
-                    // alert(Result.msg);
-                    // window.location.href = '/registerUserIndex';
                 }
-                // loadPageForRegister('/user/users');
             }
         });
     }
@@ -602,9 +598,11 @@ function saveBlog() {
     var img = document.getElementsByClassName("img")[0].src;
     if (releaseTime == '' || releaseTime == undefined || releaseTime == null) {
         swal("发布时间必填");
+        return;
     }
     if ("http://localhost:8090/background/assets/img/blog_default.png" == img) {
         swal('图片不能为空');
+        return;
     } else {
         $.ajax({
             type: "POST",
@@ -701,13 +699,12 @@ function saveBanner() {
     // var img = data.get("img");
     var img = document.getElementsByClassName("img")[0].src;
     var name = $("#name").val();
-    // alert(name);
-    // console.log(img);
-    // http://localhost:8090/background/assets/img/blog_default.png
-    // alert(img);
     if ("http://localhost:8090/background/assets/img/blog_default.png" == img || "" == name) {
         swal('图片/图片名称不能为空');
-    } else {
+        return;
+    }
+    {
+        swal('图片上传中，请稍等...');
         $.ajax({
             type: "POST",
             url: "/banner/add",
@@ -738,7 +735,7 @@ function saveBanner() {
 }
 
 /**
- * 提交Print---------------------------------------------------
+ * 后台提交Print---------------------------------------------------
  */
 function savePrint() {
     var form = document.getElementById("printAddForm");
@@ -746,15 +743,10 @@ function savePrint() {
     // var img = data.get("img");
     var filepath = $("#filepath").val();
     var filename = $("#filename").val();
-    // alert(filename+"path:"+filepath);
-    // console.log(img);
-    // http://localhost:8090/background/assets/img/blog_default.png
-    // alert(img);
     if ("" == filename || "" == filepath) {
         swal('文件/文件名称不能为空');
     } else {
-        // setTimeout(function(){swal("提示","上传中...请稍等","success"); },8000);
-        swal("提示", "上传中...请稍等", "success")
+        swal("提示", "上传中...请稍等");
         //2秒后刷新页面，足够显示swal()的信息
         $.ajax({
             type: "POST",
@@ -774,8 +766,43 @@ function savePrint() {
                     setTimeout(function () {
                         loadPageForRegister('/print/pay?page=' + page);
                     }, 2000);
-                    // alert(Result.msg);
-                    // loadPageForRegister('/banner/list');
+                } else {
+                    swal(Result.msg);
+                }
+            },
+            error: function () {
+                swal("erro");
+            }
+        });
+    }
+}
+
+/**
+ * 前台提交Print---------------------------------------------------
+ */
+function upSavePrint() {
+    var form = document.getElementById("printAddForm");
+    var data = new FormData(form);
+    var filepath = $("#filepath").val();
+    var filename = $("#filename").val();
+    if ("" == filename || "" == filepath) {
+        swal('文件/文件名称不能为空');
+    } else {
+        swal("提示", "上传中...请稍等");
+        $.ajax({
+            type: "POST",
+            url: "/print/add",
+            data: data,
+            dataType: "json",
+            contentType: false,
+            processData: false,// 注意这里应设为false
+            success: function (Result) {
+                if (Result.success === true) {
+                    setTimeout(function () {
+                        swal("提示", Result.msg, "success");
+                    }, 100);
+                    var page = Result.body;
+                    $("#printContent").load('/print/upPay?page=' + page);
                 } else {
                     swal(Result.msg);
                 }
@@ -791,14 +818,12 @@ function savePrint() {
  * 提交Print付款---------------------------------------------------
  */
 function pay() {
-        swal("提示", "正在打印中...请稍等", "success")
-        //2秒后刷新页面，足够显示swal()的信息
-                    setTimeout(function () {
-                        swal("提示", "打印成功，我们将尽快送至您的宿舍", "success");
-                    }, 100);
-                    setTimeout(function () {
-                        loadPageForRegister('/print/list');
-                    }, 2000);
+        swal("提示", "正在打印中...请稍等", "success");
+    //2秒后刷新页面，足够显示swal()的信息
+    setTimeout(function () {
+        swal("提示", "打印成功，我们将尽快送至您的宿舍", "success");
+    }, 2000);
+
 }
 
 
@@ -825,13 +850,13 @@ $('.del-print').click(function () {
                     type: 'DELETE',
                     dataType: "json",
                     success: function (data) {
-                            setTimeout(function () {
-                                swal("提示", data.msg, "success");
-                            }, 100);
-                            //2秒后刷新页面，足够显示swal()的信息
-                            setTimeout(function () {
-                                loadPageForRegister('/print/list');
-                            }, 2000);
+                        setTimeout(function () {
+                            swal("提示", data.msg, "success");
+                        }, 100);
+                        //2秒后刷新页面，足够显示swal()的信息
+                        setTimeout(function () {
+                            loadPageForRegister('/print/list');
+                        }, 2000);
                     },
                     error: function () {
                         swal(data.code + "错误信息为：" + data.msg);
@@ -852,6 +877,7 @@ $('.del-print').click(function () {
 function updateBanner() {
     var form = document.getElementById("bannerEditForm");
     var data = new FormData(form);
+    swal('图片上传中，请稍等...');
     $.ajax({
         type: "POST",
         url: "/banner/update",
@@ -867,38 +893,40 @@ function updateBanner() {
             setTimeout(function () {
                 loadPageForRegister('/banner/list');
             }, 2000);
-            // alert(data.msg);
-            // console.info("进入更新Banner");
-            // loadPageForRegister('/banner/list');
         }
     });
-    // }
 }
 
 /**
  * 上传图片及时刷新显示
  */
 function reads(obj) {
-    var file = obj.files[0];
-    var reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function (ev) {
-        $("#img").attr("src", ev.target.result);
-        $("#img").css({"width": "60%", "height": "auto"});
-        // style="width: 50%;height: auto"
+    //判断文件格式
+    var fileName = obj.value;
+    var suffixIndex = fileName.lastIndexOf(".");
+    var suffix = fileName.substring(suffixIndex + 1).toUpperCase();
+    if (suffix != "BMP" && suffix != "JPEG" && suffix != "JPG" && suffix != "PNG" && suffix != "GIF") {
+        swal("请上传BMP、JPG、JPEG、PNG、GIF格式的内容，且文件最大不超过10M");
+        return;
+    } else {
+        var file = obj.files[0];
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function (ev) {
+            $("#img").attr("src", ev.target.result);
+            $("#img").css({"width": "60%", "height": "auto"});
+        }
     }
 }
 
 /**
- * 上传print文件及时刷新显示
+ * 前台上传print文件处理
  */
-
 function handleFileUP(obj) {
     //判断文件格式
     var fileName = obj.value;
     var suffixIndex = fileName.lastIndexOf(".");
     var suffix = fileName.substring(suffixIndex + 1).toUpperCase();
-    // if(suffix!="BMP"&&suffix!="JPG"&&suffix!="JPEG"&&suffix!="PNG"&&suffix!="GIF"){
     if (suffix != "PDF" && suffix != "DOC" && suffix != "DOCX") {
         swal("请上传文件（格式PDF、DOC、DOCX等）!");
         return;
@@ -906,6 +934,9 @@ function handleFileUP(obj) {
     $('#filepath').val($('#uploadFile').val());
 }
 
+/**
+ * 后台上传print文件处理
+ */
 function handleFileBackground(obj) {
     var file = document.getElementById("uploadFile");
     var filepath = document.getElementById("filepath");
@@ -913,7 +944,6 @@ function handleFileBackground(obj) {
     var fileName = obj.value;
     var suffixIndex = fileName.lastIndexOf(".");
     var suffix = fileName.substring(suffixIndex + 1).toUpperCase();
-    // if(suffix!="BMP"&&suffix!="JPG"&&suffix!="JPEG"&&suffix!="PNG"&&suffix!="GIF"){
     if (suffix != "PDF" && suffix != "DOC" && suffix != "DOCX") {
         swal("请上传文件（格式PDF、DOC、DOCX等）!");
         return;
@@ -930,7 +960,7 @@ function getCommentByName() {
         url: "/comments/commentSearch?page=0&size=10",
         contentType: 'application/json',
         data: {
-            "async":true,
+            // "async": true,
             // "pageIndex":pageIndex,
             // "pageSize":pageSize,
             "searchText": $("#searchName").val()
@@ -951,7 +981,8 @@ function getCommentByName() {
  */
 $('.del-comment').click(function () {
     var id = $(this).attr('id');
-    var blogId = $('.blogId').attr('id');
+    var blogId = $(this).attr('blogId');
+    // var blogId = $('.blogId').attr('id');
     // alert("id="+id+",blogId="+blogId);
     swal({
             title: "确认要删除该行评论？",
@@ -996,29 +1027,6 @@ $('.del-comment').click(function () {
         });
 });
 
-//     if (window.confirm('确认要删除该行评论?')) {
-//         $.ajax({
-//             url: '/comments/' + id + '?blogId=' + blogId,
-//             type: 'DELETE',
-//             dataType: "json",
-//             success: function (data) {
-//                 if (data.code == 0) {
-//                     setTimeout(function(){swal("提示",data.msg,"success"); },100);
-//                     //2秒后刷新页面，足够显示swal()的信息
-//                     setTimeout(function(){loadPageForRegister('/comments/list');},2000);
-//                     // alert(data.msg);
-//                     // loadPageForRegister('/comments/list');
-//                 } else {
-//                     swal(data.code + "错误信息为：" + data.msg);
-//                 }
-//             },
-//             error: function () {
-//                 swal(data.code + "错误信息为：" + data.msg);
-//             }
-//         });
-//     }
-// });
-
 /* -------- 提交message --------*/
 function sendMessage() {
     // var contactUsername = $("#form_name").val();
@@ -1031,8 +1039,9 @@ function sendMessage() {
     $.ajax({
         url: 'message/sendMessage',
         type: 'POST',
-        dataType: "json",
+        // dataType: "json",
         contentType: false,
+        // contentType: "application/json;charset=UTF-8",
         processData: false,// 注意这里应设为false
         data: data,
         // data: {"contactUsername": contactUsername, "email": email,"message": message},

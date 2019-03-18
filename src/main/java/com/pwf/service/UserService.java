@@ -25,13 +25,13 @@ public interface UserService {
     void delete(Integer id);
 
     @ApiOperation(value = "保存用户")
-    User save(User user);
+    User save(User user) throws Exception;
 
     @ApiOperation(value = "删除列表里面的用户")
     void removeUsersInBatch(List<User> users);
 
     @ApiOperation(value = "更新用户")
-    User update(User user);
+    User update(User user) throws Exception;
 
     @ApiOperation(value = "根据id获取用户")
     User getUserById(Integer id);
@@ -49,7 +49,7 @@ public interface UserService {
     Page<User> listUsersByNameLike(String searchText, Pageable pageable);
 
     @ApiOperation(value = "分页获取用户列表")
-    Page<User> listUsersPage(Pageable pageable);
+    Page<User> listUsersPage(PageBean pageBean);
 
     @ApiOperation(value = "获取用户列表")
     void deleteIn(Integer... ids);

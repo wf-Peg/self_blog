@@ -59,6 +59,23 @@ public interface BlogRepository extends JpaRepository<Blog,Long>,JpaSpecificatio
 	@Modifying
 	void addCommentCount(Long blogId);
 
+	@ApiOperation(value = "减少评论量")
+	@Query(value = "update blog set comments = comments-1 where id = ?1 ",nativeQuery = true)
+	@Modifying
+    void decreaseCommentCount(Long blogId);
+
+	@ApiOperation(value = "查询单条博客评论量")
+	@Query(value = "SELECT COUNT(*) FROM blog_comment WHERE blog_id=?",nativeQuery = true)
+    Integer findBlogsCommentCount(Long id);
+
+	@ApiOperation(value = "查询当前博客的上一条")
+	@Query(value = "SELECT * FROM blog WHERE id<? ORDER BY id DESC LIMIT 1",nativeQuery = true)
+    Blog findPreBlog(long id);
+
+	@ApiOperation(value = "查询当前博客的下一条")
+	@Query(value = "SELECT * FROM blog WHERE id>? ORDER BY id ASC LIMIT 1",nativeQuery = true)
+    Blog findNextBlog(long id);
+
 //	@ApiOperation(value = "增加评论量")
 //	@Query(value = "update blog set comments = comments+1 where id = ?1 ",nativeQuery = true)
 //	@Modifying

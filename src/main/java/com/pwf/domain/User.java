@@ -8,6 +8,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Data
@@ -23,8 +24,8 @@ public class User implements Serializable {
     @NotEmpty(message = "用户名不能为空")
     private String userName;
 
+//    @Size(min=3, max=200,message = "密码要求3-20个字符")
     @NotEmpty(message = "密码不能为空")
-    @Size(min=3, max=20,message = "密码要求3-20个字符")
     private String passWord;
 
     @NotEmpty(message = "邮件地址必填")
@@ -34,6 +35,10 @@ public class User implements Serializable {
     private String userRole;
 
     private Integer blogCount=0;
+
+
+    @org.hibernate.annotations.CreationTimestamp
+    private Date createTime;
 
     protected User() {
     }
