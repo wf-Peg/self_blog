@@ -58,9 +58,9 @@
     <div id="main" class="blog-detail-main">
         <div class="page-wrapper">
 
-            <div class="blog-post-main-image">
+            <div class="blog-post-main-image" align="center">
                 <img class="post-image img-responsive" th:src="${blogDetail.image}"
-                     src="/images/blog/blog_post_2_full.jpg"/>
+                  src="/images/blog/blog_post_2_full.jpg"/>
             </div>
 
             <div class="blog-post-content">
@@ -199,7 +199,7 @@
                 <div class="block-title">
                     <h3>留言</h3>
                 </div>
-                <form class="form-add-comment" style="width: 100%">
+                <!--<form class="form-add-comment" style="width: 100%">-->
                     <div class="form-group">
                         <input class="form-control" placeholder="Your name" required="required" name="commentUsername"
                                id="commentUsername">
@@ -213,7 +213,7 @@
                         <i class="form-control-icon fa fa-comment"></i>
                     </div>
                     <button class="button add-comment" onclick="sendComment()" type="submit">提交</button>
-                </form>
+                <!--</form>-->
             </div>
 
         </div>
@@ -228,26 +228,33 @@
         var commentUsername = document.getElementById("commentUsername").value;
         var content = document.getElementById("commentContent").value;
 //        alert(blogId+";"+commentUsername+";"+content);
-        if ("" == commentUsername || "" == content) {
+        if ("" == commentUsername || "" == content||content.length<2||commentUsername.length<2) {
             swal("评论人和评论名不能为空，且至少两个字符");
+            return;
         } else {
             $.ajax({
                 url: '/comments',
                 type: 'POST',
 //                dataType: "json",
                 data: {
-                    "blogId": blogId, "commentUsername": commentUsername, "content": content,
-                    "async": true
+                    "blogId": blogId, "commentUsername": commentUsername, "content": content
+//                    "async": true
                 },
                 success: function (data) {
+                    if (data.msg =="发表评论成功!" ){
+                        swal("提示", data.msg, "success");
+                        setTimeout(function () {
+                            history.go(0);
+                        }, 2000);
+                    }
+                   else {
+                        swal("提示",data.msg);
+                    }
                     // 刷新获取评论列表
-//                    getComment(blogId);
-//                    history.go(0);
-                    window.location.reload();
-//                    swal("提示", data.msg, "success");
                 },
                 error: function () {
                     swal("error!");
+                    window.location.reload();
                 }
             });
         }
@@ -268,13 +275,10 @@
                         window.location.reload();
                     }, 2000);
                 } else {
-                    setTimeout(function () {
-                        swal("提示", data.msg, "fail");
-                    }, 100);
-                    //2秒后刷新页面，足够显示swal()的信息
-                    setTimeout(function () {
-                        window.location.reload();
-                    }, 2000);
+//                    setTimeout(function () {
+                        swal("提示", data.msg);
+//                    }, 100);
+
                 }
             },
             error: function () {

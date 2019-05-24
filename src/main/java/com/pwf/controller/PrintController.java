@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -98,16 +99,18 @@ public class PrintController {
         String originalFilename = uploadFile.getOriginalFilename();
         String suffix = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
 
-        String s = UUID.randomUUID().toString();
+        String s = UUID.randomUUID().toString().split("-")[1];
+        System.out.println(s);
         if ("doc"==suffix||suffix.equals("doc")||"docx"==suffix||suffix.equals("docx")){
+//            boolean word2pdf = Word2PdfUtil.word2pdf(filePath, "D:\\"+s+".pdf");
             boolean word2pdf = Word2PdfUtil.word2pdf(filePath, "D:\\"+s+".pdf");
             if (word2pdf){
                 try {
                     reader = new PdfReader("D:\\"+s+".pdf");
                     pagecount= reader.getNumberOfPages();
                 } catch (IOException e) {
-                    e.printStackTrace();
                     return new ResultVO(false, "word转换失败");
+//                    e.printStackTrace();
                 }
             }
         }else {
@@ -115,8 +118,8 @@ public class PrintController {
                 reader = new PdfReader(filePath);
                 pagecount= reader.getNumberOfPages();
             } catch (IOException e) {
-                e.printStackTrace();
                 return new ResultVO(false, "pdf转换失败");
+//                e.printStackTrace();
             }
 //            System.out.println(pagecount);
         }
@@ -125,6 +128,7 @@ public class PrintController {
     }
 
     @DeleteMapping("/delete")
+    @PreAuthorize("hasRole('admin')")
     @ResponseBody
     public ResultVO delete(Integer id) {
         printService.delete(id);

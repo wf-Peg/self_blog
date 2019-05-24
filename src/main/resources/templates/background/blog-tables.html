@@ -118,7 +118,7 @@
                                 </td>
                                 <td style="align:center;text-align: center;width: 10%" th:text="${blog.author}">author</td>
                                 <td style="align:center;text-align: center;width: 10%" th:if="${blog.isVisible==true}">通过</td>
-                                <td style="align:center;text-align: center;width: 10%" th:if="${blog.isVisible==false}">待审核</td>
+                                <td style="align:center;text-align: center;width: 10%;color: red" th:if="${blog.isVisible==false}">待审核</td>
                                 <td style="align:center;text-align: center;width: 15%"
                                     th:text="${#dates.format(blog.updateTime, 'yyyy-MM-dd HH:mm')}">2018-09-26</td>
                                 <!--<td style="align:center;text-align: center" th:text="${blog.comments}">2016-09-26</td>-->

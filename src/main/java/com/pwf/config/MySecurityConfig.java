@@ -20,7 +20,7 @@ import javax.sql.DataSource;
 import java.io.PrintWriter;
 
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true) //方法安全设置
+//@EnableGlobalMethodSecurity(prePostEnabled = true) //方法安全设置
 public class MySecurityConfig extends WebSecurityConfigurerAdapter{
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -79,7 +79,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter{
 //                .failureHandler(myAuthenticationFailureHandler).failureUrl("/login?error=true")
         .and()
                 .rememberMe().tokenRepository(persistentTokenRepository())
-                         .tokenValiditySeconds(60*60*24)
+                         .tokenValiditySeconds(60*60*60*24*7)
                          .userDetailsService(myUserDetailService)
         .and()
                 .addFilterBefore(codeFilter, UsernamePasswordAuthenticationFilter.class)

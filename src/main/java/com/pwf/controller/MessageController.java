@@ -8,6 +8,7 @@ import com.pwf.vo.ResultVO;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -46,6 +47,7 @@ public class MessageController {
     }
 
     @DeleteMapping("/delete")
+    @PreAuthorize("hasRole('admin')")
     @ResponseBody // 响应给客户端的是数据
     public ResultVO delete(Integer id) {
         messageService.deleteById(id);

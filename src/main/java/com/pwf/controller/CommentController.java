@@ -1,5 +1,6 @@
 package com.pwf.controller;
 
+import com.pwf.config.wordFilter;
 import com.pwf.domain.Comment;
 import com.pwf.domain.PageBean;
 import com.pwf.service.BlogService;
@@ -68,7 +69,15 @@ public class CommentController {
 	@ResponseBody
 	public ResultVO createComment(Long blogId, String commentUsername,String content) {
 		try {
-			blogService.createComment(blogId,commentUsername, content);
+			wordFilter s = new wordFilter();
+			s.addWord("吸毒");
+			s.addWord("政治");
+			s.addWord("色情");
+			s.addWord("赌博");
+			s.addWord("猪");
+			s.addWord("屎");
+			s.addWord("www.");
+			blogService.createComment(blogId,s.filter(commentUsername), s.filter(content));
 		} catch (ConstraintViolationException e)  {
 			return  new ResultVO(false, ConstraintViolationExceptionHandler.getMessage(e));
 		} catch (Exception e) {

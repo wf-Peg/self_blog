@@ -66,7 +66,7 @@ public class UserController {
         return new ModelAndView("background/user-tables", "userModel", model);
     }
 
-    //    @PreAuthorize("hasRole('admin')")
+//        @PreAuthorize("hasRole('admin')")
     @GetMapping("/users")
     @ApiOperation(value = "根据创建时间分页查询所有用户数据")
     private ModelAndView queryAll(PageBean pageBean, Model model) {
@@ -101,7 +101,6 @@ public class UserController {
                 return ResponseEntity.ok().body(new ResultVO(false, e.getMessage()));
             }
         }
-
         try {
             userService.update(user);
         } catch (Exception e) {
