@@ -20,7 +20,7 @@ import javax.sql.DataSource;
 import java.io.PrintWriter;
 
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true) //方法安全设置
+//@EnableGlobalMethodSecurity(prePostEnabled = true) //方法安全设置
 public class MySecurityConfig extends WebSecurityConfigurerAdapter{
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -70,7 +70,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter{
                     writer.close();
                 }).permitAll()
         .and()
-//        开启配置登陆，如下使用get访问userlogin登录页请求，login页面发送post到userlogin进行表单验证(必须同名才能交由security处理)
+//        开启配置登陆，如下使用get访问userlogin登录页请求，login页面发送post到login进行表单验证(必须同名才能交由security处理)
 //        或者使用loginProcessingUrl处理请求
                 .formLogin().loginPage("/userlogin")
                 .loginProcessingUrl("/login")
@@ -79,7 +79,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter{
 //                .failureHandler(myAuthenticationFailureHandler).failureUrl("/login?error=true")
         .and()
                 .rememberMe().tokenRepository(persistentTokenRepository())
-                         .tokenValiditySeconds(600)
+                         .tokenValiditySeconds(60*60*60*24*7)
                          .userDetailsService(myUserDetailService)
         .and()
                 .addFilterBefore(codeFilter, UsernamePasswordAuthenticationFilter.class)

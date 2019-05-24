@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:width="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="utf-8">
@@ -94,31 +94,31 @@
                             <thead>
                             <tr>
                                 <th style="align:center;text-align: center;width: 10%">图片id</th>
-                                <th style="align:center;text-align: center;width: 15%">图片名称</th>
-                                <th style="align:center;text-align: center">图片地址</th>
-                                <th style="align:center;text-align: center">关键字</th>
-                                <th style="align:center;text-align: center">操作</th>
+                                <th style="align:center;text-align: center;width: 10%">图片名称</th>
+                                <th style="align:center;text-align: center;width: 50%">图片地址</th>
+                                <th style="align:center;text-align: center;width: 10%">关键字</th>
+                                <th style="align:center;text-align: center;width: 20%">操作</th>
                             </tr>
                             </thead>
 
                             <tbody>
-                            <!--<tr th:if="${bannerList.size()} eq 0">-->
-                                <!--<td colspan="5" align="center">-->
-                                    <!--当前媒体列表为空-->
-                                <!--</td>-->
-                            <!--</tr>-->
+                            <tr th:if="${bannerList.size()} eq 0">
+                                <td colspan="5" align="center">
+                                    当前墙角列表为空
+                                </td>
+                            </tr>
                             <tr class="even gradeC" th:each="banner : ${bannerList}" style="align:center;text-align: center">
-                                <td th:text="${banner.id}">1</td>
+                                <td style="align:center;text-align: center;width: 10%" th:text="${banner.id}">1</td>
                                 <!--<a th:href="@{/banner/update(id=${banner.id})}">修改</a> |-->
                                 <!--<a href="#" onclick="loadPage('/banner/list')">-->
                                 <!--<td><a th:onclick="'loadPageForRegister(\'/user/userDetail?userId='+${user.userId}+'\')'" th:text="${user.userName}">pwf</a></td>-->
                                 <!--<td><a th:onclick="'loadPageForRegister(\'/banner/update(id=${banner.id})+'\')'" th:text="${banner.name}">图片名称</a></td>-->
-                                <td><a th:onclick="'loadPageForRegister(\'/banner/update?id='+${banner.id}+'\')'" th:text="${banner.name}">图片名称</a></td>
+                                <td style="align:center;text-align: center;width: 10%"><a th:onclick="'loadPageForRegister(\'/banner/update?id='+${banner.id}+'\')'" th:text="${banner.name}">图片名称</a></td>
                                 <!--<td th:text="${banner.name}">图片名称</td>-->
                                 <!--<td th:text="${user.passWord}">pwf</td>-->
-                                <td th:text="${banner.img}">img地址</td>
-                                <td th:text="${banner.bannerkey}">关键字</td>
-                                <td>
+                                <td style="align:center;text-align: center;width: 50%" th:text="${banner.img}">img地址</td>
+                                <td style="align:center;text-align: center;width: 10%" th:text="${banner.bannerkey}">关键字</td>
+                                <td style="align:center;text-align: center;width: 20%">
                                     <div class="tpl-table-black-operation" style="align:center;text-align: center">
                                         <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary"
                                                 th:onclick="'loadPageForRegister(\'/banner/update?id='+${banner.id}+'\')'">
@@ -139,19 +139,29 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="am-u-lg-12 am-cf">
+
+                    <!-- 分页 -->
+                    <div class="am-cf" th:if="${totalPage}">
                         <div class="am-fr">
                             <ul class="am-pagination tpl-pagination">
-                                <li class="am-disabled"><a href="#">«</a></li>
-                                <li class="am-active"><a href="#">1</a></li>
-                                <li><a href="#">2</a></li>
-                                <li><a href="#">3</a></li>
-                                <li><a href="#">4</a></li>
-                                <li><a href="#">5</a></li>
-                                <li><a href="#">»</a></li>
+                                <li><a th:onclick="'loadPage(\'/banner/list?page=0\')'">«</a></li>
+                                <li th:each="i : ${#numbers.sequence(1,totalPage,1)}"
+                                    th:id="'page'+${i}">
+                                    <a th:text="${i}"
+                                       th:onclick="'loadPage(\'/banner/list?page='+${i-1}+'\')'">1</a>
+                                </li>
+                                <li>
+                                    <a th:onclick="'loadPage(\'/banner/list?page='+${totalPage-1}+'\')'">»</a>
+                                </li>
                             </ul>
+                            <script th:inline="javascript" type="text/javascript">
+                                var id = [[${currentPage+1}]];
+                                $("#page" + id).attr("class", "am-active");
+                            </script>
                         </div>
                     </div>
+                    <!-- /分页 -->
+
                 </div>
             </div>
         </div>

@@ -90,28 +90,30 @@
                                id="example-r">
                             <thead>
                             <tr>
-                                <th style="align:center;text-align: center">用户id</th>
-                                <th style="align:center;text-align: center">用户昵称</th>
-                                <th style="align:center;text-align: center">用户邮箱</th>
-                                <th style="align:center;text-align: center">用户发布博客数量</th>
-                                <th style="align:center;text-align: center">用户权限</th>
-                                <th style="align:center;text-align: center">操作</th>
+                                <th style="width: 10%;align:center;text-align: center">用户id</th>
+                                <th style="width: 15%;align:center;text-align: center">用户昵称</th>
+                                <th style="width: 20%;align:center;text-align: center">用户邮箱</th>
+                                <th style="width: 10%;align:center;text-align: center">用户发布博客数量</th>
+                                <th style="width: 15%;align:center;text-align: center">用户创建时间</th>
+                                <th style="width: 10%;align:center;text-align: center">用户权限</th>
+                                <th style="width: 20%;align:center;text-align: center">操作</th>
                             </tr>
                             </thead>
 
                             <tbody>
                             <tr th:if="${userModel.userList.size()} eq 0">
-                                <td colspan="5" align="center">
+                                <td colspan="6" align="center">
                                     当前用户列表为空
                                 </td>
                             </tr>
                             <tr class="even gradeC" th:each="user : ${userModel.userList}" style="align:center;text-align: center">
-                                <td th:text="${user.userId}">1</td>
-                                <td><a th:onclick="'loadPageForRegister(\'/user/userDetail?userId='+${user.userId}+'\')'" th:text="${user.userName}">pwf</a></td>
-                                <td th:text="${user.email}">long@gmail.com</td>
-                                <td th:text="${user.blogCount}">3</td>
-                                <td th:text="${user.userRole}">admin</td>
-                                <td>
+                                <td style="width: 10%;" th:text="${user.userId}">1</td>
+                                <td style="width: 15%;"><a th:onclick="'loadPageForRegister(\'/user/userDetail?userId='+${user.userId}+'\')'" th:text="${user.userName}">pwf</a></td>
+                                <td style="width: 20%;" th:text="${user.email}">long@gmail.com</td>
+                                <td style="width: 10%;" th:text="${user.blogCount}">3</td>
+                                <td style="width: 15%;" th:text="${#dates.format(user.createTime, 'yyyy-MM-dd HH:mm')}">2019年3月11日</td>
+                                <td style="width: 10%;" th:text="${user.userRole}">admin</td>
+                                <td style="width: 20%;">
                                     <div class="tpl-table-black-operation" style="align:center;text-align: center">
                                         <button type="button" class="am-btn am-btn-default am-btn-xs am-text-secondary"
                                                 th:onclick="'loadPageForRegister(\'/user/userDetail?userId='+${user.userId}+'\')'">
@@ -133,20 +135,42 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="am-u-lg-12 am-cf">
 
+                    <!-- 分页 -->
+                    <div class="am-cf" th:if="${totalPage}">
                         <div class="am-fr">
                             <ul class="am-pagination tpl-pagination">
-                                <li class="am-disabled"><a href="#">«</a></li>
-                                <li class="am-active"><a href="#">1</a></li>
-                                <li><a href="#">2</a></li>
-                                <li><a href="#">3</a></li>
-                                <li><a href="#">4</a></li>
-                                <li><a href="#">5</a></li>
-                                <li><a href="#">»</a></li>
+                                <li><a th:onclick="'loadPageForRegister(\'/user/users?page=0\')'">«</a></li>
+                                <li th:each="i : ${#numbers.sequence(1,totalPage,1)}"
+                                    th:id="'page'+${i}">
+                                    <a th:text="${i}"
+                                       th:onclick="'loadPageForRegister(\'/user/users?page='+${i-1}+'\')'">1</a>
+                                </li>
+                                <li>
+                                    <a th:onclick="'loadPageForRegister(\'/user/users?page='+${totalPage-1}+'\')'">»</a>
+                                </li>
                             </ul>
+                            <script th:inline="javascript" type="text/javascript">
+                                var id = [[${currentPage+1}]];
+                                $("#page" + id).attr("class", "am-active");
+                            </script>
                         </div>
                     </div>
+                    <!-- /分页 -->
+                    <!--<div class="am-u-lg-12 am-cf">-->
+
+                        <!--<div class="am-fr">-->
+                            <!--<ul class="am-pagination tpl-pagination">-->
+                                <!--<li class="am-disabled"><a href="#">«</a></li>-->
+                                <!--<li class="am-active"><a href="#">1</a></li>-->
+                                <!--<li><a href="#">2</a></li>-->
+                                <!--<li><a href="#">3</a></li>-->
+                                <!--<li><a href="#">4</a></li>-->
+                                <!--<li><a href="#">5</a></li>-->
+                                <!--<li><a href="#">»</a></li>-->
+                            <!--</ul>-->
+                        <!--</div>-->
+                    <!--</div>-->
                 </div>
             </div>
         </div>

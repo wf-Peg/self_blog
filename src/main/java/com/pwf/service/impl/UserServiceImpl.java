@@ -4,6 +4,7 @@ import com.pwf.dao.UserRepository;
 import com.pwf.domain.PageBean;
 import com.pwf.domain.User;
 import com.pwf.service.UserService;
+import com.pwf.util.ConstraintViolationExceptionHandler;
 import com.pwf.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -12,9 +13,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.ConstraintViolationException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +32,8 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository repository;
+    @Autowired
+    PasswordEncoder encoder;
 
     @Override
     public void delete(Integer id) {
@@ -34,7 +41,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User save(User user) {
+    public User save(User user) throws Exception {
+        if (user.getPassWord() == null || "".equals(user.getPassWord())) {
+            throw new Exception("用户密码不能为空");
+        }
+        user.setPassWord(encoder.encode(user.getPassWord()));
         return repository.save(user);
     }
 
@@ -44,15 +55,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User update(User user) {
+    public User update(User user) throws Exception {
         User updateUser = repository.getOne(user.getUserId());
         //把需要修改的数据拷贝复制到更新数据上
         if (user.getUserName() == null) {//进入找回密码更新用户的业务
-            updateUser.setPassWord(user.getPassWord());
+//            updateUser.setPassWord(user.getPassWord());
+            if (user.getPassWord() == null || "".equals(user.getPassWord())) {
+                throw new Exception("用户密码不能为空");
+            }
+            updateUser.setPassWord(encoder.encode(user.getPassWord()));
             BeanUtils.copyProperties(updateUser, user);
             return repository.saveAndFlush(user);
         }
         //普通更新用户的业务,把user的值拷贝到updateUser上
+        user.setPassWord(encoder.encode(user.getPassWord()));
         BeanUtils.copyProperties(user, updateUser);
         return repository.saveAndFlush(updateUser);
     }
@@ -88,8 +104,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> listUsersPage(Pageable pageable) {
-        return repository.findAll(pageable);
+    public Page<User> listUsersPage(PageBean pageBean) {
+        return repository.findAll(PageRequest.of(pageBean.getPage(),pageBean.getSize()));
     }
 
     @Override

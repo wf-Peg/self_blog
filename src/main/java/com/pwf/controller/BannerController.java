@@ -1,14 +1,18 @@
 package com.pwf.controller;
 
 import com.pwf.domain.Banner;
+import com.pwf.domain.PageBean;
 import com.pwf.service.BannerService;
 import com.pwf.service.FileUploadService;
 import com.pwf.util.ConstraintViolationExceptionHandler;
 import com.pwf.vo.ResultVO;
+import com.sun.org.apache.xpath.internal.operations.Mod;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +31,7 @@ import java.util.Map;
  */
 @Controller
 @CrossOrigin
+@Api(tags = "墙角图片控制层")
 @RequestMapping("/banner")
 public class BannerController {
     @Autowired
@@ -36,10 +41,34 @@ public class BannerController {
     FileUploadService fileUploadService;
 
     @GetMapping("/list")
-    public String list(Model model) {
-        Page<Banner> list = bannerService.findAll(PageRequest.of(0,20));
+    public String list(Model model, PageBean pageBean) {
+        Page<Banner> list = bannerService.findAll(pageBean);
         model.addAttribute("bannerList", list.getContent());
+        model.addAttribute("totalPage", list.getTotalPages());
+        model.addAttribute("currentPage", pageBean.getPage());
+        System.out.println(pageBean.getPage());
         return "background/banner-tables";
+    }
+
+    //    @GetMapping("/bannerList")
+//    @ResponseBody
+//    public ResultVO bannerList(PageBean pageBean) {
+//        Page<Banner> list = bannerService.findAll(pageBean);
+//
+////        model.addAttribute("bannerList", list.getContent());
+////        model.addAttribute("totalPage", list.getTotalPages());
+////        model.addAttribute("currentPage", pageBean.getPage());
+//        return new ResultVO(true,"读取图片成功",list.getContent());
+//        return "index :: #portfolio_grid";
+//    }
+    @GetMapping("/bannerList")
+    public String bannerList(PageBean pageBean, Model model) {
+        Page<Banner> list = bannerService.findAll(pageBean);
+
+        model.addAttribute("bannerList", list.getContent());
+        model.addAttribute("totalPage", list.getTotalPages());
+        model.addAttribute("currentPage", pageBean.getPage());
+        return "index :: #portfolio_grid";
     }
 
     @GetMapping("/add")
@@ -51,7 +80,7 @@ public class BannerController {
     @ResponseBody
     public ResultVO add(Banner banner, MultipartFile uploadFile) {
 //        上传文件到本地服务器
-//        String fileName = uploadFile.getOriginalFilename();
+//        String fileName = uploadFile.getOriginalFilenaKme();
 //        uploadFile.transferTo(new File("E:\\" + fileName));
         String filePath = null;
         try {
@@ -76,14 +105,13 @@ public class BannerController {
     }
 
     @PostMapping("/update")
-    @ResponseBody // 响应给客户端的是数据
+    @ResponseBody
     public Map<String, Object> update(Banner banner, MultipartFile uploadFile) throws IOException {
         //如果有新的文件，进行上传
         if (!"".equals(uploadFile.getOriginalFilename())) {
             String filePath = fileUploadService.upload(uploadFile);
             banner.setImg(filePath);
         }
-//        banner.setBannerkey("\""+banner.getBannerkey()+"\'");
         banner.setBannerkey("\"" + banner.getBannerkey() + "\"");
         bannerService.update(banner);
         Map<String, Object> r = new HashMap<>();
@@ -97,21 +125,17 @@ public class BannerController {
     @ResponseBody
     public ResultVO delete(Integer id) {
         bannerService.delete(id);
-        return new ResultVO(true,"删除Banner成功");
+        return new ResultVO(true, "删除Banner成功");
     }
 
     @GetMapping("/bannerSearch")
-    public String list(/*@RequestParam(value="async",required=false) boolean async,
-                             @RequestParam(value="pageIndex",required=false,defaultValue="0") int pageIndex,
-                             @RequestParam(value="pageSize",required=false,defaultValue="10") int pageSize,*/
+    public String list(PageBean pageBean,
                        @RequestParam(value = "searchText", required = false, defaultValue = "") String searchText,
                        Model model) {
-
-        Pageable pageable = PageRequest.of(0, 10);
-        Page<Banner> page = bannerService.listBannerByNameLike(searchText, pageable);
-        List<Banner> list = page.getContent();    // 当前所在页面数据列表
-//        model.addAttribute("page", page);
-        model.addAttribute("bannerList", list);
+        Page<Banner> page = bannerService.listBannerByNameLike(searchText, pageBean);
+//        model.addAttribute("totalPage", page.getTotalPages());
+        model.addAttribute("currentPage", pageBean.getPage());
+        model.addAttribute("bannerList", page.getContent());
         return "background/banner-tables";
     }
 }

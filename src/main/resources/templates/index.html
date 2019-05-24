@@ -1,16 +1,15 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      lang="en" class="no-js">
 <!DOCTYPE html>
-<html lang="en" class="no-js">
-
 <!-- Mirrored from lmpixels.com/demo/sunshine-demo/sunshine-version-2/sunshine-html-template/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 24 Aug 2018 06:11:58 GMT -->
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>FFShine - 生活当向阳</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="PinPonshine" />
-    <meta name="keywords" content="vcard, resposnive, retina, resume, jquery, css3, bootstrap, Sunshine, portfolio" />
-    <meta name="author" content="lmtheme" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <meta name="description" content="PinPonshine"/>
+    <meta name="keywords" content="vcard, resposnive, retina, resume, jquery, css3, bootstrap, Sunshine, portfolio"/>
+    <meta name="author" content="lmtheme"/>
     <link rel="shortcut icon" href="favicon.ico">
 
     <link rel="stylesheet" href="css/bootstrap.css">
@@ -39,11 +38,18 @@
     <script src="js/main.js"></script>
     <script src="/asserts/js/do.js"></script>
 
+    <script src="preview/lmpixels-demo-panel.js"></script>
+
     <!-- 引入 ECharts 文件 -->
     <script src="/js/echarts.min.js"></script>
     <!-- 弹窗美化 -->
     <link rel="stylesheet" type="text/css" href="/sweetalert/sweetalert.css">
     <script type="text/javascript" src="/sweetalert/sweetalert-dev.js"></script>
+
+    <link rel="stylesheet" href="css/layui.css" media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+    <script src="js/layui.js" charset="utf-8"></script>
+    <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 
     <!-- Demo Color changer Script -->
     <script src="preview/lmpixels-demo-panel.js"></script>
@@ -53,19 +59,25 @@
         function loadPageForBlogContent(tag) {
             $("#content").load(tag);
         }
+
         function loadPageForBlogContent2(tag) {
-            window.location.href="#blog";
+            window.location.href = "#blog";
             $("#content").load(tag);
         }
 
-        function loadImage(url,callback) {
-            var img=new Image();
-            img.src=url;
-            if (img.complete){
+        function loadPageForBannerContent(tag) {
+            window.location.href = "#portfolio_grid";
+            $("#portfolio_grid").load(tag);
+        }
+
+        function loadImage(url, callback) {
+            var img = new Image();
+            img.src = url;
+            if (img.complete) {
                 callback.call(img);
                 return;
             }
-            img.onload=function () {
+            img.onload = function () {
                 callback.call(img);
             }
         }
@@ -94,7 +106,7 @@
 
         <div class="site-title-block">
             <h1 class="site-title">PPPWF</h1>
-            <p class="site-description">伪程序员</p>
+            <p class="site-description">Handsome Man</p>
         </div>
 
         <!-- Navigation & Social buttons -->
@@ -103,7 +115,8 @@
             <ul id="nav" class="site-main-menu">
                 <!-- About Me Subpage link -->
                 <li>
-                    <a class="pt-trigger" href="#home" data-animation="58" data-goto="1">首页</a><!-- href value = data-id without # of .pt-page. Data-goto is the number of section -->
+                    <a class="pt-trigger" href="#home" data-animation="58" data-goto="1">首页</a>
+                    <!-- href value = data-id without # of .pt-page. Data-goto is the number of section -->
                 </li>
                 <!-- /About Me Subpage link -->
                 <!-- About Me Subpage link -->
@@ -112,14 +125,14 @@
                 </li>
                 <!-- /About Me Subpage link -->
                 <li>
-                    <a class="pt-trigger" href="#resume" data-animation="60" data-goto="3">经历</a>
+                    <a class="pt-trigger" href="#print" data-animation="60" data-goto="3">云打印</a>
                 </li>
                 <li>
                     <!--<a onclick="getBannerIndex()" class="pt-trigger" data-animation="61" data-goto="4">墙角</a>-->
                     <a class="pt-trigger" href="#portfolio" data-animation="61" data-goto="4">墙角</a>
                 </li>
                 <li>
-                    <a class="pt-trigger" href="#blog" data-animation="58" data-goto="5">博客</a>
+                    <a onclick="getBlogIndex()" class="pt-trigger" href="#blog" data-animation="58" data-goto="5">博客</a>
                 </li>
                 <li>
                     <a class="pt-trigger" href="#contact" data-animation="59" data-goto="6">联系我</a>
@@ -137,17 +150,19 @@
             <!--<li><a class="tip social-button" href="#" title="Dribbble"><i class="fa fa-dribbble"></i></a></li>-->
             <div class="social-links" style="margin-top: 60px;margin-left: 40px">
                 <h3 class="keywords-header"><i class="fa fa-tags" aria-hidden="true"></i>热门标签</h3>
-                <div class="card-block" style="margin-top: 20px;margin-left: 20px;margin-right: 50px" >
-                <a th:onclick="loadPageForBlogContent2('/blog/keySearch?page=0&size=10&keyword='+[[${keyword}]])" th:each="keyword : ${#strings.arraySplit(keywordList , ',')}">
-                <!--<a th:href="'/blog/search?keyword='+${keyword}" th:each="keyword : ${#strings.arraySplit(keywordList, ',')}">-->
-                    <span class="badge badge-default" th:text="${keyword}">Web Design</span>
-                    <!--<span class="badge badge-default" th:onclick="'loadPageForBlogContent2(\'/blog/search?keyword=\''+${keyword}+'\')'" th:text="${keyword}">Web Design</span>-->
-                </a>
-                <!--<a href="/blogs?tag=1"> <span class="badge badge-default">Jersey</span></a>-->
-                <!--<a href="/blogs?tag=1"> <span class="badge badge-default">JavaScript</span></a>-->
-                <!--<a href="/blogs?tag=1"> <span class="badge badge-default">CSS</span></a>-->
-                <!--<a href="/blogs?tag=1"> <span class="badge badge-default">Java</span></a>-->
-                <!--<a href="/blogs?tag=1"> <span class="badge badge-default">Freebies</span></a>-->
+                <div class="card-block" style="margin-top: 20px;margin-left: 20px;margin-right: 50px">
+                    <a th:onclick="loadPageForBlogContent2('/blog/keySearch?page=0&size=10&keyword='+[[${keyword}]])"
+                       th:each="keyword : ${#strings.arraySplit(keywordList , ',')}">
+                        <!--<a th:href="'/blog/search?keyword='+${keyword}" th:each="keyword : ${#strings.arraySplit(keywordList, ',')}">-->
+                        <span class="badge badge-default" style="margin-top: 5px;"
+                              th:text="${keyword}">Web Design</span>
+                        <!--<span class="badge badge-default" th:onclick="'loadPageForBlogContent2(\'/blog/search?keyword=\''+${keyword}+'\')'" th:text="${keyword}">Web Design</span>-->
+                    </a>
+                    <!--<a href="/blogs?tag=1"> <span class="badge badge-default">Jersey</span></a>-->
+                    <!--<a href="/blogs?tag=1"> <span class="badge badge-default">JavaScript</span></a>-->
+                    <!--<a href="/blogs?tag=1"> <span class="badge badge-default">CSS</span></a>-->
+                    <!--<a href="/blogs?tag=1"> <span class="badge badge-default">Java</span></a>-->
+                    <!--<a href="/blogs?tag=1"> <span class="badge badge-default">Freebies</span></a>-->
                 </div>
             </div>
             <!-- /Social buttons -->
@@ -179,7 +194,8 @@
             <div class="subpages">
 
                 <!-- Home Subpage -->
-                <section class="pt-page pt-page-1 section-with-bg section-paddings-0" style="background-image: url(images/banner.jpg);" data-id="home">
+                <section class="pt-page pt-page-1 section-with-bg section-paddings-0"
+                         style="background-image: url(images/banner.jpg);" data-id="home">
                     <div class="home-page-block-bg">
                         <div class="mask"></div>
                     </div>
@@ -188,7 +204,7 @@
                             <h2>PPPWF</h2>
                             <div id="rotate" class="text-rotate">
                                 <div>
-                                    <p class="home-page-description">伪极客、伪程序员</p>
+                                    <p class="home-page-description">Handsome Man、Java Programmer</p>
                                 </div>
                                 <div>
                                     <p class="home-page-description">backend-developer</p>
@@ -197,11 +213,15 @@
 
                             <div class="block end" style="text-align: center">
                                 <ul class="info-list">
-                                    <li><span class="title">Age</span><span class="value">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp23</span></li>
+                                    <li><span class="title">Age</span><span class="value">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp24</span>
+                                    </li>
                                     <li><span class="title">Address</span><span class="value">福建 厦门,中国</span></li>
-                                    <li><span class="title">e-mail</span><span class="value"><a href="http://lmpixels.com/cdn-cgi/l/email-protection#dabfb7bbb3b69abfa2bbb7aab6bff4b9b5b7"><span class="__cf_email__" data-cfemail="d9bcb4b8b0b599bca1b8b4a9b5bcf7bab6b4"><!--[email&#160;protected]-->
-                         &nbsp15860167093@163.com</span></a></span></li>
-                                    <li><span class="title">Phone</span><span class="value">&nbsp&nbsp+86 17750598420</span></li>
+                                    <li><span class="title">e-mail</span><span class="value"><a
+                                            href="#"><span
+                                            class="__cf_email__"><!--[email&#160;protected]-->
+                                    &nbsp;15860167093@163.com</span></a></span></li>
+                                    <li><span class="title">Phone</span><span
+                                            class="value">&nbsp&nbsp+86 1775059xxxx</span></li>
                                 </ul>
                             </div>
                         </div>
@@ -213,37 +233,48 @@
                 <section class="pt-page pt-page-2" data-id="about_me">
                     <div class="section-title-block">
                         <h2 class="section-title">关于我</h2>
-                        <h5 class="section-description">PPPWF</h5>
+                        <h5 class="section-description">我是PPPWF，所见、所思不定时记录于此。输出即获得，分享即反哺。</h5>
                     </div>
 
                     <div class="row">
                         <div class="col-sm-6 col-md-6 subpage-block">
                             <div class="general-info">
-                                <h3>Java工程师</h3>
-                                <p>个人自传本人良好的团队合作精神，能迅速融入新的团队。易和人相处，拥有良好的亲和力。能吃苦耐劳，能在较大的压力下保持良好的工作状态，善于自我调节。具有强烈的责任感，工作踏实。性格开朗乐观，积极上进。非常热爱编程，喜欢钻研新的技术，喜欢接受各种不同的挑战，具有较好的自学能力和良好的学习方法。</p>
-                                <p>教育背景</p>
+                                <h3>Java工程师</h3><br/>
+                                <p>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;个人自传本人良好的团队合作精神，能迅速融入新的团队。易和人相处，拥有良好的亲和力。能吃苦耐劳，能在较大的压力下保持良好的工作状态，善于自我调节。具有强烈的责任感，工作踏实。性格开朗乐观，积极上进。非常热爱编程，喜欢钻研新的技术，喜欢接受各种不同的挑战，具有较好的自学能力和良好的学习方法。</p>
+                                <p>教育背景</p><br/>
                                 <p>毕业院校：厦门理工学院</p>
                                 <p>学历：本科</p>
                                 <p>毕业日期：2019-07</p>
-                                <p>专业：软件工程</p>
+                                <p>专业：软件工程</p><br/>
                                 <p>专业技能：</p>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.具备较为系统、扎实的计算机理论基础。有一定的JAVA EE项目开发经验。
+                                <br/>
+                                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        1.具备较为系统、扎实的计算机理论基础。有一定的JAVA EE项目开发经验。
                                 </p>
-                                　　2.熟练掌握JAVA语言开发技术。熟悉OOP编程思想，有一定的OOA/OOD能力，能使用UML对项目进行分析。熟知常见的GoF设计模式：如Singleton、Factory等。理解分层架构、DAO模式。
+                                <p>
+                                    　　&nbsp;2.熟练掌握JAVA语言开发技术，熟知常见的GoF设计模式：如Singleton、Factory等。理解分层架构、DAO模式。
                                 </p>
-                                　　3.了解工作流，有JBOSS JBPM工作流引擎的使用经验。了解基于RBAC模式的授权认证。
+                                <p>
+                                    　　&nbsp;3.了解git、svn，具备一定的团队开发能力。
                                 </p>
-                                4.了解Linux，有Linux下的JAVA环境搭建和开发经验，以及tomcat的搭建和项目的部署。
+                                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        4.了解Linux，有Linux下的JAVA环境搭建和开发经验，以及tomcat的搭建和项目的部署。
                                 </p>
-                                　　5.熟悉tomcat、maven下的项目部署。
+                                <p>
+                                    　　&nbsp;5.熟悉HTML5+CSS3+Ajax+JQuery等技术。
                                 </p>
-                                　　6.掌握JAVA Web技术，如JSP、Servlet、JSTL、EL等。了解OGNL。
+                                <p>
+                                　　    6.掌握JAVA Web技术，如JSP、Servlet、JSTL、EL等。
                                 </p>
-                                　　7.了解Ajax和JavaScript，有一定的使用经验。
+                                <p>
+                                    　　&nbsp;7.了解Ajax和JavaScript，有一定的使用经验。
                                 </p>
-                                　　8.能熟练运用Struts、Hibernate、Spring Framework、Mybatis等框架开发项目。
+                                <p>
+                                    　　&nbsp;8.能熟练运用Struts、Hibernate、Spring Framework、Mybatis等框架开发项目。
                                 </p>
-                                　　9.有一定的数据库理论基础，熟悉MySQL、Oracle。
+                                <p>
+                                    　　&nbsp;9.有一定的数据库理论基础，熟悉MySQL、Oracle。
                                 </p>
                             </div>
                         </div>
@@ -284,7 +315,8 @@
                                     <!-- Testimonial Content -->
                                     <div class="testimonial-content">
                                         <div class="testimonial-text">
-                                            <p>"苦恼不会一夜间烟消云散，隔阂也不会一瞬间土崩瓦解。但是只有迈出那一步，我们才能告别过去，拥抱明天。...也许这才是我们心灵中真正想要大声呼喊的声音。"</p>
+                                            <p>
+                                                "苦恼不会一夜间烟消云散，隔阂也不会一瞬间土崩瓦解。但是只有迈出那一步，我们才能告别过去，拥抱明天。...也许这才是我们心灵中真正想要大声呼喊的声音。"</p>
                                         </div>
                                     </div>
                                     <!-- /Testimonial Content -->
@@ -312,93 +344,49 @@
                 <!-- End of About Me Subpage -->
 
                 <!-- Resume Subpage -->
-                <section class="pt-page pt-page-3" data-id="resume">
+                <section class="pt-page pt-page-3" data-id="print" style="background-image: url(images/printbanner2.jpg);
+                background-size: 100%;background-repeat: no-repeat;background-position:0 40%;">
                     <div class="section-title-block">
-                        <h2 class="section-title">经历</h2>
-                        <h5 class="section-description">2 Years of Experience</h5>
+                        <h2 class="section-title">云打印</h2>
+                        <h5 class="section-description">基于校园的线上打印平台</h5>
                     </div>
 
-                    <div class="row">
-                        <div class="col-sm-6 col-md-4 subpage-block">
-                            <div class="block-title">
-                                <h3>学习经历</h3>
-                            </div>
-                            <div class="timeline">
-                                <!-- Single event -->
-                                <div class="timeline-event te-primary">
-                                    <h5 class="event-date">2015-2016</h5>
-                                    <h4 class="event-name">C、OC</h4>
-                                    <span class="event-description">University of Studies</span>
-                                    <p>入门编程，学习了计算机基础、网络基础、算法基础等</p>
-                                </div>
-                                <!-- Single event -->
-                                <div class="timeline-event te-primary">
-                                    <h5 class="event-date">2016-2018</h5>
-                                    <h4 class="event-name">JavaSE、前端技术</h4>
-                                    <span class="event-description">University of Studies</span>
-                                    <p>入门WEB开发</p>
-                                </div>
-                                Single event
-                                <div class="timeline-event te-primary">
-                                    <h5 class="event-date">2018-2019</h5>
-                                    <h4 class="event-name">JavaEE、后端技术</h4>
-                                    <span class="event-description">University of Studies</span>
-                                    <p>熟悉WEB开发，对各大框架有一点的了解，走向了后端开发之路</p>
-                                </div>
-                            </div>
-                        </div>
+                    <div id="printContent">
+                        <form class="am-form tpl-form-line-form"
+                              enctype="multipart/form-data" id="printAddForm">
 
-                        <div class="col-sm-6 col-md-4 subpage-block">
-                            <div class="block-title">
-                                <h3>专业设计</h3>
-                            </div>
-                            <div class="skills-info">
-                                <h4>项目原型设计</h4>
-                                <div class="skill-container">
-                                    <div class="skill-percentage skill-1"></div>
+                            <div class="row" style="position:absolute;top:55%;left:55%;margin:-150px 0 0 -200px;
+                                width:1000px;height:500px;">
+                                <div class="form-group" style="display:flex;">
+                                    <input id="filename" name="filename" type="text" style="display: block;width:40%;border-width:0 0 1px;border-style: solid;
+                                border-color: rgba(0,0,0,.12);
+                                box-shadow: inset 0 -1px 0 rgba(0,0,0,0);
+                                background: transparent;outline: none;"
+                                           placeholder="请填写格式为：宿舍号+备注的内容" required>
+                                    <br>
                                 </div>
 
-                                <h4>交互设计</h4>
-                                <div class="skill-container">
-                                    <div class="skill-percentage skill-2"></div>
+                                <div class="form-group" style="display:flex;margin: 0 auto;">
+                                    <input id="filepath" name="filepath" style="display: block;width:40%;border-width:0 0 1px;border-style: solid;
+                                border-color: rgba(0,0,0,.12);
+                                box-shadow: inset 0 -1px 0 rgba(0,0,0,0);
+                                background: transparent;outline: none;margin-top: 10px"
+                                           placeholder="当前仅支持word和pdf相关格式的内容,请勿随意上传">
+                                    <input type="file" id="uploadFile" name="uploadFile" accept=".nse"
+                                           onchange="handleFileUP(this)" style="display: none">
+                                    <br>
                                 </div>
-
-                                <h4>Web设计开发</h4>
-                                <div class="skill-container">
-                                    <div class="skill-percentage skill-3"></div>
+                                <div style="display: block;margin-top: 20px">
+                                    <input type="button" id="i-check" value="浏览"
+                                           onclick="$('#uploadFile').click();">
+                                    <!--<input type="submit" class="button btn-send" onclick="upSavePrint()" value="提交">-->
+                                    <input type="button" onclick="upSavePrint()" value="提交">
                                 </div>
+                                <!--<a class="btn btn-primary btn-lg" onclick="upSavePrint()"-->
+                                <!--style="margin-top: 20px" href="#">提交</a>-->
                             </div>
 
-                            <div class="block-title">
-                                <h3>编程能力</h3>
-                            </div>
-                            <div class="skills-info">
-                                <h4>Java</h4>
-                                <div class="skill-container">
-                                    <div class="skill-percentage skill-4"></div>
-                                </div>
-
-                                <h4>C</h4>
-                                <div class="skill-container">
-                                    <div class="skill-percentage skill-5"></div>
-                                </div>
-
-                                <h4>HTML5</h4>
-                                <div class="skill-container">
-                                    <div class="skill-percentage skill-6"></div>
-                                </div>
-
-                                <h4>CSS3</h4>
-                                <div class="skill-container">
-                                    <div class="skill-percentage skill-7"></div>
-                                </div>
-
-                                <h4>ES6</h4>
-                                <div class="skill-container">
-                                    <div class="skill-percentage skill-8"></div>
-                                </div>
-                            </div>
-                        </div>
+                        </form>
                     </div>
 
                 </section>
@@ -406,7 +394,7 @@
 
 
                 <!-- Portfolio Subpage -->
-                <section class="pt-page pt-page-4" data-id="portfolio" id="portfolioPage">
+                <section class="pt-page pt-page-4" data-id="portfolio">
 
                     <div class="section-title-block">
                         <h2 class="section-title">墙角</h2>
@@ -414,7 +402,7 @@
                     </div>
 
                     <!-- Portfolio Content -->
-                    <div class="portfolio-content">
+                    <div class="portfolio-content" id="portfolio-content">
 
                         <!-- Portfolio filter -->
                         <ul id="portfolio_filters" class="portfolio-filters">
@@ -433,69 +421,22 @@
                             <li>
                                 <a class="filter btn btn-sm btn-link" data-group="girl">妹子图</a>
                             </li>
-                            <li>
-                                <a class="filter btn btn-sm btn-link" data-group="video">小视频</a>
-                            </li>
+                            <!--<li>-->
+                            <!--<a class="filter btn btn-sm btn-link" data-group="video">小视频</a>-->
+                            <!--</li>-->
                         </ul>
                         <!-- End of Portfolio filter -->
 
                         <!-- Portfolio Grid -->
                         <div id="portfolio_grid" class="portfolio-grid portfolio-masonry masonry-grid-3">
 
-                            <!--&lt;!&ndash; Portfolio Item 1 &ndash;&gt;-->
-                            <!--&lt;!&ndash;<figure class="item" data-groups='["all", "media"]'>&ndash;&gt;-->
-                                <!--&lt;!&ndash;<a class="ajax-page-load"  href="portfolio-1.html">&ndash;&gt;-->
-                                    <!--&lt;!&ndash;<img src="/images/portfolio/1.jpg">&ndash;&gt;-->
-                                    <!--&lt;!&ndash;<div>&ndash;&gt;-->
-                                        <!--&lt;!&ndash;<h5 class="name">速度与激情8&ndash;&gt;-->
-                                        <!--&lt;!&ndash;</h5>&ndash;&gt;-->
-                                        <!--&lt;!&ndash;<small>Media</small>&ndash;&gt;-->
-                                        <!--&lt;!&ndash;<i class="fa fa-video-camera"></i>&ndash;&gt;-->
-                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                                <!--&lt;!&ndash;</a>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</figure>&ndash;&gt;-->
-                            <!--&lt;!&ndash; /Portfolio Item 1 &ndash;&gt;-->
-
-                            <!-- Portfolio Item 2 -->
-                            <figure class="item" data-groups='["all", "video"]'>
-                                <a href="//gslb.miaopai.com/stream/qVmPqswrXnF9A2Rl4~zJG-F6elfhYNWD5WPkLQ__.mp4?yx=&refer=weibo_app&vend=weibo&label=mp4_hd&mpflag=8&Expires=1540387248&ssig=GOdC6M%2BWYe&KID=unistore,video" title="" class="lightbox mfp-iframe">
-                                    <img src="images/portfolio/2.jpg">
-                                    <div>
-                                        <h5 class="name">歌舞青春
-                                        </h5>
-                                        <small>Video</small>
-                                        <i class="fa fa-video-camera"></i>
-                                    </div>
-                                </a>
-                            </figure>
-                            <!-- /Portfolio Item 2 -->
-
-                            <!-- Portfolio Item 3 -->
-                            <figure class="item" data-groups='["all", "video"]'>
-                                <a href="https://f.us.sinaimg.cn/002J0VYXlx07qkhEdsnm010412003jx40E010.mp4?label=mp4_hd&template=640x480.28.0&Expires=1550920995&ssig=qK81thV21q&KID=unistore,video" title="" class="lightbox mfp-iframe">
-                                    <img src="images/portfolio/pi.png">
-                                    <div>
-                                        <h5 class="name">就你最皮
-                                        </h5>
-                                        <small>Video</small>
-                                        <i class="fa fa-video-camera"></i>
-                                    </div>
-                                </a>
-                            </figure>
-                            <!-- /Portfolio Item 3 -->
-
                             <!-- sql data start -->
-                            <!-- 修改属性：
-                            name:title名（项目名）、
-                            key：data-groups、标签名、i 图标class的值
-                            img:img文件地址、
-                            -->
-                            <!--<figure class="item" data-groups='["all","wallpaper"]' th:each="banner : ${bannerList}">-->
-                            <figure class="item" th:data-groups='[+${banner.bannerkey}+]' th:each="banner : ${bannerList}">
-                                <!--<a class="ajax-page-load" href="portfolio-1.html">-->
-                                <a href="#" class="lightbox"  th:title="${banner.name}"
-                                th:href="(${banner.img})">
-                                    <img id="img" name="img" th:src="${banner.img}" >
+                            <figure class="item" th:data-groups='[+${banner.bannerkey}+]'
+                                    th:each="banner : ${bannerList}">
+                                <a href="#" class="lightbox" th:title="${banner.name}"
+                                   th:href="(${banner.img})">
+                                    <img id="img" name="img"
+                                         th:src="${banner.img}+'?x-oss-process=image/resize,w_300,h_300/watermark,type_d3F5LXplbmhlaQ,size_15,text_RkZzaGluZQ==,color_FFFAFA,shadow_100,order_0,align_2,interval_10,t_100,g_se,x_10,y_10'">
                                     <div>
                                         <h5 class="name" th:text="${banner.name}">项目名
                                         </h5>
@@ -505,70 +446,99 @@
                                 </a>
                             </figure>
                             <!-- sql data end -->
-
                         </div>
-                        <ul class="pagination square" style="margin-left: 470px">
-                            <li><a href="#">&laquo;</a></li>
-                            <li class="previous"><a href="#">上一页</a></li>
-                            <li><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                            <li><a href="#">5</a></li>
-                            <li class="next"><a href="#">下一页</a></li>
-                            <li><a href="#">&raquo;</a></li>
-                        </ul>
-                        <!-- /Portfolio Grid -->
+                        <!-- 所有图片的分页 -->
+                        <div class="am-fr" align="center">
+                            <ul class="pagination">
+                                <li>
+                                    <a th:onclick="'loadPageForBannerContent(\'/banner/bannerList?page=0&size=40\')'">«</a>
+                                </li>
+                                <li th:each="i : ${#numbers.sequence(1,bannerTotalPage,1)}">
+                                    <!--th:id="'page'+${i}">-->
+                                    <a th:text="${i}"
+                                       th:onclick="'loadPageForBannerContent(\'/banner/bannerList?size=40&page='+${i-1}+'\')'">1</a>
+                                </li>
+                                <li>
+                                    <a th:onclick="'loadPageForBannerContent(\'/banner/bannerList?size=40&page='+${bannerTotalPage-1}+'\')'">»</a>
+                                </li>
+                            </ul>
+                            <!--<script th:inline="javascript" type="text/javascript">-->
+                            <!--var id = [[${bannerCurrentPage+1}]];-->
+                            <!--$("#page" + id).attr("class", "active");-->
+                            <!--</script>-->
+                        </div>
+                        <!-- 所有图片的分页end -->
 
                     </div>
-                    <!-- /Portfolio Content -->
+                    <!--<div class="portf
+                    olio-grid portfolio-masonry masonry-grid-3" id="LAY_demo2"></div>-->
 
+                    <!--/Portfolio Content -->
                 </section>
-                <!-- /Portfolio Subpage -->
+                <!--/Portfolio Subpage -->
 
                 <!-- Blog Subpage -->
-                <section class="pt-page pt-page-5" data-id="blog" id="blog" >
-                    <div style="margin-left: 90%;font-size: larger"><a class="btn btn-primary btn-lg" style="border-radius: 6px;" href="/userlogin">发布内容</a></div>
+                <section class="pt-page pt-page-5" data-id="blog" id="blog">
+                    <div style="margin-left: 90%;font-size: larger"><a class="btn btn-primary btn-lg"
+                                                                       style="border-radius: 6px;"
+                                                                       href="/userlogin">发布内容</a>
+                    </div>
                     <div class="section-title-block">
                         <h2 class="section-title">博客</h2>
                         <h5 class="section-description">碎碎念，树洞，心情，技术，Whatever.</h5>
-                        <div class="form-group" style="width:33%;margin: 0 auto;">
-                            <input style="position:absolute;width: 80%;margin-top: 2px" id="searchText" type="text" name="searchText" class="form-control" placeholder="搜索名称、关键词、分类、摘要、作者、内容">
-                            <button style="position:relative;float:right;display: inline-block" class="fa fa-search" type="button" onclick="getContentBySearchText()"></button>
-                        </div>
+                    </div>
+                    <div class="form-group" style="margin-top: 30px;display:flex;width:33.3%;margin: 0 auto;">
+                        <input id="searchText" type="text" name="searchText" style="display: block;width:100%;border-width:0 0 1px;border-style: solid;
+                                border-color: rgba(0,0,0,.12);
+                                box-shadow: inset 0 -1px 0 rgba(0,0,0,0);
+                                background: transparent;outline: none;"
+                               placeholder="搜索名称、摘要、作者、内容等">
+                        <!--<button class="fa fa-search" style="outline: none;"  onclick="getContentBySearchText()"></button>-->
+                        <input type="button" class="fa fa-search" onclick="getContentBySearchText()"
+                               value="搜索">
                     </div>
 
 
                     <!--<div style="float: right">-->
-                        <!--<div class="am-input-group am-input-group-sm tpl-form-border-form cl-p">-->
-                            <!--<input type="text" id="searchName" class="form-control mr-sm-2 " placeholder="根据名称查询">-->
-                            <!--<span class="am-input-group-btn">-->
-                            <!--<button class="fa fa-search"-->
-                                    <!--type="button" onclick="getBannerByName()">-->
-                            <!--</button>-->
-                          <!--</span>-->
-                        <!--</div>-->
+                    <!--<div class="am-input-group am-input-group-sm tpl-form-border-form cl-p">-->
+                    <!--<input type="text" id="searchName" class="form-control mr-sm-2 " placeholder="根据名称查询">-->
+                    <!--<span class="am-input-group-btn">-->
+                    <!--<button class="fa fa-search"-->
+                    <!--type="button" onclick="getBannerByName()">-->
+                    <!--</button>-->
+                    <!--</span>-->
+                    <!--</div>-->
                     <!--</div>-->
 
-                    <div id="container" style="padding-top: 20px">
+                    <div id="container" style="margin-top: 20px">
+
                         <div id="category"><h2>分类：
-                            <a href="#" onclick="loadPageForBlogContent('blog/orderList?page=0&size=10')">全部&nbsp;&nbsp;</a>
-                            <a href="#" onclick="loadPageForBlogContent('blog/orderList?category=生活?')">生活&nbsp;&nbsp;</a>
-                            <a href="#" onclick="loadPageForBlogContent('blog/orderList?category=技术?')">技术&nbsp;&nbsp;</a>
-                            <a href="#" onclick="loadPageForBlogContent('blog/orderList?category=游戏?')">游戏&nbsp;&nbsp;</a>
-                            <a href="#" onclick="loadPageForBlogContent('blog/orderList?category=最新?')">最新&nbsp;&nbsp;</a>
-                            <a href="#" onclick="loadPageForBlogContent('blog/orderList?category=最热?')">最热&nbsp;&nbsp;</a>
+                            <a href="#"
+                               onclick="loadPageForBlogContent('blog/orderList?page=0&size=10')">全部&nbsp;&nbsp;</a>
+                            <a href="#"
+                               onclick="loadPageForBlogContent('blog/orderList?category=生活')">生活&nbsp;&nbsp;</a>
+                            <a href="#"
+                               onclick="loadPageForBlogContent('blog/orderList?category=技术')">技术&nbsp;&nbsp;</a>
+                            <a href="#"
+                               onclick="loadPageForBlogContent('blog/orderList?category=游戏')">游戏&nbsp;&nbsp;</a>
+                            <a href="#"
+                               onclick="loadPageForBlogContent('blog/orderList?category=最新')">最新&nbsp;&nbsp;</a>
+                            <a href="#"
+                               onclick="loadPageForBlogContent('blog/orderList?category=最热')">最热&nbsp;&nbsp;</a>
                         </h2>
                         </div>
 
                         <div id="content">
-
                             <article class="article" th:each="blog : ${blogList}">
                                 <!--<h2 class="title"><a href="article?id=${article.id}">${article.title}</a></h2>-->
-                                <h1 class="title" style="padding-top: 25px"><a th:href="@{/blog/}+${blog.id}" th:text="${blog.title}" target="_blank">${blog.title}</a></h1>
+                                <h1 class="title" style="padding-top: 25px"><a th:href="@{/blog/}+${blog.id}"
+                                                                               th:text="${blog.title}" target="_blank">${blog.title}</a>
+                                </h1>
                                 <!--<span><i th:text="${blog.keywords}">${blog.keywords}</i></span>-->
-                                <h4>作者：<b th:text="${blog.author}">author</b>&nbsp;&nbsp;&nbsp;&nbsp;阅读量：<b th:text="${blog.reading}">reading</b></h4>
-                                <time style="text-align: center" th:text="${#dates.format(blog.updateTime, 'yyyy-MM-dd HH:mm')}">[[${blog.updateTime}]]</time>
+                                <h4>作者：<b th:text="${blog.author}">author</b>&nbsp;&nbsp;&nbsp;&nbsp;阅读量：<b
+                                        th:text="${blog.reading}">reading</b></h4>
+                                <time style="text-align: center"
+                                      th:text="${#dates.format(blog.releaseTime, 'yyyy-MM-dd')}"></time>
                                 <section class="article-content markdown-body">
                                     <blockquote>
                                         <p th:text="${blog.summary}">${blog.summary}</p>
@@ -580,72 +550,35 @@
                                 </footer>
                             </article>
 
-                            <!--<article class="article">-->
-                                <!--&lt;!&ndash;<h2 class="title"><a href="article?id=${article.id}">${article.title}</a></h2>&ndash;&gt;-->
-                                <!--<h2 class="title"><a href="blog-post-1.html">${article.title}</a></h2>-->
-                                <!--<span><i>${article.keywords}</i></span>-->
-                                <!--<time style="text-align: center">${article.localTime}</time>-->
-                                <!--<section class="article-content markdown-body">-->
-                                    <!--<blockquote>-->
-                                        <!--<p>${article.desci}</p>-->
-                                    <!--</blockquote>-->
-                                    <!--......-->
-                                <!--</section>-->
-                                <!--<footer>-->
-                                    <!--<a href="article?id=${article.id}">阅读全文</a>-->
-                                <!--</footer>-->
-                            <!--</article>-->
-                        </div>
-                        <!-- content end-->
-                        <!-- paging start-->
-                        <!--<div style="text-align: center">-->
-                        <!--<ul class="pagination" >-->
-                        <!--<li th:if test="${pageInfo.pageNum==1}">class="disabled"</th:if>><a href="/?page=1">&laquo;</a></li>-->
-                        <!--<th:forEach begin="1" end="${pageInfo.pages}" step="1" var="pageNo">-->
-                        <!--<li th:if test="${pageInfo.pageNum==pageNo}">class="active"</th:if>><a href="/?page=${pageNo}">${pageNo}</a></li>-->
-                        <!--</th:forEach>-->
-                        <!--<li th:if test="${pageInfo.pageNum==pageInfo.pages}">class="disabled"</:if>><a href="/?page=${pageInfo.pages}">&raquo;</a></li>-->
-                        <!--</ul>-->
-                        <!--</div>-->
-                        <!-- paging end-->
-                    </div>
+                            <!-- 所有文章的分页 -->
+                            <div class="cf" align="center" th:if="${totalPage}">
+                                <div class="fr" align="center">
+                                    <ul class="pagination">
+                                        <li><a href="#blog" target="_self"
+                                               th:onclick="'loadPageForBlogContent(\'/blog/orderList?page=0\')'">«</a>
+                                        </li>
+                                        <li th:each="i : ${#numbers.sequence(1,totalPage,1)}"
+                                            th:id="'page'+${i}">
+                                            <a th:text="${i}" href="#blog" target="_self"
+                                               th:onclick="'loadPageForBlogContent(\'/blog/orderList?page='+${i-1}+'\')'">1</a>
+                                        </li>
+                                        <li>
+                                            <a href="#blog" target="_self"
+                                               th:onclick="'loadPageForBlogContent(\'/blog/orderList?page='+${totalPage-1}+'\')'">»</a>
+                                        </li>
+                                    </ul>
+                                    <script th:inline="javascript" type="text/javascript">
+                                        var id = [[${currentPage+1}]];
+                                        $("#page" + id).attr("class", "active");
+                                    </script>
+                                </div>
+                            </div>
 
-                    <!-- 分页 -->
-                    <div class="am-cf">
-                        <div class="am-fr">
-                            <ul class="pagination square" style="margin-left: 470px">
-                                <li><a th:onclick="'loadPage(\'/blog/examine?page=0\')'">«</a></li>
-                                <li th:each="i : ${#numbers.sequence(1,totalPage,1)}"
-                                    th:id="'page'+${i}">
-                                    <a th:text="${i}"
-                                       th:onclick="'loadPage(\'/blog/examine?page='+${i-1}+'\')'">1</a>
-                                </li>
-                                <li>
-                                    <a th:onclick="'loadPage(\'/blog/examine?page='+${totalPage-1}+'\')'">»</a>
-                                </li>
-                            </ul>
-                            <script th:inline="javascript" type="text/javascript">
-                                var id = [[${currentPage+1}]];
-                                $("#page" + id).attr("class", "am-active");
-                            </script>
                         </div>
-                    </div>
-                    <!-- /分页 -->
 
-                    <!--<ul class="pagination square" style="margin-left: 470px">-->
-                        <!--<li><a href="#">&laquo;</a></li>-->
-                        <!--<li class="previous"><a href="#">上一页</a></li>-->
-                        <!--<li><a href="#">1</a></li>-->
-                        <!--<li><a href="#">2</a></li>-->
-                        <!--<li><a href="#">3</a></li>-->
-                        <!--<li><a href="#">4</a></li>-->
-                        <!--<li><a href="#">5</a></li>-->
-                        <!--<li class="next"><a href="#">下一页</a></li>-->
-                        <!--<li><a href="#">&raquo;</a></li>-->
-                    <!--</ul>-->
-                    <!-- container end-->
-                    <!--<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>-->
-                    <a href="#blog" target="_self" id="top" style="color: darkseagreen;padding-right: 200px">Top</a>
+                    </div>
+                    <a href="#blog" target="_self" id="top"
+                       style="color: darkseagreen;padding-right: 200px">Top</a>
                 </section>
                 <!-- End Blog Subpage -->
 
@@ -675,28 +608,29 @@
                                     <i class="pe-7s-icon pe-7s-mail"></i>
                                 </div>
                                 <div class="ci-text">
-                                    <h5><a href="#" class="__cf_email__" data-cfemail="9afbf6ffe2e9f7f3eef2daffe2fbf7eaf6ffb4f9f5f7"><!--[email&#160;protected]-->
-                                        827906388@qq.com
+                                    <h5><a href="#" class="__cf_email__">
+                                        <!--[email&#160;protected]-->
+                                        15860167093@163.com
                                     </a></h5>
                                 </div>
                             </div>
                             <!--<div class="contact-info-block">-->
-                                <!--<div class="ci-icon">-->
-                                    <!--<i class="pe-7s-icon pe-7s-call"></i>-->
-                                <!--</div>-->
-                                <!--<div class="ci-text">-->
-                                    <!--<h5>+86 177 50598420</h5>-->
-                                <!--</div>-->
-                            <!--</div>-->
-
-                            <!--<div class="contact-info-block">-->
                             <!--<div class="ci-icon">-->
-                            <!--<i class="pe-7s-icon pe-7s-check"></i>-->
+                            <!--<i class="pe-7s-icon pe-7s-call"></i>-->
                             <!--</div>-->
                             <!--<div class="ci-text">-->
-                            <!--<h5>Freelance Available</h5>-->
+                            <!--<h5>+86 177 50598420</h5>-->
                             <!--</div>-->
                             <!--</div>-->
+
+                            <div class="contact-info-block">
+                                <div class="ci-icon">
+                                    <i class="pe-7s-icon pe-7s-check"></i>
+                                </div>
+                                <div class="ci-text">
+                                    <h5>Freelance Available</h5>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="col-sm-6 col-md-6 subpage-block">
@@ -709,19 +643,23 @@
 
                                 <div class="controls">
                                     <div class="form-group">
-                                        <input id="form_name" type="text" name="contactUsername" class="form-control" placeholder="联系人昵称" required="required" data-error="联系人昵称必填">
+                                        <input id="form_name" type="text" name="contactUsername" class="form-control"
+                                               placeholder="联系人昵称" required="required" data-error="联系人昵称必填">
                                         <i class="form-control-icon fa fa-user"></i>
                                         <div class="help-block with-errors"></div>
                                     </div>
 
                                     <div class="form-group">
-                                        <input id="form_email" type="email" name="email" class="form-control" placeholder="邮箱地址，用于回复邮件" required="required" data-error="邮箱地址必填">
+                                        <input id="form_email" type="email" name="email" class="form-control"
+                                               placeholder="邮箱地址，用于回复邮件" required="required" data-error="邮箱地址必填">
                                         <i class="form-control-icon fa fa-envelope"></i>
                                         <div class="help-block with-errors"></div>
                                     </div>
 
                                     <div class="form-group">
-                                        <textarea id="form_message" name="message" class="form-control" placeholder="联系内容" rows="4" required="required" data-error="联系内容必填"></textarea>
+                                        <textarea id="form_message" name="message" class="form-control"
+                                                  placeholder="联系内容" rows="4" required="required"
+                                                  data-error="联系内容必填"></textarea>
                                         <i class="form-control-icon fa fa-comment"></i>
                                         <div class="help-block with-errors"></div>
                                     </div>
@@ -750,9 +688,10 @@
         right: 0;
         buttom: 0;
     }
+
     a:hover {
         /*background-color: green;*/
-        text-decoration:underline
+        text-decoration: underline;
     }
 
 </style>

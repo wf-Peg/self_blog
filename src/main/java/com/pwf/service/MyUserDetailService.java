@@ -32,8 +32,7 @@ public class MyUserDetailService implements UserDetailsService {
             authorityList+=s1;
         }
         //TODO passwordEncoder.encode是注册的时候使用，之后要直接改成数据库的值
-        return new org.springframework.security.core.userdetails.User(s, passwordEncoder.encode(user.getPassWord()), AuthorityUtils
+        return new org.springframework.security.core.userdetails.User(s, user.getPassWord(), AuthorityUtils
                 .commaSeparatedStringToAuthorityList(authorityList));
-
     }
 }

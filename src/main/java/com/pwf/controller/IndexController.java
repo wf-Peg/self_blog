@@ -1,9 +1,6 @@
 package com.pwf.controller;
 
-import com.pwf.domain.Banner;
-import com.pwf.domain.Blog;
-import com.pwf.domain.Message;
-import com.pwf.domain.User;
+import com.pwf.domain.*;
 import com.pwf.service.*;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import io.swagger.annotations.Api;
@@ -17,7 +14,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import java.awt.print.Pageable;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.*;
 
 @Controller
@@ -35,15 +35,14 @@ public class IndexController {
     private MessageService messageService;
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private HttpServletRequest request;
 
 
     @RequestMapping({"/","index"})
     @ApiOperation(value = "跳转前台首页")
-    public String index(Model model) {
-        Page<Banner> bannerList = bannerService.findAll(PageRequest.of(0,30));
-//        List<Banner> bannerList = bannerService.findAll();
-        Page<Blog> blogList=blogService.findBlogsByIsVisibleIsTrue(PageRequest.of(0,10));
-
+    public String index(Model model,HttpServletRequest request) {
+        //todo redis 优化
         //取出前三十篇热门的文章的所有标签
         StringBuilder sb = null;
         try {
@@ -60,8 +59,8 @@ public class IndexController {
             e.printStackTrace();
             System.out.println("关键词为空导致空指针");
         }
-
-        //准备将所有标签去重,步骤：根据逗号转化为数组，准备第二个StringBuilder存储去重数据，最后使用LinkedHashSet去重并删除首个逗号
+        /*准备将所有标签去重,步骤：根据逗号转化为数组，准备第二个StringBuilder存储去重数据，
+        最后使用LinkedHashSet去重并删除首个逗号*/
         String[]  arr = sb.toString().split(",");
         Set<String> set = new LinkedHashSet<>(Arrays.asList(arr));
         StringBuilder sb2 = new StringBuilder();
@@ -71,23 +70,23 @@ public class IndexController {
         sb2.deleteCharAt(0);
         System.out.println(sb2);
 
-
-        model.addAttribute("totalPage", blogList.getTotalPages());
-        model.addAttribute("currentPage", 1);
-
+        Page<Banner> bannerList = bannerService.findAll(new PageBean(0,40));
         model.addAttribute("bannerList", bannerList.getContent());
-//        model.addAttribute("bannerList", bannerList);
-        model.addAttribute("blogList", blogList.getContent());
+        model.addAttribute("bannerTotalPage", bannerList.getTotalPages());
+        model.addAttribute("bannerCurrentPage", 0);
+
+//        model.addAttribute("blogList", blogList.getContent());
         model.addAttribute("keywordList", sb2);
+
         return "index";
     }
 
 //    @GetMapping("/bannerIndex")
 //    @ApiOperation(value = "跳转前台banner")
-//    public String bannerIndex(Model model) {
-//        List<Banner> bannerList = bannerService.findAll();
-//        model.addAttribute("bannerList", bannerList);
-//        return "index :: #portfolio";
+//    public String bannerIndex(Model model,PageBean pageBean) {
+//        Page<Banner> bannerList = bannerService.findAll(pageBean);
+//        model.addAttribute("bannerList", bannerList.getContent());
+//        return "index :: #portfolio_grid";
 //    }
 
     @RequestMapping("/userlogin")
@@ -100,7 +99,7 @@ public class IndexController {
     @RequestMapping("/background/index")
     @ApiOperation(value = "跳转后台首页")
     public String backgroundIndex(Model model) {
-        Page<Blog> blogs = blogService.findBlogsByIsVisibleIsTrue(PageRequest.of(0, 5));
+        Page<Blog> blogs = blogService.findBlogsByIsVisibleIsTrue(new PageBean(0,5));
         Integer needLooks = blogService.findBlogsByIsVisibleIsFalseCount();
         User mostBlogsUser=userService.findMostBlogsUser();
         Integer messageCount = messageService.findAllCount();
@@ -114,6 +113,36 @@ public class IndexController {
         model.addAttribute("needLooks",needLooks);
         model.addAttribute("messageCount",messageCount);
         model.addAttribute("allMessage",allMessage);
+        //获取ip
+        String ip = request.getHeader("x-forwarded-for");
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+            if(ip.equals("127.0.0.1")){
+                //根据网卡取本机配置的IP
+                InetAddress inet=null;
+                try {
+                    inet = InetAddress.getLocalHost();
+                } catch (UnknownHostException e) {
+                    e.printStackTrace();
+                }
+                ip= inet.getHostAddress();
+            }
+        }
+        // 对于通过多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割
+        if(ip != null && ip.length() > 15){
+            if(ip.indexOf(",")>0){
+                ip = ip.substring(0,ip.indexOf(","));
+            }
+        }
+//        System.out.println(ip);
+        model.addAttribute("ip", ip);
+
         return PREFIX + "index";
     }
 

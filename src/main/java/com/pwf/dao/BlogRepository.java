@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -21,10 +22,14 @@ import java.util.List;
 public interface BlogRepository extends JpaRepository<Blog,Long>,JpaSpecificationExecutor<Blog>{
 //public interface BlogRepository extends ElasticsearchRepository<Blog, String>,JpaSpecificationExecutor<Blog>{
 	@ApiOperation(value = "根据博文标题、作者、摘要分页查找数据")
+
 	@Query(value = "SELECT * FROM blog WHERE content LIKE ?1 OR title LIKE ?1 OR author LIKE ?1 OR summary LIKE ?1 OR keywords LIKE ?1 limit ?2,?3",nativeQuery = true)
 	List<Blog> findByAttr(String text,int page, int pageSize);
 
-	Page<Blog> findBlogsByKeywordsLike(String keyword, Pageable pageable);
+	@Query(value = "SELECT * FROM blog WHERE CONCAT(title,summary,content) LIKE :text",nativeQuery = true)
+	Page<Blog> findByAttr2(@Param("text") String text, Pageable pageable);
+
+	Page<Blog> findBlogsByKeywordsLikeAndIsVisibleIsTrue(String keyword, Pageable pageable);
 
 
 	@ApiOperation(value = "修改文章的状态")
@@ -47,21 +52,37 @@ public interface BlogRepository extends JpaRepository<Blog,Long>,JpaSpecificatio
 	Page<Blog> findBlogsByIsVisibleIsTrue(Pageable pageable);
 
 	@ApiOperation(value = "根据分类查询文章")
-	Page<Blog> findBlogsByCategory(Pageable pageable,String category);
+	Page<Blog> findBlogsByCategoryAndIsVisibleIsTrue(Pageable pageable,String category);
 
 	@ApiOperation(value = "增加评论量")
 	@Query(value = "update blog set comments = comments+1 where id = ?1 ",nativeQuery = true)
 	@Modifying
 	void addCommentCount(Long blogId);
 
-	@ApiOperation(value = "增加评论量")
-	@Query(value = "update blog set comments = comments+1 where id = ?1 ",nativeQuery = true)
+	@ApiOperation(value = "减少评论量")
+	@Query(value = "update blog set comments = comments-1 where id = ?1 ",nativeQuery = true)
 	@Modifying
-	void findBlogsByUpdateTime(Long blogId);
+    void decreaseCommentCount(Long blogId);
+
+	@ApiOperation(value = "查询单条博客评论量")
+	@Query(value = "SELECT COUNT(*) FROM blog_comment WHERE blog_id=?",nativeQuery = true)
+    Integer findBlogsCommentCount(Long id);
+
+	@ApiOperation(value = "查询当前博客的上一条")
+	@Query(value = "SELECT * FROM blog WHERE id<? ORDER BY id DESC LIMIT 1",nativeQuery = true)
+    Blog findPreBlog(long id);
+
+	@ApiOperation(value = "查询当前博客的下一条")
+	@Query(value = "SELECT * FROM blog WHERE id>? ORDER BY id ASC LIMIT 1",nativeQuery = true)
+    Blog findNextBlog(long id);
+
+//	@ApiOperation(value = "增加评论量")
+//	@Query(value = "update blog set comments = comments+1 where id = ?1 ",nativeQuery = true)
+//	@Modifying
+//	void findBlogsByUpdateTime(Long blogId);
 
 //	Page<Blog> findByIshot(PageRequest pageRequest);
 
-//	Page<Blog> findBlogsByReadingContainingOrlOrLikesContainingOrCommentsContaining(String )
-
+//	Page<Blog> findByReadingContainingOrLikesContainingOrCommentsContaining(String text,);
 
 }

@@ -17,4 +17,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long>,JpaSpeci
 
     Page<Comment> findByContentLike(String searchText, Pageable pageable);
     List<Comment> getCommentsByBlogId(Long id);
+
+    Long countByBlogId(Long blogId);
 }

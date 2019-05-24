@@ -24,17 +24,17 @@
     <!--<input type="hidden" id="userId" name="userId"></input>-->
 
     <label class="sr-only" >用户名</label>
-    <input type="text" class="form-control" name="userName" id="userName" placeholder="用户名：2-20个字符"
+    <input type="text" class="form-control" name="userName" id="userName" placeholder="用户名：请牢记，可用于找回密码"
            required="" autofocus="" onchange="checkUserNameIsExist()">
         <div class="span-exist-tip" style="display: none;color: red"><span class="label label-sm label-danger">该帐号已存在，请重新输入!</span></div>
 
     <label class="sr-only" >密码</label>
     <input type="password" class="form-control" name="passWord" id="passWord"
-           placeholder="密码：6-20个字符" required="">
+           placeholder="密码：请牢记" required="">
     <hr>
     <label class="sr-only" >邮箱</label>
     <input type="email" class="form-control" name="email" id="email"
-           placeholder="邮箱：请输入正确的邮箱和格式" required="">
+           placeholder="邮箱：请输入正确的邮箱和格式，请牢记，可用于找回密码" required="">
 
     <input type="hidden" id="userRole" name="userRole" value="user"></input>
     <!--<label class="sr-only" >请重复密码</label>-->

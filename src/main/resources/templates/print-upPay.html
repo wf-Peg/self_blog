@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+<form class="am-form tpl-form-line-form"
+      enctype="multipart/form-data" id="printAddForm">
+
+    <div class="row" style="position:absolute;top:35%;left:60%;margin:-150px 0 0 -200px;
+                                width:1000px;height:500px;">
+        <div class="form-group">
+            <label for="page" class="am-u-sm-3 am-form-label">文件页数 <span
+                    class="tpl-form-line-small-title">page</span></label>
+            <div class="am-u-sm-9" >
+                <input type="text" class="tpl-form-input" id="page" name="page" maxlength="5" style="display: block;width:40%;border-width:0 0 1px;border-style: solid;
+                                border-color: rgba(0,0,0,.12);
+                                box-shadow: inset 0 -1px 0 rgba(0,0,0,0);
+                                background: transparent;outline: none;"
+                       th:value="${payModel.page}" readonly>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="count" class="am-u-sm-3 am-form-label">总价格 <span
+                    class="tpl-form-line-small-title">count</span></label>
+            <div class="am-u-sm-9" >
+                <input type="text" class="tpl-form-input" id="count" name="count" maxlength="5" style="display: block;width:40%;border-width:0 0 1px;border-style: solid;
+                                border-color: rgba(0,0,0,.12);
+                                box-shadow: inset 0 -1px 0 rgba(0,0,0,0);
+                                background: transparent;outline: none;"
+                       th:value="${payModel.count}" readonly>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="payImg" class="am-u-sm-3 am-form-label">付款二维码 <span
+                    class="tpl-form-line-small-title">payImg</span></label>
+            <div class="tpl-form-file-img">
+                <img style="width: 25%;margin-left: 50px;margin-top: 5px" class="payImg" id="payImg" name="payImg" src="/asserts/img/payImg.jpg" alt="付款图片">
+            </div>
+        </div>
+
+        <a class="btn btn-success btn-lg"
+           style="border-radius: 6px;margin-left: 82px" href="#"
+            onclick="pay()">付款完成，点击提交</a>
+        <!--<input type="button" class="btn btn-success" style="margin-left: 85px"  value="付款完成，点击提交">-->
+    </div>
+
+</form>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:align="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="utf-8">
@@ -93,12 +93,12 @@
                                id="example-r">
                             <thead>
                             <tr>
-                                <th style="align:center;text-align: center">评论id</th>
-                                <th style="align:center;text-align: center">评论博客id</th>
-                                <th style="align:center;text-align: center">评论用户名</th>
-                                <th style="align:center;text-align: center">评论内容</th>
-                                <th style="align:center;text-align: center">评论时间</th>
-                                <th style="align:center;text-align: center">操作</th>
+                                <th style="width:10%;align:center;text-align: center">id</th>
+                                <th style="width:10%;align:center;text-align: center">博客id</th>
+                                <th style="width:10%;align:center;text-align: center">用户名</th>
+                                <th style="width:40%;align:center;text-align: center">内容</th>
+                                <th style="width:20%;align:center;text-align: center">时间</th>
+                                <th style="width:10%;align:center;text-align: center">操作</th>
                             </tr>
                             </thead>
 
@@ -109,18 +109,19 @@
                                 </td>
                             </tr>
                             <tr class="even gradeC" th:each="comment : ${comments}" style="align:center;text-align: center">
-                                <td th:text="${comment.id}">1</td>
-                                <td class="blogId" th:id="${comment.blogId}" th:text="${comment.blogId}">1</td>
+                                <td style="width:10%;align:center;text-align: center" th:text="${comment.id}">1</td>
+
+                                <td style="width:10%;align:center;text-align: center" th:text="${comment.blogId}">1</td>
                                 <!--<td><a th:onclick="'loadPageForRegister(\'/comment/commentDetail?commentId='+${comment.id}+'\')'"-->
-                                <td><a th:text="${comment.commentUsername}">pwf</a></td>
-                                <!--<td><a onclick="loadPageForRegister('/background/user-edit.html')" th:text="${user.userName}">pwf</a></td>-->
+                                <td style="width:10%;align:center;text-align: center"><a th:text="${comment.commentUsername}">pwf</a></td>
+                                <!--<td><a onclick="loadPageForRegister('/bbackground/user-edit.html')" th:text="${user.userName}">pwf</a></td>-->
                                 <!--<td th:text="${user.passWord}">pwf</td>-->
-                                <td th:text="${comment.content}"></td>
-                                <td th:text="${#dates.format(comment.createTime, 'yyyy-MM-dd HH:mm')}">[[${comment.createTime}]]</td>
-                                <td>
-                                    <div class="tpl-table-black-operation" style="align:center;text-align: center">
+                                <td style="width:40%;align:center;text-align: center" th:text="${comment.content}"></td>
+                                <td style="width:20%;align:center;text-align: center" th:text="${#dates.format(comment.createTime, 'yyyy-MM-dd HH:mm')}">[[${comment.createTime}]]</td>
+                                <td style="align:center;width:10%;text-align: center">
+                                    <div class="tpl-table-black-operation">
                                         <button type="button" class="am-btn am-btn-danger am-btn-xs del-comment"
-                                                th:id="${comment.id}">
+                                                th:blogId="${comment.blogId}" th:id="${comment.id}">
                                             <i class="am-icon-trash"></i> 删除
                                         </button>
                                             <!--<i class="am-icon-trash"></i> 删除-->
@@ -134,17 +135,17 @@
                     </div>
 
                     <!-- 分页 -->
-                    <div class="am-cf">
+                    <div class="am-cf" th:if="${totalPage}">
                         <div class="am-fr">
                             <ul class="am-pagination tpl-pagination">
-                                <li><a th:onclick="'loadPage(\'/blog/examine?page=0\')'">«</a></li>
+                                <li><a th:onclick="'loadPage(\'/comments/list?page=0\')'">«</a></li>
                                 <li th:each="i : ${#numbers.sequence(1,totalPage,1)}"
                                     th:id="'page'+${i}">
                                     <a th:text="${i}"
-                                       th:onclick="'loadPage(\'/blog/examine?page='+${i-1}+'\')'">1</a>
+                                       th:onclick="'loadPage(\'/comments/list?page='+${i-1}+'\')'">1</a>
                                 </li>
                                 <li>
-                                    <a th:onclick="'loadPage(\'/blog/examine?page='+${totalPage-1}+'\')'">»</a>
+                                    <a th:onclick="'loadPage(\'/comments/list?page='+${totalPage-1}+'\')'">»</a>
                                 </li>
                             </ul>
                             <script th:inline="javascript" type="text/javascript">

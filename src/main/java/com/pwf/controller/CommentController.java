@@ -1,41 +1,26 @@
 package com.pwf.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.validation.ConstraintViolationException;
-
-import com.pwf.domain.Blog;
+import com.pwf.config.wordFilter;
 import com.pwf.domain.Comment;
 import com.pwf.domain.PageBean;
-import com.pwf.domain.User;
 import com.pwf.service.BlogService;
 import com.pwf.service.CommentService;
 import com.pwf.util.ConstraintViolationExceptionHandler;
 import com.pwf.vo.ResultVO;
-import com.sun.org.apache.xpath.internal.operations.Mod;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import sun.rmi.runtime.Log;
 
-/**
- * 主页控制器.
- * 
- * @since 1.0.0 2017年3月8日
- * @author <a href="https://waylau.com">Way Lau</a> 
- */
+import javax.validation.ConstraintViolationException;
+import java.util.HashMap;
+import java.util.Map;
+
 @Controller
+@Api(tags = "评论控制层")
 @RequestMapping("/comments")
 public class CommentController {
 	
@@ -49,16 +34,16 @@ public class CommentController {
 	 * 前台获取评论列表
 	 * @return
 	 */
-	@GetMapping
-	public String getComments(@RequestParam(value="blogId",required=true) Long blogId, Model model) {
-//		Blog blog = blogService.findById(blogId);
-//		List<Comment> comments = blog.getCommentList();
-//		在此处通过commentService查不用blogService增加数据读取效率，“根据博文id查看博文详情页面”这个借口则可以使用redis
-//		blogService.readingIncrease(blogId);
-		List<Comment> comments = commentService.getCommentByBlogId(blogId);
-		model.addAttribute("comments", comments);
-		return "blog-detail :: #commentContainer";
-	}
+//	@GetMapping
+//	public String getComments(@RequestParam(value="blogId",required=true) Long blogId, Model model) {
+////		Blog blog = blogService.findById(blogId);
+////		List<Comment> comments = blog.getCommentList();
+////		在此处通过commentService查不用blogService增加数据读取效率，“根据博文id查看博文详情页面”这个借口则可以使用redis
+////		blogService.readingIncrease(blogId);
+//		List<Comment> comments = commentService.getCommentByBlogId(blogId);
+//		model.addAttribute("comments", comments);
+//		return "blog-detail :: #commentContainer";
+//	}
 
 	/**
 	 * 后台获取评论列表
@@ -82,15 +67,22 @@ public class CommentController {
 	 */
 	@PostMapping
 	@ResponseBody
-	public ResultVO createComment(String blogId, String commentUsername,String content) {
+	public ResultVO createComment(Long blogId, String commentUsername,String content) {
 		try {
-			blogService.createComment(Long.valueOf(blogId),commentUsername, content);
+			wordFilter s = new wordFilter();
+			s.addWord("吸毒");
+			s.addWord("政治");
+			s.addWord("色情");
+			s.addWord("赌博");
+			s.addWord("猪");
+			s.addWord("屎");
+			s.addWord("www.");
+			blogService.createComment(blogId,s.filter(commentUsername), s.filter(content));
 		} catch (ConstraintViolationException e)  {
 			return  new ResultVO(false, ConstraintViolationExceptionHandler.getMessage(e));
 		} catch (Exception e) {
 			return new ResultVO(false, e.getMessage());
 		}
-//		return ResponseEntity.ok().body(new ResultVO(true, "发表评论成功!",commentService.getCommentById(blogId)));
 		return new ResultVO(true, "发表评论成功!");
 	}
 
@@ -120,11 +112,13 @@ public class CommentController {
 
 	@GetMapping("/commentSearch")
 	public String list(@RequestParam(value = "searchText", required = false, defaultValue = "") String searchText,
-							 Model model) {
-		Pageable pageable = PageRequest.of(0, 10);
-		Page<Comment> page = commentService.listCommentsByNameLike(searchText, pageable);
-		List<Comment> list = page.getContent();    // 当前所在页面数据列表
-		model.addAttribute("comments", list);
+							 Model model,PageBean pageBean) {
+//		Pageable pageable = PageRequest.of(0, 10);
+		Page<Comment> all = commentService.listCommentsByNameLike(searchText, PageRequest.of(pageBean.getPage(),pageBean.getSize()));
+//		List<Comment> list = page.getContent();    // 当前所在页面数据列表
+		model.addAttribute("comments", all.getContent());
+//		model.addAttribute("totalPage", all.getTotalPages());
+		model.addAttribute("currentPage", pageBean.getPage());
 		return "background/comments-tables";
 	}
 

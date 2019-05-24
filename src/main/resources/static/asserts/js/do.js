@@ -6,6 +6,10 @@ function changeImg() {
 // 根据用户名、页面索引、页面大小获取用户列表
 // function getUersByName(pageIndex, pageSize) {
 function getUersByName() {
+    if ($("#searchName").val()==null||""==$("#searchName").val()) {
+        swal("搜索内容信息不能为空！");
+        return;
+    }
     // var _pageSize; // 存储用于搜索
     $.ajax({
         url: "/user/usersSearch",
@@ -31,6 +35,10 @@ function getUersByName() {
 // function getBannerByName(pageIndex, pageSize) {
 function getBannerByName() {
     // var _pageSize; // 存储用于搜索
+    if ($("#searchName").val()==null||""==$("#searchName").val()) {
+        swal("搜索内容信息不能为空！");
+        return;
+    }
     $.ajax({
         url: "/banner/bannerSearch",
         contentType: 'application/json',
@@ -50,10 +58,36 @@ function getBannerByName() {
     });
 }
 
+
+function getPrintByName() {
+    // var _pageSize; // 存储用于搜索
+    if ($("#searchName").val()==null||""==$("#searchName").val()) {
+        swal("搜索内容信息不能为空！");
+        return;
+    }
+    $.ajax({
+        url: "/print/printSearch",
+        contentType: 'application/json',
+        data: {
+            "searchText": $("#searchName").val()
+        },
+        success: function (data) {
+            $("#content").html(data);
+        },
+        error: function () {
+            swal("error!");
+            // alert($("#searchName").val());
+        }
+    });
+}
+
 function getBlogByAttr() {
     // var _pageSize; // 存储用于搜索
+    if ($("#searchName").val()==null||""==$("#searchName").val()) {
+        swal("搜索内容信息不能为空！");
+        return;
+    }
     $.ajax({
-        // url: "/blog/search?page=0&size=10",
         url: "/blog/search",
         contentType: 'application/json',
         data: {
@@ -72,14 +106,29 @@ function getBlogByAttr() {
     });
 }
 
+function getBlogIndex() {
+    $.ajax({
+        url: "/blog/orderList",
+        type: 'GET',
+        success: function (data) {
+            // window.location.href="#portfolio";
+            // $("#portfolioPage").load(#portfolio);
+            $("#content").html(data);
+        },
+        error: function () {
+            alert("error!");
+        }
+    });
+}
+
 // function getBannerIndex() {
 //     $.ajax({
 //         url: "/bannerIndex",
 //         type: 'GET',
 //         success: function (data) {
-//             // window.location.href="#portfolio";
+//             window.location.href="#portfolio";
 //             // $("#portfolioPage").load(#portfolio);
-//             $("#portfolio-content").html(data);
+//             $("#portfolio_grid").html(data);
 //         },
 //         error: function () {
 //             alert("error!");
@@ -108,8 +157,8 @@ function login() {
     // var imageCode=formData.get("imageCode");
     // var rememberme=formData.get("remember-me");
     // formData.append("token","kshdfiwi3rh");
-    console.info(formData.get("username"));
-    console.info(formData.get("password"));
+    // console.info(formData.get("username"));
+    // console.info(formData.get("password"));
     $.ajax({
         url: '/login',
         type: 'POST',
@@ -126,9 +175,13 @@ function login() {
                 window.location.href = '/background/index';
             }
             if (loginResult.success === false) {
-                setTimeout(function(){swal("提示",msg,"warning"); },100);
+                setTimeout(function () {
+                    swal("提示", msg, "warning");
+                }, 100);
                 //2秒后刷新页面，足够显示swal()的信息
-                setTimeout(function(){window.location.href = '/userlogin'; },2000);
+                // setTimeout(function () {
+                //     window.location.href = '/userlogin';
+                // }, 2000);
                 // window.location.href = '/userlogin';
             }
         }
@@ -146,10 +199,13 @@ function forgotPassword() {
         // var email= $('#email').val();
         var pwd1 = $('#passWord').val();
         var pwd2 = $('#rePassword').val();
+        if (pwd1==null||""==pwd1||pwd2==null||""==pwd2) {
+            swal("密码不能为空！");
+            return;
+        }
         if (pwd1 != pwd2) {
-            console.info(pwd1);
-            console.info(pwd2);
-            alert("输入的两次密码不一致，请重新输入！");
+            swal("输入的两次密码不一致，请重新输入！");
+            return
         } else {
             $.ajax({
                 url: '/user/update',
@@ -160,9 +216,14 @@ function forgotPassword() {
                 success: function (Result) {
                     // alert(Result.msg);
                     // window.location.href = 'background/login.html';
-                    setTimeout(function(){swal("提示",Result.msg,"success"); },100);
+                    setTimeout(function () {
+                        swal("提示", Result.msg, "success");
+                    }, 100);
+                    if (Result.msg=="修改成功"||Result.msg=="注册成功")
                     //2秒后刷新页面，足够显示swal()的信息
-                    setTimeout(function(){window.location.href = 'background/login.html'; },2000);
+                    setTimeout(function () {
+                        window.location.href = 'background/login.html';
+                    }, 2000);
                 }
             });
         }
@@ -220,25 +281,26 @@ function saveUserForUser() {
             dataType: 'json',  //告诉服务器，我要想什么类型的数据
             processData: false,// 注意这里应设为false
             success: function (Result) {
-                // var msg = Result.msg;
-                // console.info("进入注册用户");
-                // console.info(Result.msg);
-                // console.info(Result);
                 if (Result.success === true) {
                     // swal(Result.msg);
-                    setTimeout(function(){swal("提示",Result.msg,"success"); },100);
+                    setTimeout(function () {
+                        swal("提示", Result.msg, "success");
+                    }, 100);
                     //2秒后刷新页面，足够显示swal()的信息
-                    setTimeout(function(){ window.location.href = '/userlogin'; },2000);
+                    setTimeout(function () {
+                        window.location.href = '/userlogin';
+                    }, 2000);
                     // window.location.href = '/userlogin';
                 }
                 if (Result.success === false) {
-                    setTimeout(function(){swal("提示",Result.msg,"warning"); },100);
+                    setTimeout(function () {
+                        swal("提示", Result.msg, "warning");
+                    }, 100);
                     //2秒后刷新页面，足够显示swal()的信息
-                    setTimeout(function(){ window.location.href = '/registerUserIndex'; },2000);
-                    // alert(Result.msg);
-                    // window.location.href = '/registerUserIndex';
+                    // setTimeout(function () {
+                    //     window.location.href = '/registerUserIndex';
+                    // }, 2000);
                 }
-                // loadPageForRegister('/user/users');
             }
         });
     }
@@ -261,9 +323,13 @@ function saveUser() {
                 if (Result.success === true) {
                     // alert(Result.msg);
                     // loadPageForRegister('/user/users');
-                    setTimeout(function(){swal("提示",Result.msg,"success"); },100);
+                    setTimeout(function () {
+                        swal("提示", Result.msg, "success");
+                    }, 100);
                     //2秒后刷新页面，足够显示swal()的信息
-                    setTimeout(function(){ loadPageForRegister('/user/users');},2000);
+                    setTimeout(function () {
+                        loadPageForRegister('/user/users');
+                    }, 2000);
                 } else {
                     swal(Result.msg);
                 }
@@ -288,9 +354,13 @@ function updateUser() {
         processData: false,// 注意这里应设为false
         success: function (result) {
             // console.info("进入更新用户");
-            setTimeout(function(){swal("提示",result.msg,"success"); },100);
+            setTimeout(function () {
+                swal("提示", result.msg, "success");
+            }, 100);
             //2秒后刷新页面，足够显示swal()的信息
-            setTimeout(function(){ loadPageForRegister('/user/users'); },2000);
+            setTimeout(function () {
+                loadPageForRegister('/user/users');
+            }, 2000);
             // alert(result.msg);
             // loadPageForRegister('/user/users');
         }
@@ -476,9 +546,13 @@ $('.del-blog').bind('click', function () {
                     dataType: 'json',
                     success: function (data) {
                         if (data.success) {
-                            setTimeout(function(){swal("提示",data.msg,"success"); },100);
+                            setTimeout(function () {
+                                swal("提示", data.msg, "success");
+                            }, 100);
                             //2秒后刷新页面，足够显示swal()的信息
-                            setTimeout(function(){ loadPageForRegister('/blog/list'); },2000);
+                            setTimeout(function () {
+                                loadPageForRegister('/blog/list');
+                            }, 2000);
                         }
                     }
                 })
@@ -513,9 +587,13 @@ $('.del-blog-check').bind('click', function () {
                     dataType: 'json',
                     success: function (data) {
                         if (data.success) {
-                            setTimeout(function(){swal("提示",data.msg,"success"); },100);
+                            setTimeout(function () {
+                                swal("提示", data.msg, "success");
+                            }, 100);
                             //2秒后刷新页面，足够显示swal()的信息
-                            setTimeout(function(){ loadPageForRegister('/blog/examine'); },2000);
+                            setTimeout(function () {
+                                loadPageForRegister('/blog/examine');
+                            }, 2000);
                         }
                     }
                 })
@@ -537,9 +615,12 @@ function saveBlog() {
     var img = document.getElementsByClassName("img")[0].src;
     if (releaseTime == '' || releaseTime == undefined || releaseTime == null) {
         swal("发布时间必填");
-    }  if ("http://localhost:8090/background/assets/img/blog_default.png" == img) {
+        return;
+    }
+    if ("http://localhost:8090/background/assets/img/blog_default.png" == img) {
         swal('图片不能为空');
-    }  else{
+        return;
+    } else {
         $.ajax({
             type: "POST",
             url: "/blog",
@@ -548,14 +629,20 @@ function saveBlog() {
             processData: false,// 注意这里应设为false
             success: function (Result) {
                 if (Result.success === true) {
-                    if (Result.msg=="提交更新成功"){
-                        setTimeout(function(){swal("提示",Result.msg,"success"); },100);
+                    if (Result.msg == "提交更新成功") {
+                        setTimeout(function () {
+                            swal("提示", Result.msg, "success");
+                        }, 100);
                         //2秒后刷新页面，足够显示swal()的信息
-                        setTimeout(function(){  loadPageForRegister('/blog/list');},2000);
-                    // loadPageForRegister('/blog/list');
-                    // alert(Result.msg);
-                    }else {
-                        setTimeout(function(){swal("提示",Result.msg,"warning"); },100);
+                        setTimeout(function () {
+                            loadPageForRegister('/blog/list');
+                        }, 2000);
+                        // loadPageForRegister('/blog/list');
+                        // alert(Result.msg);
+                    } else {
+                        setTimeout(function () {
+                            swal("提示", Result.msg, "warning");
+                        }, 100);
                         //2秒后刷新页面，足够显示swal()的信息
                         // setTimeout(function(){ window.location.reload();},2000);
                         // alert(Result.msg);
@@ -575,6 +662,10 @@ function saveBlog() {
  */
 function getContentBySearchText() {
     var val = $("#searchText").val();
+    if (val == '' || val == undefined || val == null) {
+        swal('搜索内容不能为空');
+        return
+    }
     $.ajax({
         url: "/blog/esSearch?page=0&size=10",
         contentType: 'application/json',
@@ -600,20 +691,43 @@ function getContentBySearchText() {
  * 删除banner
  */
 $('.del-banner').click(function () {
-    if (window.confirm('确认要删除该行数据?')) {
-        $.ajax({
-            url: "/banner/delete?id=" + $(this).attr('id'),
-            type: "DELETE",
-            dataType: "json",
-            success: function (data) {
-                setTimeout(function(){swal("提示",data.msg,"warning"); },100);
-                //2秒后刷新页面，足够显示swal()的信息
-                setTimeout(function(){ loadPageForRegister('/banner/list'); },2000);
-                // alert(data.msg);
-                // loadPageForRegister('/banner/list');
+    var id = $(this).attr('id');
+    swal({
+            title: "确认要删除该图片数据？",
+            text: "你将无法恢复该数据！",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "确定删除！",
+            cancelButtonText: "取消删除！",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                $.ajax({
+                    url: "/banner/delete?id=" + id,
+                    type: 'DELETE',
+                    dataType: "json",
+                    success: function (data) {
+                        setTimeout(function () {
+                            swal("提示", data.msg, "success");
+                        }, 100);
+                        //2秒后刷新页面，足够显示swal()的信息
+                        setTimeout(function () {
+                            loadPageForRegister('/banner/list');
+                        }, 2000);
+                    },
+                    error: function () {
+                        swal("错误信息为：" + data.msg);
+                    }
+                });
+            } else {
+                swal("取消！", "你的文件是安全的:)",
+                    "error");
             }
         });
-    }
+
 });
 
 /**
@@ -624,14 +738,13 @@ function saveBanner() {
     var data = new FormData(form);
     // var img = data.get("img");
     var img = document.getElementsByClassName("img")[0].src;
-    var name =$("#name").val();
-    // alert(name);
-    // console.log(img);
-    // http://localhost:8090/background/assets/img/blog_default.png
-    // alert(img);
-    if ("http://localhost:8090/background/assets/img/blog_default.png" == img||""==name) {
+    var name = $("#name").val();
+    if ("http://localhost:8090/background/assets/img/blog_default.png" == img || "" == name) {
         swal('图片/图片名称不能为空');
-    } else {
+        return;
+    }
+    {
+        swal('图片上传中，请稍等...');
         $.ajax({
             type: "POST",
             url: "/banner/add",
@@ -640,13 +753,17 @@ function saveBanner() {
             contentType: false,
             processData: false,// 注意这里应设为false
             success: function (Result) {
-                if (Result.success === true){
-                    setTimeout(function(){swal("提示",Result.msg,"success"); },100);
+                if (Result.success === true) {
+                    setTimeout(function () {
+                        swal("提示", Result.msg, "success");
+                    }, 100);
                     //2秒后刷新页面，足够显示swal()的信息
-                    setTimeout(function(){ loadPageForRegister('/banner/list'); },2000);
+                    setTimeout(function () {
+                        loadPageForRegister('/banner/list');
+                    }, 2000);
                     // alert(Result.msg);
                     // loadPageForRegister('/banner/list');
-                }else {
+                } else {
                     swal(Result.msg);
                 }
             },
@@ -655,8 +772,144 @@ function saveBanner() {
             }
         });
     }
+}
+
+/**
+ * 后台提交Print---------------------------------------------------
+ */
+function savePrint() {
+    var form = document.getElementById("printAddForm");
+    var data = new FormData(form);
+    // var img = data.get("img");
+    var filepath = $("#filepath").val();
+    var filename = $("#filename").val();
+    if ("" == filename || "" == filepath) {
+        swal('文件/文件名称不能为空');
+    } else {
+        swal("提示", "上传中...请稍等");
+        //2秒后刷新页面，足够显示swal()的信息
+        $.ajax({
+            type: "POST",
+            url: "/print/add",
+            data: data,
+            dataType: "json",
+            contentType: false,
+            processData: false,// 注意这里应设为false
+            success: function (Result) {
+                if (Result.success === true) {
+                    setTimeout(function () {
+                        swal("提示", Result.msg, "success");
+                    }, 100);
+                    //2秒后刷新页面，足够显示swal()的信息
+                    var page = Result.body;
+                    // setTimeout(function(){ loadPageForRegister('/print/list'); },2000);
+                    setTimeout(function () {
+                        loadPageForRegister('/print/pay?page=' + page);
+                    }, 2000);
+                } else {
+                    swal(Result.msg);
+                }
+            },
+            error: function () {
+                swal("erro");
+            }
+        });
+    }
+}
+
+/**
+ * 前台提交Print---------------------------------------------------
+ */
+function upSavePrint() {
+    var form = document.getElementById("printAddForm");
+    var data = new FormData(form);
+    var filepath = $("#filepath").val();
+    var filename = $("#filename").val();
+    if ("" == filename || "" == filepath) {
+        swal('文件/文件名称不能为空');
+    } else {
+        swal("提示", "上传中...请稍等");
+        $.ajax({
+            type: "POST",
+            url: "/print/add",
+            data: data,
+            dataType: "json",
+            contentType: false,
+            processData: false,// 注意这里应设为false
+            success: function (Result) {
+                if (Result.success === true) {
+                    setTimeout(function () {
+                        swal("提示", Result.msg, "success");
+                    }, 100);
+                    var page = Result.body;
+                    $("#printContent").load('/print/upPay?page=' + page);
+                } else {
+                    swal(Result.msg);
+                }
+            },
+            error: function () {
+                swal("erro");
+            }
+        });
+    }
+}
+
+/**
+ * 提交Print付款---------------------------------------------------
+ */
+function pay() {
+        swal("提示", "正在打印中...请稍等", "success");
+    //2秒后刷新页面，足够显示swal()的信息
+    setTimeout(function () {
+        swal("提示", "打印成功，我们将尽快送至您的宿舍", "success");
+    }, 2000);
 
 }
+
+
+/**
+ * 删除print
+ */
+$('.del-print').click(function () {
+    var id = $(this).attr('id');
+    swal({
+            title: "确认要删除该条打印数据？",
+            text: "你将无法恢复该数据！",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "确定删除！",
+            cancelButtonText: "取消删除！",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                $.ajax({
+                    url: "/print/delete?id=" + id,
+                    type: 'DELETE',
+                    dataType: "json",
+                    success: function (data) {
+                        setTimeout(function () {
+                            swal("提示", data.msg, "success");
+                        }, 100);
+                        //2秒后刷新页面，足够显示swal()的信息
+                        setTimeout(function () {
+                            loadPageForRegister('/print/list');
+                        }, 2000);
+                    },
+                    error: function () {
+                        swal(data.code + "错误信息为：" + data.msg);
+                    }
+                });
+            } else {
+                swal("取消！", "你的虚拟文件是安全的:)",
+                    "error");
+            }
+        });
+
+});
+
 
 /**
  * 更新Banner
@@ -664,6 +917,7 @@ function saveBanner() {
 function updateBanner() {
     var form = document.getElementById("bannerEditForm");
     var data = new FormData(form);
+    swal('图片上传中，请稍等...');
     $.ajax({
         type: "POST",
         url: "/banner/update",
@@ -672,40 +926,85 @@ function updateBanner() {
         contentType: false,
         processData: false,// 注意这里应设为false
         success: function (data) {
-            setTimeout(function(){swal("提示",data.msg,"success"); },100);
+            setTimeout(function () {
+                swal("提示", data.msg, "success");
+            }, 100);
             //2秒后刷新页面，足够显示swal()的信息
-            setTimeout(function(){ loadPageForRegister('/banner/list'); },2000);
-            // alert(data.msg);
-            // console.info("进入更新Banner");
-            // loadPageForRegister('/banner/list');
+            setTimeout(function () {
+                loadPageForRegister('/banner/list');
+            }, 2000);
         }
     });
-    // }
 }
 
 /**
  * 上传图片及时刷新显示
  */
 function reads(obj) {
-    var file = obj.files[0];
-    var reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function (ev) {
-        $("#img").attr("src", ev.target.result);
-        $("#img").css({"width":"60%" ,"height":"auto"});
-        // style="width: 50%;height: auto"
+    //判断文件格式
+    var fileName = obj.value;
+    var suffixIndex = fileName.lastIndexOf(".");
+    var suffix = fileName.substring(suffixIndex + 1).toUpperCase();
+    if (suffix != "BMP" && suffix != "JPEG" && suffix != "JPG" && suffix != "PNG" && suffix != "GIF") {
+        swal("请上传BMP、JPG、JPEG、PNG、GIF格式的内容，且文件最大不超过10M");
+        return;
+    } else {
+        var file = obj.files[0];
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function (ev) {
+            $("#img").attr("src", ev.target.result);
+            $("#img").css({"width": "60%", "height": "auto"});
+        }
     }
+}
+
+/**
+ * 前台上传print文件处理
+ */
+function handleFileUP(obj) {
+    //判断文件格式
+    var fileName = obj.value;
+    var suffixIndex = fileName.lastIndexOf(".");
+    var suffix = fileName.substring(suffixIndex + 1).toUpperCase();
+    if (suffix != "PDF" && suffix != "DOC" && suffix != "DOCX") {
+        swal("请上传文件（格式PDF、DOC、DOCX等）!");
+        return;
+    }
+    $('#filepath').val($('#uploadFile').val());
+}
+
+/**
+ * 后台上传print文件处理
+ */
+function handleFileBackground(obj) {
+    var file = document.getElementById("uploadFile");
+    var filepath = document.getElementById("filepath");
+    //判断文件格式
+    var fileName = obj.value;
+    var suffixIndex = fileName.lastIndexOf(".");
+    var suffix = fileName.substring(suffixIndex + 1).toUpperCase();
+    if (suffix != "PDF" && suffix != "DOC" && suffix != "DOCX") {
+        swal("请上传文件（格式PDF、DOC、DOCX等）!");
+        return;
+    }
+    filepath.value = file.value;
 }
 
 
 /*------------------------------------评论---------------------------------*/
+
 // 根据评论内容查询
 function getCommentByName() {
+    if ($("#searchName").val()==null||""==$("#searchName").val()) {
+        swal("搜索内容信息不能为空！");
+        return;
+    }
     $.ajax({
-        url: "/comments/commentSearch",
+        url: "/comments/commentSearch?page=0&size=10",
         contentType: 'application/json',
         data: {
-            // "async":true,
+            // "async": true,
             // "pageIndex":pageIndex,
             // "pageSize":pageSize,
             "searchText": $("#searchName").val()
@@ -726,7 +1025,8 @@ function getCommentByName() {
  */
 $('.del-comment').click(function () {
     var id = $(this).attr('id');
-    var blogId = $('.blogId').attr('id');
+    var blogId = $(this).attr('blogId');
+    // var blogId = $('.blogId').attr('id');
     // alert("id="+id+",blogId="+blogId);
     swal({
             title: "确认要删除该行评论？",
@@ -771,29 +1071,6 @@ $('.del-comment').click(function () {
         });
 });
 
-//     if (window.confirm('确认要删除该行评论?')) {
-//         $.ajax({
-//             url: '/comments/' + id + '?blogId=' + blogId,
-//             type: 'DELETE',
-//             dataType: "json",
-//             success: function (data) {
-//                 if (data.code == 0) {
-//                     setTimeout(function(){swal("提示",data.msg,"success"); },100);
-//                     //2秒后刷新页面，足够显示swal()的信息
-//                     setTimeout(function(){loadPageForRegister('/comments/list');},2000);
-//                     // alert(data.msg);
-//                     // loadPageForRegister('/comments/list');
-//                 } else {
-//                     swal(data.code + "错误信息为：" + data.msg);
-//                 }
-//             },
-//             error: function () {
-//                 swal(data.code + "错误信息为：" + data.msg);
-//             }
-//         });
-//     }
-// });
-
 /* -------- 提交message --------*/
 function sendMessage() {
     // var contactUsername = $("#form_name").val();
@@ -803,44 +1080,70 @@ function sendMessage() {
 
     var form = document.getElementById("contact-form");
     var data = new FormData(form);
-        $.ajax({
-            url: 'message/sendMessage',
-            type: 'POST',
-            dataType: "json",
-            contentType: false,
-            processData: false,// 注意这里应设为false
-            data: data,
-            // data: {"contactUsername": contactUsername, "email": email,"message": message},
-            success: function (data) {
-                if (data.success) {
-                    setTimeout(function(){swal("提示",data.msg,"success"); },100);
-                    //2秒后刷新页面，足够显示swal()的信息
-                } else {
-                    swal(data.msg);
-                }
-            },
-            error: function () {
-                swal("error!");
+    $.ajax({
+        url: 'message/sendMessage',
+        type: 'POST',
+        // dataType: "json",
+        contentType: false,
+        // contentType: "application/json;charset=UTF-8",
+        processData: false,// 注意这里应设为false
+        data: data,
+        // data: {"contactUsername": contactUsername, "email": email,"message": message},
+        success: function (data) {
+            if (data.success) {
+                setTimeout(function () {
+                    swal("提示", data.msg, "success");
+                }, 100);
+                //2秒后刷新页面，足够显示swal()的信息
+            } else {
+                swal(data.msg);
             }
-        });
+        },
+        error: function () {
+            swal("error!");
+        }
+    });
 }
 
 /**
  * 删除message
  */
 $('.del-message').click(function () {
-    if (window.confirm('确认要删除该行数据?')) {
-        $.ajax({
-            url: "/message/delete?id=" + $(this).attr('id'),
-            type: "DELETE",
-            dataType: "json",
-            success: function (data) {
-                // swal(data.msg);
-                setTimeout(function(){swal("提示",data.msg,"success"); },100);
-                setTimeout(function(){ loadPageForRegister('/message/list');},2000);
-                // loadPageForRegister('/message/list');
+    swal({
+            title: "确认要删除该行留言？",
+            text: "你将无法恢复该留言！",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "确定删除！",
+            cancelButtonText: "取消删除！",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                $.ajax({
+                    url: "/message/delete?id=" + $(this).attr('id'),
+                    type: "DELETE",
+                    dataType: "json",
+                    success: function (data) {
+                        // swal(data.msg);
+                        setTimeout(function () {
+                            swal("提示", data.msg, "success");
+                        }, 100);
+                        setTimeout(function () {
+                            loadPageForRegister('/message/list');
+                        }, 2000);
+                        // loadPageForRegister('/message/list');
+                    }
+                });
+            } else {
+                swal("取消！", "你的虚拟文件是安全的:)",
+                    "error");
             }
+
         });
-    }
 });
+
+
 

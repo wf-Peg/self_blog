@@ -1,6 +1,8 @@
 package com.pwf.controller;
 
-import com.pwf.domain.*;
+import com.alibaba.fastjson.JSONObject;
+import com.pwf.domain.Blog;
+import com.pwf.domain.PageBean;
 import com.pwf.service.BlogService;
 import com.pwf.service.FileUploadService;
 import com.pwf.service.UserService;
@@ -23,18 +25,22 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolationException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
+import java.util.Enumeration;
 
 /**
  * Created by PWF on 2018/11/10.
  */
 @Controller
 @RequestMapping("/blog")
-@Api(tags = "博文逻辑控制层")
+@Api(tags = "博文控制层")
 public class BlogController {
     @Autowired
     private BlogService service;
@@ -53,7 +59,7 @@ public class BlogController {
         return "background/blog-form";
     }
 
-    @ApiOperation("查询所有博文")
+    @ApiOperation("后台分页查询博文")
     @RequestMapping("/list")
     private String findAll(PageBean pageBean, Model model) {
         Page<Blog> all = service.pageFindAll(pageBean);
@@ -63,54 +69,85 @@ public class BlogController {
         return "/background/blog-tables";
     }
 
-    @ApiOperation("根据分类查询所有博文")
+//    @ApiOperation("前台分页查询博文")
+//    @RequestMapping("/blogList")
+//    private String findAllup(PageBean pageBean, Model model) {
+//        Page<Blog> all = service.pageFindAllByUpdataTime(pageBean);
+//        model.addAttribute("blogList", all.getContent());
+//        model.addAttribute("totalPage", all.getTotalPages());
+//        model.addAttribute("currentPage", pageBean.getPage());
+//        return "index :: #content";
+//    }
+
+    @ApiOperation("前端根据分类查询所有博文")
     @RequestMapping("/orderList")
     private String orderList(Model model, PageBean pageBean,
                              @RequestParam(value = "category", required = false, defaultValue = "") String category) {
+        Page<Blog> blogs = service.pageFindAllByUpdataTime(pageBean);
         if (category.equals("生活") || category.equals("技术") || category.equals("游戏")) {
-            Page<Blog> blogs = service.findByCategory(pageBean, category);
+            blogs = service.findByCategory(new PageBean(0, 30), category);
             model.addAttribute("blogList", blogs.getContent());
-            model.addAttribute("totalPage", blogs.getTotalPages());
-            model.addAttribute("currentPage", pageBean.getPage());
+            model.addAttribute("all", false);
             return "index :: #content";
         }
         if (category.equals("最热")) {
-            Page<Blog> blogs = service.hotlist(pageBean);
+            blogs = service.hotlist(new PageBean(0, 30));
             model.addAttribute("blogList", blogs.getContent());
-            model.addAttribute("totalPage", blogs.getTotalPages());
-            model.addAttribute("currentPage", pageBean.getPage());
+            model.addAttribute("all", false);
             return "index :: #content";
         }
         if (category.equals("最新")) {
-//            Pageable pageable = PageRequest.of(0, 10, sort);
-            Page<Blog> blogs = service.newlist(pageBean);
-//            PageResult<Blog> pageResult = new PageResult<>(blogs.getTotalElements(),blogs.getContent());
+            blogs = service.newlist(new PageBean(0, 30));
             model.addAttribute("blogList", blogs.getContent());
-            model.addAttribute("totalPage", blogs.getTotalPages());
-            model.addAttribute("currentPage", pageBean.getPage());
+            model.addAttribute("all", false);
             return "index :: #content";
         }
-
-        Page<Blog> all = service.pageFindAll(pageBean);
-        model.addAttribute("blogList", all.getContent());
-//        model.addAttribute("totalPage", all.getTotalPages());
-//        model.addAttribute("currentPage", pageBean.getPage());
+        model.addAttribute("blogList", blogs.getContent());
+        model.addAttribute("totalPage", blogs.getTotalPages());
+        model.addAttribute("currentPage", pageBean.getPage());
+//        model.addAttribute("all", true);
+//        System.out.println("current:"+pageBean.getPage());
         return "index :: #content";
     }
 
     @ApiOperation("前台根据博文id查看博文详情页面")
     @RequestMapping(value = "/{id}")
-    public String findById(Model model, @PathVariable long id) {
+    public String findById(HttpServletRequest request, HttpServletResponse response,Model model, @PathVariable long id) {
 //        Blog blog = (Blog)redisTemplate.opsForValue().get("blog_" + id);
 //        if (blog==null){
+        String[] cookies = getCookie(request);
+        String mark = "blog_"+id;
+        //有cookie则不增加阅读数
+        if (mark.equals(cookies[0])||mark.equals(cookies[1])) {
+            Blog blog = service.findById(id);
+            Blog preBlog = service.findPreBlog(id);
+            Blog nextBlog = service.findNextBlog(id);
+            model.addAttribute("comments", blog.getCommentList());
+            model.addAttribute("commentCount", service.findBlogsCommentCount(id));
+            model.addAttribute("blogDetail", blog);
+            model.addAttribute("preBlog", preBlog);
+            model.addAttribute("nextBlog", nextBlog);
+            return "blog-detail";
+        }
+
+        Cookie cookie = new Cookie("blog_mark", mark);
+        cookie.setMaxAge(24 * 3600);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+
         Blog blog = service.findById(id);
 //            redisTemplate.opsForValue().set("VisitsCount");
 //        }
 //        Blog blog = service.findById(id);
-        List<Comment> comments = blog.getCommentList();
-        model.addAttribute("blogDetail", blog);
-        model.addAttribute("comments", comments);
+
+        Blog preBlog = service.findPreBlog(id);
+        Blog nextBlog = service.findNextBlog(id);
         service.readingIncrease(id);
+        model.addAttribute("comments", blog.getCommentList());
+        model.addAttribute("commentCount", service.findBlogsCommentCount(id));
+        model.addAttribute("blogDetail", blog);
+        model.addAttribute("preBlog", preBlog);
+        model.addAttribute("nextBlog", nextBlog);
         return "blog-detail";
     }
 
@@ -216,14 +253,14 @@ public class BlogController {
     @ApiOperation("后台根据blog标题进行查询")
     @GetMapping("/search")
     public String findSearch(@RequestParam(value = "searchText", required = false, defaultValue = "") String searchText,
-                             PageBean pageBean,Model model) {
+                             PageBean pageBean, Model model) {
 //        List<Blog> list = service.findSearch(searchText);
 //        model.addAttribute("blogList", list);
 //        model.addAttribute("totalPage", list.getTotalPages());
 //        model.addAttribute("currentPage", pageBean.getPage());
-        List<Blog> list = service.findByTitleContainingOrSummaryContainingOrContentContaining(searchText, pageBean);
-        model.addAttribute("blogList", list);
-        model.addAttribute("totalPage", 1);
+        Page<Blog> list = service.findByTitleContainingOrSummaryContainingOrContentContaining(searchText, pageBean);
+        model.addAttribute("blogList", list.getContent());
+//        model.addAttribute("totalPage", 1);
         model.addAttribute("currentPage", pageBean.getPage());
         return "background/blog-tables";
     }
@@ -242,9 +279,9 @@ public class BlogController {
     @GetMapping("/esSearch")
     public String esSearch(@RequestParam(value = "searchText", required = false, defaultValue = "") String searchText,
                            PageBean pageBean, Model model) {
-        List<Blog> list = service.findByTitleContainingOrSummaryContainingOrContentContaining(searchText, pageBean);
-        model.addAttribute("blogList", list);
-        model.addAttribute("totalPage", 1);
+        Page<Blog> list = service.findByTitleContainingOrSummaryContainingOrContentContaining(searchText, pageBean);
+        model.addAttribute("blogList", list.getContent());
+//        model.addAttribute("totalPage", list.getTotalPages());
         model.addAttribute("currentPage", pageBean.getPage());
         return "index :: #content";
     }
@@ -279,9 +316,46 @@ public class BlogController {
     @ApiOperation("文章点赞")
     @ResponseBody
     @PutMapping(value = "/likes/{id}")
-    public ResultVO updateLikes(@PathVariable Long id) {
+    public ResultVO updateLikes(HttpServletRequest request, HttpServletResponse response, @PathVariable Long id) {
+        String[] cookies = getCookie(request);
+        String mark = "like_"+id;
+        //有cookie则返回失败
+        if (mark.equals(cookies[0])||mark.equals(cookies[1])) {
+            return new ResultVO(false, "点赞失败，请勿重复点赞");
+        }
+
+        Cookie cookie = new Cookie("like_mark", mark);
+        cookie.setMaxAge(24 * 3600);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+
         service.updateLikes(id);
         return new ResultVO(true, "点赞成功");
+    }
+
+    /**
+     * 获取cookie中的值
+     *  
+     *
+     * @param request
+     * @return  
+     */
+    public static String[] getCookie(HttpServletRequest request) {
+        String[] strs = new String[2];
+        Cookie[] cs = request.getCookies();
+        if (cs != null) {
+            for (Cookie c : cs) {
+                if (c.getName().equals("like_mark")) {
+                    // 获取账号
+                    strs[0] = c.getValue();
+                }
+                if (c.getName().equals("blog_mark")) {
+                    // 获取密码
+                    strs[1] = c.getValue();
+                }
+            }
+        }
+        return strs;
     }
 
 }
